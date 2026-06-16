@@ -3,26 +3,24 @@
 /**
  * Frontend for ee-invoice-history.
  *
- * Lifts the timeline rendering shape from
+ * The timeline rendering is lifted *verbatim* from
  *   E:\Solar Calculator v2\public\templates\my_invoice.html
- * (the `openHistoryModal` function and its `escapeHtml` / `formatHistoryValue`
- * helpers). The original was a modal; this version inlines the same
- * timeline into a full page with a search input and a second tab for
- * viewer-activity.
+ * (the `openHistoryModal` function, lines 523-607). Only the API URL has
+ * been swapped from `/api/v1/invoices/:bubbleId/history` to this app's
+ * `/api/invoices/:bubbleId/history`. Helpers `escapeHtml` and
+ * `formatHistoryValue` are also lifted (lines 458-470).
+ *
+ * The result is a full-page version of the exact modal users see in the
+ * parent app — same Tailwind classes, same badges, same "Before / After"
+ * grid, same color tokens. No auth wall.
  */
-
-const TZ = 'Asia/Kuala_Lumpur';
-const LOCALE = 'en-MY';
 
 const state = {
     bubbleId: null,
-    activeTab: 'history',
-    history: null,           // { invoiceId, rows: [] }
-    activity: null,          // { invoiceId, invoiceNumber, summary, events }
-    activeTabSwitchInFlight: false,
+    isLoading: false,
 };
 
-// ---------- helpers ----------
+// ---------- helpers (lifted from my_invoice.html) ----------
 
 function escapeHtml(value) {
     return String(value ?? '')
@@ -38,59 +36,7 @@ function formatHistoryValue(value) {
     return normalized.length > 0 ? normalized : 'Empty';
 }
 
-function formatDateTime(input) {
-    if (!input) return '—';
-    try {
-        return new Date(input).toLocaleString(LOCALE, {
-            timeZone: TZ,
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-        });
-    } catch (err) {
-        return String(input);
-    }
-}
-
-function formatDuration(seconds) {
-    if (seconds === null || seconds === undefined || !Number.isFinite(seconds)) return '—';
-    if (seconds < 60) return `${Math.round(seconds)}s`;
-    const m = Math.floor(seconds / 60);
-    const s = Math.round(seconds % 60);
-    return `${m}m ${s}s`;
-}
-
-function badgeClassFor(actionType) {
-    if (actionType === 'ADDED') return 'badge badge--added';
-    if (actionType === 'DELETED') return 'badge badge--deleted';
-    return 'badge badge--updated';
-}
-
-// ---------- API ----------
-
-async function fetchJson(url) {
-    const res = await fetch(url, { headers: { Accept: 'application/json' } });
-    let body = null;
-    try {
-        body = await res.json();
-    } catch (err) {
-        throw new Error(`Bad JSON from server (${res.status})`);
-    }
-    if (!res.ok || body.ok === false) {
-        throw new Error((body && body.error) || `Request failed (${res.status})`);
-    }
-    return body.data;
-}
-
-async function loadHistory(bubbleId) {
-    return fetchJson(`/api/invoices/${encodeURIComponent(bubbleId)}/history`);
-}
-
-async function loadActivity(bubbleId) {
-    return fetchJson(`/api/invoices/${encodeURIComponent(bubbleId)}/viewer-activity`);
-}
+// ---------- health badge ----------
 
 async function pingHealth() {
     const badge = document.getElementById('healthBadge');
@@ -99,230 +45,115 @@ async function pingHealth() {
         const body = await res.json();
         if (res.ok && body.db === 'up') {
             badge.textContent = 'db: up';
-            badge.className = 'badge badge--ok';
+            badge.className = 'text-[10px] sm:text-xs font-medium text-emerald-600 px-2 py-1.5 rounded-md';
         } else {
             badge.textContent = 'db: down';
-            badge.className = 'badge badge--err';
+            badge.className = 'text-[10px] sm:text-xs font-medium text-red-600 px-2 py-1.5 rounded-md';
         }
     } catch (err) {
         badge.textContent = 'db: ?';
-        badge.className = 'badge badge--err';
+        badge.className = 'text-[10px] sm:text-xs font-medium text-amber-600 px-2 py-1.5 rounded-md';
     }
 }
 
-// ---------- rendering: history ----------
+// ---------- history rendering (lifted from my_invoice.html, API URL swapped) ----------
 
-function renderHistoryRows(rows) {
-    if (!rows || rows.length === 0) {
-        return '<p class="empty">No history recorded for this invoice.</p>';
-    }
+async function openHistoryView(bubbleId) {
+    const container = document.getElementById('historyList');
+    const invoiceTag = document.getElementById('historyInvoice');
+    const countTag = document.getElementById('historyCount');
 
+    container.innerHTML = '<div class="text-center py-4"><div class="loading-spinner h-6 w-6 rounded-full mx-auto border-slate-300 border-t-slate-600"></div></div>';
+    invoiceTag.textContent = bubbleId;
+    countTag.classList.add('hidden');
     const compactLayout = window.matchMedia('(max-width: 640px)').matches;
 
-    return rows.map((action, index) => {
-        const isLast = index === rows.length - 1;
-        const details = action.details || {};
-        const changes = Array.isArray(action.changes) ? action.changes : [];
-        const date = formatDateTime(action.edited_at || action.created_at);
-        const actorParts = [action.edited_by_name, action.edited_by_phone, action.edited_by_role]
-            .filter(Boolean)
-            .map(escapeHtml);
+    try {
+        const res = await fetch(`/api/invoices/${encodeURIComponent(bubbleId)}/history`);
+        const data = await res.json();
+        if (!data.ok) {
+            throw new Error(data.error || 'Request failed');
+        }
+        const rows = data.data.rows || [];
+        if (rows.length === 0) {
+            container.innerHTML = '<p class="text-center text-slate-500 py-4 text-sm">No history recorded.</p>';
+            countTag.textContent = '0 entries';
+            countTag.classList.remove('hidden');
+            return;
+        }
 
-        return `
-            <article class="timeline-item ${!isLast ? 'timeline-item--has-next' : ''}">
-                <span class="timeline-dot" aria-hidden="true"></span>
-                <div class="timeline-head">
-                    <div class="timeline-head__left">
-                        <span class="${badgeClassFor(action.action_type)}">${escapeHtml(action.action_type.replace(/_/g, ' '))}</span>
-                        <span class="entity-tag">${escapeHtml((action.entity_type || 'invoice').replace(/_/g, ' '))}</span>
-                    </div>
-                    <time class="timeline-head__time" datetime="${escapeHtml(action.edited_at || '')}">${escapeHtml(date)}</time>
-                </div>
-                <p class="timeline-desc">${escapeHtml(details.description || 'Update recorded')}</p>
-                ${actorParts.length > 0 ? `<p class="timeline-actor">${actorParts.join(' • ')}</p>` : ''}
-                ${changes.length > 0 ? renderChanges(changes, compactLayout) : ''}
-            </article>
-        `;
-    }).join('');
-}
+        countTag.textContent = `${rows.length} ${rows.length === 1 ? 'entry' : 'entries'}`;
+        countTag.classList.remove('hidden');
 
-function renderChanges(changes, compactLayout) {
-    const items = changes.map((change) => {
-        const field = escapeHtml(change.field || 'Updated value');
-        const before = escapeHtml(formatHistoryValue(change.before));
-        const after = escapeHtml(formatHistoryValue(change.after));
-        if (compactLayout) {
+        container.innerHTML = rows.map((action, index) => {
+            const date = new Date(action.edited_at || action.created_at).toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            const isLast = index === rows.length - 1;
+            const details = action.details || {};
+            const changes = Array.isArray(action.changes) ? action.changes : [];
+            const actorParts = [action.edited_by_name, action.edited_by_phone, action.edited_by_role]
+                .filter(Boolean)
+                .map(escapeHtml);
+            const badgeClass = action.action_type === 'ADDED'
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                : action.action_type === 'DELETED'
+                    ? 'bg-rose-50 text-rose-700 border-rose-200'
+                    : 'bg-blue-50 text-blue-700 border-blue-200';
+
             return `
-                <div class="change change--compact">
-                    <div class="change__head">
-                        <p class="change__field">${field}</p>
-                        <span class="change__pill">Before / After</span>
-                    </div>
-                    <div class="change__body">
-                        <div class="change__row">
-                            <span class="change__letter change__letter--b">B</span>
-                            <p class="change__value change__value--b">${before}</p>
+                <div class="relative pl-4 sm:pl-5 ${!isLast ? 'pb-4 sm:pb-5 border-l border-slate-200' : ''}">
+                    <div class="absolute -left-1.5 top-1.5 h-2.5 w-2.5 rounded-full bg-slate-300 ring-4 ring-white"></div>
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="inline-flex items-center rounded-full border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] ${badgeClass}">${escapeHtml(action.action_type.replace(/_/g, ' '))}</span>
+                            <span class="text-[9px] font-semibold uppercase tracking-[0.12em] text-slate-400">${escapeHtml((action.entity_type || 'invoice').replace(/_/g, ' '))}</span>
                         </div>
-                        <div class="change__row">
-                            <span class="change__letter change__letter--a">A</span>
-                            <p class="change__value change__value--a">${after}</p>
-                        </div>
+                        <span class="text-[9px] text-slate-400 font-mono">${date}</span>
                     </div>
+                    <p class="${compactLayout ? 'text-[11px]' : 'text-xs'} font-semibold text-slate-700 mb-1 leading-snug">${escapeHtml(details.description || details.change_summary || 'Update recorded')}</p>
+                    ${actorParts.length > 0 ? `<p class="text-[10px] text-slate-500 mb-2 leading-snug">${actorParts.join(' • ')}</p>` : ''}
+                    ${changes.length > 0 ? `
+                        <div class="space-y-2">
+                            ${changes.map((change) => compactLayout ? `
+                                <div class="rounded-xl border border-slate-200 bg-slate-50 p-2.5">
+                                    <div class="flex items-center justify-between gap-2">
+                                        <p class="text-[9px] font-bold uppercase tracking-[0.14em] text-slate-500">${escapeHtml(change.field || 'Updated value')}</p>
+                                        <span class="inline-flex items-center rounded-full bg-white px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-[0.12em] text-slate-400">Before / After</span>
+                                    </div>
+                                    <div class="mt-2 space-y-1.5">
+                                        <div class="flex gap-2">
+                                            <span class="inline-flex shrink-0 items-center rounded-full bg-rose-50 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-[0.12em] text-rose-600">B</span>
+                                            <p class="min-w-0 flex-1 text-[10px] leading-snug text-slate-600 break-words whitespace-pre-wrap">${escapeHtml(formatHistoryValue(change.before))}</p>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <span class="inline-flex shrink-0 items-center rounded-full bg-emerald-50 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-[0.12em] text-emerald-600">A</span>
+                                            <p class="min-w-0 flex-1 text-[10px] leading-snug text-slate-800 break-words whitespace-pre-wrap">${escapeHtml(formatHistoryValue(change.after))}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ` : `
+                                <div class="rounded-xl border border-slate-200 bg-slate-50 p-2.5">
+                                    <p class="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">${escapeHtml(change.field || 'Updated value')}</p>
+                                    <div class="mt-2 grid gap-2 sm:grid-cols-2">
+                                        <div class="rounded-lg border border-rose-100 bg-white p-2">
+                                            <p class="text-[9px] font-bold uppercase tracking-[0.16em] text-rose-500">Before</p>
+                                            <p class="mt-1 text-[11px] text-slate-600 break-words whitespace-pre-wrap">${escapeHtml(formatHistoryValue(change.before))}</p>
+                                        </div>
+                                        <div class="rounded-lg border border-emerald-100 bg-white p-2">
+                                            <p class="text-[9px] font-bold uppercase tracking-[0.16em] text-emerald-600">After</p>
+                                            <p class="mt-1 text-[11px] text-slate-800 break-words whitespace-pre-wrap">${escapeHtml(formatHistoryValue(change.after))}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                            ${!compactLayout && changes.length > 3 ? `<p class="text-[10px] font-medium text-slate-400">+ ${changes.length - 3} more changes</p>` : ''}
+                        </div>
+                    ` : ''}
                 </div>
             `;
-        }
-        return `
-            <div class="change">
-                <p class="change__field">${field}</p>
-                <div class="change__grid">
-                    <div class="change__col change__col--b">
-                        <p class="change__col-label">Before</p>
-                        <p class="change__value">${before}</p>
-                    </div>
-                    <div class="change__col change__col--a">
-                        <p class="change__col-label">After</p>
-                        <p class="change__value">${after}</p>
-                    </div>
-                </div>
-            </div>
-        `;
-    }).join('');
-
-    const overflow = !compactLayout && changes.length > 3
-        ? `<p class="change-overflow">+ ${changes.length - 3} more changes</p>`
-        : '';
-
-    return `<div class="changes">${items}${overflow}</div>`;
-}
-
-function renderHistory(data) {
-    const container = document.getElementById('historyContainer');
-    if (!data) {
-        container.innerHTML = '<p class="empty">Invoice not found.</p>';
-        return;
-    }
-    container.innerHTML = `
-        <header class="panel-head">
-            <h2>${escapeHtml(data.invoiceId)}</h2>
-            <span class="panel-head__count">${data.rows.length} entr${data.rows.length === 1 ? 'y' : 'ies'}</span>
-        </header>
-        <div class="timeline">${renderHistoryRows(data.rows)}</div>
-    `;
-}
-
-// ---------- rendering: viewer activity ----------
-
-function renderActivitySummary(summary) {
-    if (!summary) return '';
-    return `
-        <div class="summary__grid">
-            <div class="summary__cell">
-                <span class="summary__num">${summary.total_events}</span>
-                <span class="summary__label">Events</span>
-            </div>
-            <div class="summary__cell">
-                <span class="summary__num">${summary.invoice_views}</span>
-                <span class="summary__label">Invoice views</span>
-            </div>
-            <div class="summary__cell">
-                <span class="summary__num">${summary.proposal_views}</span>
-                <span class="summary__label">Proposal views</span>
-            </div>
-            <div class="summary__cell">
-                <span class="summary__num">${summary.button_clicks}</span>
-                <span class="summary__label">Button clicks</span>
-            </div>
-            <div class="summary__cell">
-                <span class="summary__num">${summary.unique_visitors}</span>
-                <span class="summary__label">Unique visitors</span>
-            </div>
-            <div class="summary__cell">
-                <span class="summary__num">${formatDuration(summary.average_duration_seconds)}</span>
-                <span class="summary__label">Avg duration</span>
-            </div>
-        </div>
-        <p class="summary__last">Last activity: <time>${escapeHtml(formatDateTime(summary.last_activity_at))}</time></p>
-    `;
-}
-
-function renderActivity(data) {
-    const container = document.getElementById('activityContainer');
-    const summaryEl = document.getElementById('activitySummary');
-
-    if (!data) {
-        summaryEl.hidden = true;
-        container.innerHTML = '<p class="empty">Invoice not found.</p>';
-        return;
-    }
-
-    summaryEl.hidden = false;
-    summaryEl.innerHTML = renderActivitySummary(data.summary);
-
-    if (!data.events || data.events.length === 0) {
-        container.innerHTML = `
-            <header class="panel-head">
-                <h2>${escapeHtml(data.invoiceNumber || data.invoiceId)}</h2>
-                <span class="panel-head__count">0 events</span>
-            </header>
-            <p class="empty">No viewer activity recorded.</p>
-        `;
-        return;
-    }
-
-    const rows = data.events.map((event) => {
-        const eventType = escapeHtml((event.event_type || '').replace(/_/g, ' ') || 'event');
-        const viewer = escapeHtml(event.visitor_label || (event.device_hash ? `device ${event.device_hash.slice(0, 8)}` : 'unknown'));
-        const pageType = event.page_type ? escapeHtml(event.page_type) : '';
-        const button = event.button_name ? escapeHtml(event.button_name) : '';
-        const duration = formatDuration(event.duration_seconds);
-        const time = formatDateTime(event.viewed_at || event.created_at);
-        const viewerType = escapeHtml(event.viewer_type || '');
-
-        return `
-            <article class="activity-row">
-                <div class="activity-row__head">
-                    <span class="${badgeClassFor('UPDATED')}">${eventType}</span>
-                    ${viewerType ? `<span class="viewer-tag">${viewerType}</span>` : ''}
-                    <time class="activity-row__time">${escapeHtml(time)}</time>
-                </div>
-                <p class="activity-row__visitor">${viewer}</p>
-                <div class="activity-row__meta">
-                    ${pageType ? `<span><strong>Page:</strong> ${pageType}</span>` : ''}
-                    ${button ? `<span><strong>Button:</strong> ${button}</span>` : ''}
-                    <span><strong>Duration:</strong> ${escapeHtml(duration)}</span>
-                    ${event.device_hash ? `<span class="activity-row__hash" title="${escapeHtml(event.device_hash)}">${escapeHtml(event.device_hash.slice(0, 12))}…</span>` : ''}
-                </div>
-            </article>
-        `;
-    }).join('');
-
-    container.innerHTML = `
-        <header class="panel-head">
-            <h2>${escapeHtml(data.invoiceNumber || data.invoiceId)}</h2>
-            <span class="panel-head__count">${data.events.length} event${data.events.length === 1 ? '' : 's'}</span>
-        </header>
-        <div class="activity-list">${rows}</div>
-    `;
-}
-
-// ---------- tabs ----------
-
-function switchTab(tabName) {
-    state.activeTab = tabName;
-    document.querySelectorAll('.tab').forEach((btn) => {
-        const isActive = btn.dataset.tab === tabName;
-        btn.classList.toggle('is-active', isActive);
-        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
-    });
-    document.querySelectorAll('.tab-panel').forEach((panel) => {
-        const isActive = panel.id === `tab-${tabName}`;
-        panel.classList.toggle('is-active', isActive);
-        panel.hidden = !isActive;
-    });
-
-    // Lazy-load viewer activity the first time the tab is opened.
-    if (tabName === 'activity' && state.bubbleId && !state.activity) {
-        fetchActivity(state.bubbleId);
+        }).join('');
+    } catch (err) {
+        container.innerHTML = `<p class="text-red-500 text-center text-xs">${escapeHtml(err.message)}</p>`;
+        countTag.classList.add('hidden');
     }
 }
 
@@ -331,43 +162,16 @@ function switchTab(tabName) {
 function setLoading(isLoading) {
     const btn = document.getElementById('loadBtn');
     btn.disabled = isLoading;
-    btn.textContent = isLoading ? 'Loading…' : 'Load';
+    btn.innerHTML = isLoading
+        ? '<div class="loading-spinner h-3 w-3 rounded-full"></div> Loading…'
+        : '<i class="fa-solid fa-magnifying-glass"></i> Load';
 }
 
 function setHint(text, isError = false) {
     const hint = document.getElementById('searchHint');
     hint.textContent = text;
-    hint.classList.toggle('search__hint--err', isError);
-}
-
-async function fetchHistory(bubbleId) {
-    const container = document.getElementById('historyContainer');
-    container.innerHTML = '<div class="loading">Loading history…</div>';
-    try {
-        const data = await loadHistory(bubbleId);
-        state.history = data;
-        renderHistory(data);
-        setHint(`Loaded history for ${bubbleId}.`);
-    } catch (err) {
-        state.history = null;
-        container.innerHTML = `<p class="empty empty--err">${escapeHtml(err.message)}</p>`;
-        setHint(err.message, true);
-    }
-}
-
-async function fetchActivity(bubbleId) {
-    const container = document.getElementById('activityContainer');
-    const summaryEl = document.getElementById('activitySummary');
-    summaryEl.hidden = true;
-    container.innerHTML = '<div class="loading">Loading viewer activity…</div>';
-    try {
-        const data = await loadActivity(bubbleId);
-        state.activity = data;
-        renderActivity(data);
-    } catch (err) {
-        state.activity = null;
-        container.innerHTML = `<p class="empty empty--err">${escapeHtml(err.message)}</p>`;
-    }
+    hint.classList.toggle('text-red-500', isError);
+    hint.classList.toggle('text-slate-400', !isError);
 }
 
 async function onSearchSubmit(event) {
@@ -379,14 +183,7 @@ async function onSearchSubmit(event) {
     setLoading(true);
     setHint('Loading…');
     state.bubbleId = bubbleId;
-    state.history = null;
-    state.activity = null;
-
-    // Always fetch history. Fetch activity only if the user is already on that tab.
-    const historyPromise = fetchHistory(bubbleId);
-    const activityPromise = state.activeTab === 'activity' ? fetchActivity(bubbleId) : Promise.resolve();
-
-    await Promise.all([historyPromise, activityPromise]);
+    await openHistoryView(bubbleId);
     setLoading(false);
 }
 
@@ -394,17 +191,13 @@ async function onSearchSubmit(event) {
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('searchForm').addEventListener('submit', onSearchSubmit);
-    document.querySelectorAll('.tab').forEach((btn) => {
-        btn.addEventListener('click', () => switchTab(btn.dataset.tab));
-    });
     pingHealth();
 
-    // Allow deep-linking via ?bubbleId=...
+    // Deep-link via ?bubbleId=...
     const params = new URLSearchParams(window.location.search);
     const initial = (params.get('bubbleId') || '').trim();
     if (initial) {
-        const input = document.getElementById('bubbleIdInput');
-        input.value = initial;
+        document.getElementById('bubbleIdInput').value = initial;
         onSearchSubmit(new Event('submit', { cancelable: true }));
     }
 });

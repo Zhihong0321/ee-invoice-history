@@ -1,32 +1,93 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="color-scheme" content="light" />
-    <meta name="robots" content="noindex,nofollow" />
-    <title>ee-invoice-history</title>
-    <link rel="icon" href="data:," />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <title>Invoice History</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Exact CSS lifted from E:\Solar Calculator v2\public\templates\my_invoice.html
+           so the standalone page matches the existing mobile UI. */
+        :root {
+            --primary: #334155;
+            --primary-hover: #475569;
+            --accent: #64748b;
+            --success: #166534;
+            --warning: #854d0e;
+            --danger: #991b1b;
+            --info: #1e40af;
+        }
+        * {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        body {
+            background: linear-gradient(to bottom, #f8fafc 0%, #f1f5f9 100%);
+            min-height: 100vh;
+            min-height: 100svh;
+        }
+        .loading-spinner {
+            border: 2px solid #e5e7eb;
+            border-top-color: var(--primary);
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .floating-panel {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 -8px 32px -4px rgba(0, 0, 0, 0.1);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        input[type="text"], input[type="search"] {
+            background: #f8fafc;
+            border: 1px solid #d1d5db;
+            color: #1f2937;
+            transition: all 0.15s;
+        }
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(51, 65, 85, 0.1);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
 </head>
-<body>
-    <header class="app-header">
-        <div class="app-header__inner">
-            <div class="app-header__title">
-                <h1>Invoice History</h1>
-                <p class="app-header__sub">Read-only viewer for <code>invoice_audit_log</code></p>
-            </div>
-            <span class="badge badge--ghost" id="healthBadge" title="DB connectivity">checking…</span>
-        </div>
-    </header>
+<body class="min-h-screen text-slate-800 pb-24 overflow-x-hidden w-full">
 
-    <main class="app-main">
-        <form id="searchForm" class="search" autocomplete="off">
-            <label class="search__label" for="bubbleIdInput">Invoice bubble_id</label>
-            <div class="search__row">
+    <!-- Top Bar (minimal — no nav, no logout, no Customers link) -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 w-full" style="padding-top: env(safe-area-inset-top);">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6">
+            <div class="flex justify-between h-14 items-center">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white">
+                        <i class="fa-solid fa-clock-rotate-left text-sm"></i>
+                    </div>
+                    <span class="text-sm font-bold tracking-tight text-slate-900">Invoice History</span>
+                    <div class="h-4 w-px bg-slate-200 mx-1 hidden sm:block"></div>
+                    <h1 class="text-sm font-bold text-slate-500 hidden sm:block">Audit Log Viewer</h1>
+                </div>
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    <span id="healthBadge" class="text-[10px] sm:text-xs font-medium text-slate-400 px-2 py-1.5 rounded-md" title="DB connectivity">checking…</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main -->
+    <div class="w-full max-w-3xl mx-auto px-4 sm:px-6 py-4 sm:py-6 space-y-4">
+
+        <!-- Search -->
+        <form id="searchForm" autocomplete="off" class="bg-white rounded-xl border border-slate-200 p-4">
+            <label for="bubbleIdInput" class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Invoice bubble_id</label>
+            <div class="flex gap-2">
                 <input
                     id="bubbleIdInput"
                     name="bubbleId"
@@ -36,35 +97,36 @@
                     autocorrect="off"
                     spellcheck="false"
                     placeholder="e.g. 1718224567890x123456789"
+                    class="flex-1 min-w-0 rounded-lg px-3 py-2 text-sm font-mono"
                     required
                 />
-                <button type="submit" id="loadBtn" class="btn btn--primary">Load</button>
+                <button type="submit" id="loadBtn" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 disabled:opacity-50">
+                    <i class="fa-solid fa-magnifying-glass"></i> Load
+                </button>
             </div>
-            <p class="search__hint" id="searchHint">Paste a bubble_id to load its history.</p>
+            <p id="searchHint" class="text-[10px] text-slate-400 mt-2">Paste a bubble_id to load its history.</p>
         </form>
 
-        <nav class="tabs" role="tablist">
-            <button class="tab is-active" data-tab="history" role="tab" aria-selected="true">History</button>
-            <button class="tab" data-tab="activity" role="tab" aria-selected="false">Viewer Activity</button>
-        </nav>
-
-        <section id="tab-history" class="tab-panel is-active" role="tabpanel">
-            <div id="historyContainer" class="panel">
-                <p class="empty">No invoice loaded yet.</p>
+        <!-- History Panel (the exact same look as the original "Activity History" modal) -->
+        <section id="historyPanel" class="bg-white rounded-xl border border-slate-200 shadow-sm">
+            <header class="flex items-center justify-between px-4 sm:px-5 py-3 sm:py-4 border-b border-slate-100">
+                <div class="flex items-center gap-2 min-w-0">
+                    <i class="fa-solid fa-clock-rotate-left text-slate-500 text-xs"></i>
+                    <h3 class="text-sm font-semibold text-slate-900">Activity History</h3>
+                    <span id="historyCount" class="text-[10px] text-slate-400 font-medium hidden"></span>
+                </div>
+                <span id="historyInvoice" class="text-[10px] text-slate-400 font-mono truncate max-w-[50%]"></span>
+            </header>
+            <div id="historyList" class="max-h-[72vh] overflow-y-auto p-3 sm:p-5">
+                <p class="text-center text-slate-500 py-4 text-sm">No invoice loaded yet.</p>
             </div>
         </section>
 
-        <section id="tab-activity" class="tab-panel" role="tabpanel" hidden>
-            <div id="activitySummary" class="summary" hidden></div>
-            <div id="activityContainer" class="panel">
-                <p class="empty">No invoice loaded yet.</p>
-            </div>
-        </section>
-    </main>
-
-    <footer class="app-footer">
-        <span>ee-invoice-history · read-only · no auth</span>
-    </footer>
+        <!-- Footer note -->
+        <p class="text-center text-[10px] text-slate-400 pt-2">
+            ee-invoice-history · read-only · no auth · DB: <code class="font-mono">invoice_audit_log</code>
+        </p>
+    </div>
 
     <script src="/js/app.js" defer></script>
 </body>

@@ -88,10 +88,14 @@ GRANT SELECT ON ALL TABLES IN SCHEMA public TO invoice_history_readonly;
 │   └── routes/
 │       └── api.js             JSON endpoints
 └── public/
-    ├── index.html             Single-page UI
-    ├── js/app.js              Fetch + render
-    └── css/style.css
+    ├── index.html             Single-page UI (lifted chrome from my_invoice.html)
+    └── js/app.js              Fetch + render (lifted timeline from my_invoice.html)
 ```
+
+The frontend uses **Tailwind via CDN**, Inter font, and FontAwesome — the same
+stack as the parent app's `public/templates/my_invoice.html`. The timeline
+rendering code is lifted **verbatim** from that file (the `openHistoryModal`
+function, lines 523-607), with only the API URL swapped.
 
 ## Origin
 

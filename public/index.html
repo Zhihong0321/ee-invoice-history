@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>ee-invoice-history</title>
+    <link rel="icon" href="data:," />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+    <header class="app-header">
+        <div class="app-header__inner">
+            <div class="app-header__title">
+                <h1>Invoice History</h1>
+                <p class="app-header__sub">Read-only viewer for <code>invoice_audit_log</code></p>
+            </div>
+            <span class="badge badge--ghost" id="healthBadge" title="DB connectivity">checking…</span>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <form id="searchForm" class="search" autocomplete="off">
+            <label class="search__label" for="bubbleIdInput">Invoice bubble_id</label>
+            <div class="search__row">
+                <input
+                    id="bubbleIdInput"
+                    name="bubbleId"
+                    type="text"
+                    inputmode="text"
+                    autocapitalize="off"
+                    autocorrect="off"
+                    spellcheck="false"
+                    placeholder="e.g. 1718224567890x123456789"
+                    required
+                />
+                <button type="submit" id="loadBtn" class="btn btn--primary">Load</button>
+            </div>
+            <p class="search__hint" id="searchHint">Paste a bubble_id to load its history.</p>
+        </form>
+
+        <nav class="tabs" role="tablist">
+            <button class="tab is-active" data-tab="history" role="tab" aria-selected="true">History</button>
+            <button class="tab" data-tab="activity" role="tab" aria-selected="false">Viewer Activity</button>
+        </nav>
+
+        <section id="tab-history" class="tab-panel is-active" role="tabpanel">
+            <div id="historyContainer" class="panel">
+                <p class="empty">No invoice loaded yet.</p>
+            </div>
+        </section>
+
+        <section id="tab-activity" class="tab-panel" role="tabpanel" hidden>
+            <div id="activitySummary" class="summary" hidden></div>
+            <div id="activityContainer" class="panel">
+                <p class="empty">No invoice loaded yet.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <span>ee-invoice-history · read-only · no auth</span>
+    </footer>
+
+    <script src="/js/app.js" defer></script>
+</body>
+</html>

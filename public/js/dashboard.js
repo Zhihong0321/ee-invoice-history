@@ -161,11 +161,17 @@ function renderRecentLogs(data) {
 
     const rows = recent.map((ev, i) => {
         const meta = CATEGORIES[ev.category] || CATEGORIES.other;
+        const actorName = ev.actor ? ev.actor.name : 'System';
         return `
-            <div style="display:flex; align-items:center; gap:9px; padding:8px 2px; ${i > 0 ? 'border-top:1px solid var(--border);' : ''}">
-                <span style="width:6px; height:6px; border-radius:50%; background:${meta.color}; flex:0 0 auto;"></span>
-                <span style="flex:1; min-width:0; font-size:12.5px; color:var(--text); font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(ev.summary)}</span>
-                <span style="font-size:11px; color:var(--text3); flex:0 0 auto; white-space:nowrap;" title="${escapeHtml(getEventTime(ev.edited_at))}">${escapeHtml(timeAgo(ev.edited_at))}</span>
+            <div style="display:flex; align-items:flex-start; gap:9px; padding:8px 2px; ${i > 0 ? 'border-top:1px solid var(--border);' : ''}">
+                <span style="width:6px; height:6px; border-radius:50%; background:${meta.color}; flex:0 0 auto; margin-top:6px;"></span>
+                <div style="flex:1; min-width:0;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="flex:1; min-width:0; font-size:12.5px; color:var(--text); font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(ev.summary)}</span>
+                        <span style="font-size:11px; color:var(--text3); flex:0 0 auto; white-space:nowrap;" title="${escapeHtml(getEventTime(ev.edited_at))}">${escapeHtml(timeAgo(ev.edited_at))}</span>
+                    </div>
+                    <div style="font-size:11px; color:var(--text3); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">by <span style="color:var(--text2); font-weight:500;">${escapeHtml(actorName)}</span>${ev.invoice_number ? ` · ${escapeHtml(ev.invoice_number)}` : ''}</div>
+                </div>
             </div>
         `;
     }).join('');

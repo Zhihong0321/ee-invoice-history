@@ -78,14 +78,28 @@ async function loadDayBuckets(client) {
         console.warn('[dashboard] loadDayBuckets got 0 rows for the last 3 days — likely a transient proxy/DB hiccup, not real zero activity');
     }
 
+    const seenDayKeys = new Set();
     result.rows.forEach((row) => {
         const day = toDayKey(row.day);
+        seenDayKeys.add(day);
         if (!buckets[day]) return;
         const key = `${row.entity_type}:${row.action_type}`;
         buckets[day][key] = (buckets[day][key] || 0) + Number(row.c);
     });
 
-    return { today, yesterday, buckets };
+    // TEMPORARY DEBUG — remove once the production all-zero KPI bug is root-caused.
+    const debug = {
+        computedToday: today,
+        computedYesterday: yesterday,
+        rawRowCount: result.rows.length,
+        seenDayKeys: [...seenDayKeys],
+        sampleRawDayValues: result.rows.slice(0, 5).map((r) => r.day),
+        nodeVersion: process.version,
+        resolvedTz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        serverNowIso: new Date().toISOString()
+    };
+
+    return { today, yesterday, buckets, debug };
 }
 
 function countMetrics(bucketData, metrics) {
@@ -360,7 +374,8 @@ async function loadDashboard(client) {
             kpis: countMetrics(bucketData, SEDA_METRICS),
             pipeline: sedaPipeline,
             transitions: sedaTransitions
-        }
+        },
+        _debug: bucketData.debug
     };
 }
 

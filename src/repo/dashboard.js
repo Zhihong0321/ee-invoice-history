@@ -21,9 +21,14 @@ const ACTIVE_VIEWER_WINDOW = '15 minutes';
 const TOP_MOVERS_WINDOW = '24 hours';
 
 function toDayKey(value) {
-    // Postgres `date` values round-trip through the proxy as either
-    // 'YYYY-MM-DD' or an ISO timestamp at midnight UTC — either way the
-    // first 10 chars are the date we grouped by.
+    // Postgres `date` values arrive differently depending on DB_MODE:
+    // - proxy mode (HTTP + JSON): a string, either 'YYYY-MM-DD' or an ISO
+    //   timestamp at midnight UTC.
+    // - direct mode (real pg.Pool): node-postgres parses SQL `date` columns
+    //   into a native JS Date object. String(dateObject) calls .toString()
+    //   ("Tue Jul 07 2026...", NOT ISO), which silently produced the wrong
+    //   key and made every day-bucketed KPI read as zero in production.
+    if (value instanceof Date) return value.toISOString().slice(0, 10);
     return String(value).slice(0, 10);
 }
 
@@ -78,28 +83,14 @@ async function loadDayBuckets(client) {
         console.warn('[dashboard] loadDayBuckets got 0 rows for the last 3 days — likely a transient proxy/DB hiccup, not real zero activity');
     }
 
-    const seenDayKeys = new Set();
     result.rows.forEach((row) => {
         const day = toDayKey(row.day);
-        seenDayKeys.add(day);
         if (!buckets[day]) return;
         const key = `${row.entity_type}:${row.action_type}`;
         buckets[day][key] = (buckets[day][key] || 0) + Number(row.c);
     });
 
-    // TEMPORARY DEBUG — remove once the production all-zero KPI bug is root-caused.
-    const debug = {
-        computedToday: today,
-        computedYesterday: yesterday,
-        rawRowCount: result.rows.length,
-        seenDayKeys: [...seenDayKeys],
-        sampleRawDayValues: result.rows.slice(0, 5).map((r) => r.day),
-        nodeVersion: process.version,
-        resolvedTz: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        serverNowIso: new Date().toISOString()
-    };
-
-    return { today, yesterday, buckets, debug };
+    return { today, yesterday, buckets };
 }
 
 function countMetrics(bucketData, metrics) {
@@ -374,8 +365,7 @@ async function loadDashboard(client) {
             kpis: countMetrics(bucketData, SEDA_METRICS),
             pipeline: sedaPipeline,
             transitions: sedaTransitions
-        },
-        _debug: bucketData.debug
+        }
     };
 }
 

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5.0, viewport-fit=cover">
+  <title>公司动态 · Company Pulse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #3B82F6;
+      --bg-light: #EDF1F6;
+      --surface-light: #FFFFFF;
+      --surface2-light: #F5F8FB;
+      --border-light: #E4E9F0;
+      --text-light: #101B2D;
+      --text2-light: #566379;
+      --text3-light: #93A1B5;
+      --shadow-light: 0 1px 2px rgba(16,27,45,.05), 0 2px 6px rgba(16,27,45,.04);
+
+      --bg-dark: #0A0F1A;
+      --surface-dark: #121A2A;
+      --surface2-dark: #0E1626;
+      --border-dark: #212C40;
+      --text-dark: #E7EDF5;
+      --text2-dark: #93A4BC;
+      --text3-dark: #5E6F88;
+      --shadow-dark: 0 1px 2px rgba(0,0,0,.4), 0 4px 12px rgba(0,0,0,.3);
+    }
+
+    body.theme-light {
+      --bg: var(--bg-light); --surface: var(--surface-light); --surface2: var(--surface2-light);
+      --border: var(--border-light); --text: var(--text-light); --text2: var(--text2-light);
+      --text3: var(--text3-light); --shadow: var(--shadow-light);
+    }
+    body.theme-dark {
+      --bg: var(--bg-dark); --surface: var(--surface-dark); --surface2: var(--surface2-dark);
+      --border: var(--border-dark); --text: var(--text-dark); --text2: var(--text2-dark);
+      --text3: var(--text3-dark); --shadow: var(--shadow-dark);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      margin: 0; padding: 0; background: var(--bg); color: var(--text);
+      font-family: 'IBM Plex Sans', system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    ::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+    @keyframes ihpulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+    @keyframes fadein { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    @keyframes ringpulse {
+      0% { box-shadow: 0 0 0 0 color-mix(in srgb, #22C55E 45%, transparent); }
+      70% { box-shadow: 0 0 0 8px color-mix(in srgb, #22C55E 0%, transparent); }
+      100% { box-shadow: 0 0 0 0 color-mix(in srgb, #22C55E 0%, transparent); }
+    }
+    .animated-fadein { animation: fadein 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+    .stagger-0 { animation-delay: 0ms; } .stagger-1 { animation-delay: 30ms; }
+    .stagger-2 { animation-delay: 60ms; } .stagger-3 { animation-delay: 90ms; }
+    .stagger-4 { animation-delay: 120ms; } .stagger-5 { animation-delay: 150ms; }
+
+    .live-ring { animation: ringpulse 2s ease-out infinite; }
+
+    .tap-card { transition: transform .15s ease, box-shadow .15s ease; cursor: pointer; }
+    .tap-card:active { transform: scale(0.98); }
+
+    @keyframes toastIn { from { opacity: 0; transform: translateX(24px) scale(.96); } to { opacity: 1; transform: none; } }
+    @keyframes toastOut { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateX(24px) scale(.96); } }
+    .toast-pop { animation: toastIn .28s cubic-bezier(0.16, 1, 0.3, 1) both; }
+    .toast-pop.toast-out { animation: toastOut .22s ease forwards; }
+  </style>
+</head>
+<body class="theme-light">
+  <div id="app" style="position:relative; min-height:100vh; max-width:452px; margin:0 auto; padding-bottom:40px;">
+    <div id="view-header"></div>
+    <main id="view-content" style="padding:0 14px;"></main>
+  </div>
+
+  <script src="/js/dashboard.js" defer></script>
+</body>
+</html>

@@ -5,6 +5,7 @@ const { pool } = require('../db');
 const { loadInvoiceHistory } = require('../repo/history');
 const { loadViewerActivity } = require('../repo/viewerActivity');
 const { listInvoices, loadInvoiceDetail } = require('../repo/invoiceFeed');
+const { loadDashboard } = require('../repo/dashboard');
 
 const router = express.Router();
 
@@ -129,6 +130,29 @@ router.get('/invoices/:bubbleId/viewer-activity', async (req, res) => {
         res.json({ ok: true, data: result });
     } catch (err) {
         console.error(`[api] /viewer-activity ${bubbleId} failed:`, err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/dashboard
+ * Company-wide "live pulse" snapshot: today's KPI counters (vs. yesterday),
+ * revenue collected/pending, who's viewing an invoice right now, which
+ * invoices are getting the most attention, and a chronological cross-invoice
+ * activity feed. Powers the standalone /dashboard.html view.
+ *
+ * Returns: 200 { ok: true, data: { generatedAt, kpis, revenue, activeViewers, topMovers, feed } }
+ */
+router.get('/dashboard', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const data = await loadDashboard(client);
+        res.json({ ok: true, data });
+    } catch (err) {
+        console.error('[api] /dashboard failed:', err.message);
         res.status(500).json({ ok: false, error: err.message });
     } finally {
         if (client) client.release();

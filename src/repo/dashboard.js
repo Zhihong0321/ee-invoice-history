@@ -71,6 +71,13 @@ async function loadDayBuckets(client) {
     const { today, yesterday } = todayYesterdayKeys();
     const buckets = { [today]: {}, [yesterday]: {} };
 
+    if (result.rows.length === 0) {
+        // 3 days of activity across the whole company coming back empty is
+        // never legitimate during business hours — surface it instead of
+        // silently rendering an all-zero KPI row.
+        console.warn('[dashboard] loadDayBuckets got 0 rows for the last 3 days — likely a transient proxy/DB hiccup, not real zero activity');
+    }
+
     result.rows.forEach((row) => {
         const day = toDayKey(row.day);
         if (!buckets[day]) return;

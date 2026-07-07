@@ -153,6 +153,34 @@ function renderHeader() {
     document.getElementById('btn-invoices').onclick = () => { location.href = '/'; };
 }
 
+// ---------- section: recent log strip (last 3, any type) ----------
+
+function renderRecentLogs(data) {
+    if (!data || !data.feed || data.feed.length === 0) return '';
+    const recent = data.feed.slice(0, 3);
+
+    const rows = recent.map((ev, i) => {
+        const meta = CATEGORIES[ev.category] || CATEGORIES.other;
+        return `
+            <div style="display:flex; align-items:center; gap:9px; padding:8px 2px; ${i > 0 ? 'border-top:1px solid var(--border);' : ''}">
+                <span style="width:6px; height:6px; border-radius:50%; background:${meta.color}; flex:0 0 auto;"></span>
+                <span style="flex:1; min-width:0; font-size:12.5px; color:var(--text); font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(ev.summary)}</span>
+                <span style="font-size:11px; color:var(--text3); flex:0 0 auto; white-space:nowrap;" title="${escapeHtml(getEventTime(ev.edited_at))}">${escapeHtml(timeAgo(ev.edited_at))}</span>
+            </div>
+        `;
+    }).join('');
+
+    return `
+        <div style="margin-top:12px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                <span style="font-size:10.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--text3);">Latest</span>
+                <span style="flex:1; height:1px; background:var(--border);"></span>
+            </div>
+            <div style="background:var(--surface); border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow); padding:0 12px;">${rows}</div>
+        </div>
+    `;
+}
+
 // ---------- section: KPI grid ----------
 
 function renderKpis(data) {
@@ -485,6 +513,7 @@ function mergeNewFeedItems(newFeed) {
 // ---------- orchestration ----------
 
 function renderStaticSections(data) {
+    document.getElementById('sec-recent').innerHTML = renderRecentLogs(data);
     document.getElementById('sec-kpis').innerHTML = renderKpis(data);
     document.getElementById('sec-revenue').innerHTML = renderRevenue(data);
     document.getElementById('sec-viewers').innerHTML = renderActiveViewers(data);
@@ -495,6 +524,7 @@ function renderStaticSections(data) {
 function renderShell() {
     const container = document.getElementById('view-content');
     container.innerHTML = `
+        <div id="sec-recent"></div>
         <div id="sec-kpis"></div>
         <div id="sec-revenue"></div>
         <div id="sec-viewers"></div>

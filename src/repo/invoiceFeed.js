@@ -76,6 +76,10 @@ function categorizeAction(rawAction, entityType) {
     if (a.endsWith('session_ended')) return { category: 'session', label: 'Session ended' };
     if (a.endsWith('button_clicked')) return { category: 'click', label: 'Button clicked' };
 
+    // Newer audit-log types (see src/repo/dashboard.js for their KPI/sections):
+    if (e === 'payment' && a === 'receipt_sent_manual') return { category: 'payment', label: 'Receipt sent' };
+    if (e === 'seda_registration' && ['insert', 'create', 'created'].includes(a)) return { category: 'created', label: 'Registration created' };
+
     if (e.includes('payment')) {
         if (['insert', 'create', 'created', 'added', 'verify', 'verified'].includes(a)) {
             return { category: 'payment', label: a === 'verify' || a === 'verified' ? 'Payment verified' : 'Payment recorded' };
@@ -174,6 +178,10 @@ function normalizeDetailRow(row) {
     let summary;
     if (isViewer) {
         summary = summarizeViewerActivity(rawAction, Array.isArray(changesArr) ? changesArr : []);
+    } else if (entityType === 'payment' && rawAction === 'receipt_sent_manual') {
+        summary = 'Payment receipt sent to customer';
+    } else if (entityType === 'seda_registration' && ['insert', 'create', 'created'].includes(rawAction)) {
+        summary = 'New SEDA registration created';
     } else if (changes.length === 0) {
         summary = `${label} ${entityType.replace(/_/g, ' ')}`;
     } else if (changes.length === 1) {

@@ -394,6 +394,145 @@ function renderSeda(data) {
     `;
 }
 
+// ---------- shared: single-KPI card row ----------
+
+function kpiCardsHtml(kpis) {
+    return (kpis || []).map((k) => `
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:15px; box-shadow:var(--shadow); padding:13px 14px;">
+            <div style="font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; color:var(--text3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(k.label)}</div>
+            <div style="display:flex; align-items:baseline; gap:7px; margin-top:6px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:23px; font-weight:700; color:var(--text); font-variant-numeric:tabular-nums;">${k.today}</span>
+                <span style="font-size:11px; font-weight:700; color:${deltaColor(k.delta.direction)};">${deltaArrow(k.delta.direction)} ${escapeHtml(k.delta.label)}</span>
+            </div>
+            <div style="font-size:10.5px; color:var(--text3); margin-top:3px;">vs ${k.yesterday} yesterday</div>
+        </div>
+    `).join('');
+}
+
+// ---------- section: receipts sent ----------
+
+function renderReceipts(data) {
+    if (!data || !data.receipts) return '';
+    const rc = data.receipts;
+    const list = rc.list || [];
+
+    const rows = list.length === 0
+        ? `<div style="padding:16px; text-align:center; color:var(--text3); font-size:12.5px;">No receipts sent yet.</div>`
+        : list.map((r) => `
+            <div class="tap-card" onclick="${r.invoice_id ? `goToInvoice(${r.invoice_id})` : ''}" style="display:flex; align-items:center; gap:10px; padding:9px 12px; border-top:1px solid var(--border);">
+                <span style="width:6px; height:6px; border-radius:50%; background:#059669; flex:0 0 auto;"></span>
+                <div style="min-width:0; flex:1;">
+                    <div style="font-size:13px; font-weight:600; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(r.customer_name || 'No customer')}</div>
+                    <div style="font-size:11px; color:var(--text3);"><span style="font-family:'IBM Plex Mono',monospace; color:var(--accent);">${escapeHtml(r.invoice_number || '—')}</span>${r.agent_phone ? ` · WhatsApp ${escapeHtml(r.agent_phone)}` : ''}</div>
+                </div>
+                <div style="font-size:10.5px; color:var(--text3); flex:0 0 auto; white-space:nowrap;">${timeAgo(r.edited_at)}</div>
+            </div>
+        `).join('');
+
+    return `
+        <div style="margin-top:18px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                <span style="font-size:11.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--text3);">Receipts Sent</span>
+                <span style="flex:1; height:1px; background:var(--border);"></span>
+                <span style="font-size:10px; color:var(--text3);">payment confirmations</span>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr; gap:9px;">${kpiCardsHtml(rc.kpis)}</div>
+            <div style="background:var(--surface); border:1px solid var(--border); border-radius:15px; box-shadow:var(--shadow); overflow:hidden; margin-top:9px;">${rows}</div>
+        </div>
+    `;
+}
+
+// ---------- section: new SEDA registrations ----------
+
+const SEDA_REG_STATUS_COLORS = { draft: '#64748B', pending: '#D97706', submitted: '#2563EB', approved: '#059669' };
+
+function renderNewSedaRegistrations(data) {
+    if (!data || !data.newSedaRegistrations) return '';
+    const nr = data.newSedaRegistrations;
+    const list = nr.list || [];
+
+    const rows = list.length === 0
+        ? `<div style="padding:16px; text-align:center; color:var(--text3); font-size:12.5px;">No new registrations yet.</div>`
+        : list.map((r) => {
+            const status = r.registration_status || r.admin_status || '';
+            const color = SEDA_REG_STATUS_COLORS[String(status).toLowerCase()] || 'var(--text3)';
+            return `
+                <div class="tap-card" onclick="${r.invoice_id ? `goToInvoice(${r.invoice_id})` : ''}" style="display:flex; align-items:center; gap:10px; padding:9px 12px; border-top:1px solid var(--border);">
+                    <div style="min-width:0; flex:1;">
+                        <div style="font-size:13px; font-weight:600; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(r.customer_name || 'No customer')}</div>
+                        <div style="font-size:11px; color:var(--text3); font-family:'IBM Plex Mono',monospace;">${escapeHtml(r.invoice_number || '—')}</div>
+                    </div>
+                    <div style="text-align:right; flex:0 0 auto;">
+                        ${status ? `<div style="font-size:11px; font-weight:700; color:${color}; white-space:nowrap;">${escapeHtml(status)}</div>` : ''}
+                        <div style="font-size:10px; color:var(--text3); margin-top:1px;">${timeAgo(r.edited_at)}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+    return `
+        <div style="margin-top:18px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                <span style="font-size:11.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--text3);">New SEDA Registrations</span>
+                <span style="flex:1; height:1px; background:var(--border);"></span>
+                <span style="font-size:10px; color:var(--text3);">newly created</span>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr; gap:9px;">${kpiCardsHtml(nr.kpis)}</div>
+            <div style="background:var(--surface); border:1px solid var(--border); border-radius:15px; box-shadow:var(--shadow); overflow:hidden; margin-top:9px;">${rows}</div>
+        </div>
+    `;
+}
+
+// ---------- section: referral web chat activity ----------
+
+function renderReferralWebchat(data) {
+    if (!data || !data.referralWebchat) return '';
+    const wc = data.referralWebchat;
+    const isDark = state.theme === 'dark';
+    const mix = isDark ? 22 : 13;
+
+    const kpiCards = (wc.kpis || []).map((k) => `
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:15px; box-shadow:var(--shadow); padding:13px 14px;">
+            <div style="font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; color:var(--text3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(k.label)}</div>
+            <div style="display:flex; align-items:baseline; gap:7px; margin-top:6px;">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:23px; font-weight:700; color:var(--text); font-variant-numeric:tabular-nums;">${k.today}</span>
+                <span style="font-size:11px; font-weight:700; color:${deltaColor(k.delta.direction)};">${deltaArrow(k.delta.direction)} ${escapeHtml(k.delta.label)}</span>
+            </div>
+            <div style="font-size:10.5px; color:var(--text3); margin-top:3px;">vs ${k.yesterday} yesterday</div>
+        </div>
+    `).join('');
+
+    const threads = wc.threads || [];
+    const threadRows = threads.length === 0
+        ? `<div style="padding:16px; text-align:center; color:var(--text3); font-size:12.5px;">No webchat activity yet.</div>`
+        : threads.map((t) => {
+            const isInbound = t.last_direction === 'inbound';
+            const color = isInbound ? '#0891B2' : '#7C3AED';
+            return `
+                <div style="display:flex; align-items:center; gap:10px; padding:9px 12px; border-top:1px solid var(--border);">
+                    <span style="width:6px; height:6px; border-radius:50%; background:${color}; flex:0 0 auto;"></span>
+                    <div style="min-width:0; flex:1;">
+                        <div style="font-size:13px; font-weight:600; color:var(--text); font-family:'IBM Plex Mono',monospace;">${escapeHtml(t.phone_masked)}</div>
+                        <div style="font-size:11px; color:var(--text3); margin-top:1px;">${t.message_count} message${t.message_count === 1 ? '' : 's'} · ${isInbound ? 'awaiting reply' : 'replied'}</div>
+                    </div>
+                    <div style="font-size:10.5px; color:var(--text3); flex:0 0 auto; white-space:nowrap;">${timeAgo(t.last_activity)}</div>
+                </div>
+            `;
+        }).join('');
+
+    return `
+        <div style="margin-top:18px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                <span style="font-size:11.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--text3);">Referral Web Chat</span>
+                <span style="flex:1; height:1px; background:var(--border);"></span>
+                <span style="font-size:10px; color:var(--text3);">AI Assistant</span>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:9px;">${kpiCards}</div>
+            <div style="background:var(--surface); border:1px solid var(--border); border-radius:15px; box-shadow:var(--shadow); overflow:hidden; margin-top:9px;">${threadRows}</div>
+        </div>
+    `;
+}
+
 // ---------- section: live feed ----------
 
 function feedCardHtml(ev) {
@@ -525,6 +664,9 @@ function renderStaticSections(data) {
     document.getElementById('sec-viewers').innerHTML = renderActiveViewers(data);
     document.getElementById('sec-movers').innerHTML = renderTopMovers(data);
     document.getElementById('sec-seda').innerHTML = renderSeda(data);
+    document.getElementById('sec-newseda').innerHTML = renderNewSedaRegistrations(data);
+    document.getElementById('sec-receipts').innerHTML = renderReceipts(data);
+    document.getElementById('sec-webchat').innerHTML = renderReferralWebchat(data);
 }
 
 function renderShell() {
@@ -536,6 +678,9 @@ function renderShell() {
         <div id="sec-viewers"></div>
         <div id="sec-movers"></div>
         <div id="sec-seda"></div>
+        <div id="sec-newseda"></div>
+        <div id="sec-receipts"></div>
+        <div id="sec-webchat"></div>
         <div style="display:flex; align-items:center; gap:8px; margin:18px 0 8px;">
             <span style="font-size:11.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--text3);">Live Activity</span>
             <span style="flex:1; height:1px; background:var(--border);"></span>

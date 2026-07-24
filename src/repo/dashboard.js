@@ -59,6 +59,15 @@ const SEDA_METRICS = [
     { id: 'seda_status_changes', label: 'Status Changes', pairs: [['seda', 'update']] }
 ];
 
+// Newer audit-log types, each surfaced as its own KPI + section below.
+const RECEIPT_METRICS = [
+    { id: 'receipts_sent', label: 'Receipts Sent', pairs: [['payment', 'receipt_sent_manual']] }
+];
+
+const SEDA_REG_METRICS = [
+    { id: 'new_registrations', label: 'New Registrations', pairs: [['seda_registration', 'insert']] }
+];
+
 /**
  * Single grouped read of entity_type/action_type counts for today +
  * yesterday (Asia/Kuala_Lumpur) — shared by every "today vs. yesterday" KPI
@@ -342,16 +351,253 @@ async function loadSedaTransitions(client) {
     });
 }
 
+/**
+ * Payment receipts that were manually sent to the customer
+ * (`entity_type='payment'`, `action_type='receipt_sent_manual'`) — a newer
+ * audit-log type. The single change field `whatsapp_receipt` records the
+ * channel/agent the receipt went out through (e.g. "Agent: 60162147294").
+ */
+async function loadReceiptsSent(client) {
+    const result = await client.query(
+        `SELECT a.id, a.invoice_id, a.changes, a.actor_name, a.edited_at,
+                i.invoice_number, cu.name AS customer_name
+           FROM invoice_audit_log a
+           LEFT JOIN invoice i ON i.id = a.invoice_id
+           LEFT JOIN customer cu ON cu.customer_id = i.linked_customer
+          WHERE a.entity_type = 'payment' AND a.action_type = 'receipt_sent_manual'
+          ORDER BY a.edited_at DESC
+          LIMIT 12`
+    );
+
+    return result.rows.map((row) => {
+        const changes = safeJson(row.changes);
+        const receipt = (Array.isArray(changes) ? changes : []).find((c) => String(c?.field || '').toLowerCase() === 'whatsapp_receipt') || {};
+        const via = String(receipt.after || '').replace(/^\s*agent:\s*/i, '').trim();
+        return {
+            invoice_id: row.invoice_id,
+            invoice_number: row.invoice_number || (row.invoice_id ? `#${row.invoice_id}` : null),
+            customer_name: row.customer_name || null,
+            sent_by: row.actor_name || null,
+            agent_phone: via || null,
+            edited_at: row.edited_at
+        };
+    });
+}
+
+/**
+ * Newly created SEDA registrations (`entity_type='seda_registration'`,
+ * `action_type='insert'`) — a newer audit-log type, distinct from the
+ * existing `seda_registration:updated` status edits already in SEDA Activity.
+ * Each insert records the starting Registration/Admin status.
+ */
+async function loadNewSedaRegistrations(client) {
+    const result = await client.query(
+        `SELECT a.id, a.invoice_id, a.changes, a.edited_at,
+                i.invoice_number, cu.name AS customer_name
+           FROM invoice_audit_log a
+           LEFT JOIN invoice i ON i.id = a.invoice_id
+           LEFT JOIN customer cu ON cu.customer_id = i.linked_customer
+          WHERE a.entity_type = 'seda_registration' AND a.action_type = 'insert'
+          ORDER BY a.edited_at DESC
+          LIMIT 12`
+    );
+
+    return result.rows.map((row) => {
+        const changes = safeJson(row.changes);
+        const arr = Array.isArray(changes) ? changes : [];
+        const field = (name) => {
+            const f = arr.find((c) => String(c?.field || '').toLowerCase() === name.toLowerCase());
+            return f ? (f.after ?? null) : null;
+        };
+        return {
+            invoice_id: row.invoice_id,
+            invoice_number: row.invoice_number || (row.invoice_id ? `#${row.invoice_id}` : null),
+            customer_name: row.customer_name || null,
+            registration_status: field('Registration Status'),
+            admin_status: field('Admin Status'),
+            edited_at: row.edited_at
+        };
+    });
+}
+
+/**
+ * Referral product's AI Assistant web-chat activity — read from the
+ * standard multi-channel `et_messages` log (`channel = 'webchat'`), same
+ * `prod_main` database this whole dashboard already reads. Content is
+ * deliberately never selected or returned here: this is an activity signal
+ * (message counts, conversation threads, timestamps), not a chat viewer.
+ *
+ * `channel='whatsapp'` rows in the same table are historical only (Referral
+ * retired WhatsApp) — this reads webchat exclusively, and rows only start
+ * appearing once the webchat route's backend logging ships; there is no
+ * historical backfill for webchat.
+ */
+function maskWebchatPhone(phone) {
+    const digits = String(phone || '').replace(/\D/g, '');
+    if (digits.length < 4) return '••••';
+    return `•••• ${digits.slice(-4)}`;
+}
+
+async function loadReferralWebchatBuckets(client) {
+    const result = await client.query(
+        `WITH msgs AS (
+            SELECT (created_at AT TIME ZONE 'Asia/Kuala_Lumpur')::date AS day,
+                   LEAST(sender_phone, recipient_phone) || '|' || GREATEST(sender_phone, recipient_phone) AS thread_key
+              FROM et_messages
+             WHERE channel = 'webchat'
+               AND created_at > now() - interval '3 days'
+         )
+         SELECT day, count(*) AS message_count, count(DISTINCT thread_key) AS thread_count
+           FROM msgs
+          GROUP BY 1`
+    );
+
+    const { today, yesterday } = todayYesterdayKeys();
+    const buckets = { [today]: { messages: 0, threads: 0 }, [yesterday]: { messages: 0, threads: 0 } };
+    result.rows.forEach((row) => {
+        const day = toDayKey(row.day);
+        if (!buckets[day]) return;
+        buckets[day] = { messages: Number(row.message_count) || 0, threads: Number(row.thread_count) || 0 };
+    });
+
+    const t = buckets[today];
+    const y = buckets[yesterday];
+    return [
+        { id: 'webchat_messages', label: 'Webchat Messages', today: t.messages, yesterday: y.messages, delta: pctDelta(t.messages, y.messages) },
+        { id: 'webchat_conversations', label: 'Active Conversations', today: t.threads, yesterday: y.threads, delta: pctDelta(t.threads, y.threads) }
+    ];
+}
+
+async function loadReferralWebchatThreads(client) {
+    const result = await client.query(
+        `SELECT direction, sender_phone, recipient_phone, created_at
+           FROM et_messages
+          WHERE channel = 'webchat'
+          ORDER BY created_at DESC
+          LIMIT 300`
+    );
+
+    const threads = new Map();
+    result.rows.forEach((row) => {
+        const a = row.sender_phone || '';
+        const b = row.recipient_phone || '';
+        const key = a < b ? `${a}|${b}` : `${b}|${a}`;
+        const customerPhone = /^60\d{8,11}$/.test(a) ? a : (/^60\d{8,11}$/.test(b) ? b : (a || b));
+
+        let entry = threads.get(key);
+        if (!entry) {
+            // First row seen per key is the newest (rows arrive DESC by created_at).
+            entry = { customerPhone, messageCount: 0, lastDirection: row.direction, lastActivity: row.created_at };
+            threads.set(key, entry);
+        }
+        entry.messageCount += 1;
+    });
+
+    return Array.from(threads.values())
+        .sort((x, y) => new Date(y.lastActivity) - new Date(x.lastActivity))
+        .slice(0, 20)
+        .map((t) => ({
+            phone_masked: maskWebchatPhone(t.customerPhone),
+            message_count: t.messageCount,
+            last_direction: t.lastDirection,
+            last_activity: t.lastActivity
+        }));
+}
+
+async function loadReferralWebchat(client) {
+    const [kpis, threads] = await Promise.all([
+        loadReferralWebchatBuckets(client),
+        loadReferralWebchatThreads(client)
+    ]);
+    return { kpis, threads };
+}
+
+/**
+ * Events-per-minute over the last 60 minutes — the "is the system breathing"
+ * pulse for the live wall. Cheap (indexed on edited_at, small grouped result).
+ * Empty minutes are zero-filled in JS so the graph is a continuous 60-bar
+ * shape. Uses the same Asia/Kuala_Lumpur convention as the day buckets.
+ */
+async function loadActivityPulse(client) {
+    const result = await client.query(
+        `SELECT date_trunc('minute', edited_at AT TIME ZONE 'Asia/Kuala_Lumpur') AS minute,
+                count(*) AS c
+           FROM invoice_audit_log
+          WHERE edited_at > now() - interval '60 minutes'
+          GROUP BY 1
+          ORDER BY 1`
+    );
+
+    // Key observed counts by 'YYYY-MM-DDTHH:MM' (KL local, from the shifted timestamp).
+    const counts = new Map();
+    result.rows.forEach((row) => {
+        const key = String(row.minute instanceof Date ? row.minute.toISOString() : row.minute).slice(0, 16);
+        counts.set(key, Number(row.c) || 0);
+    });
+
+    // Build 60 contiguous minute buckets ending at "now" (KL local minute).
+    const nowMs = Date.now();
+    const buckets = [];
+    for (let i = 59; i >= 0; i--) {
+        const d = new Date(nowMs - i * 60 * 1000);
+        // Shift to KL (UTC+8) so the key matches the DB's AT TIME ZONE output.
+        const kl = new Date(d.getTime() + 8 * 60 * 60 * 1000);
+        const key = kl.toISOString().slice(0, 16);
+        buckets.push({ minute: d.toISOString(), count: counts.get(key) || 0 });
+    }
+
+    const sumRange = (fromEnd, len) => buckets.slice(buckets.length - fromEnd, buckets.length - fromEnd + len).reduce((s, b) => s + b.count, 0);
+    const eventsLastMin = buckets[buckets.length - 1].count;
+    const eventsLastHour = buckets.reduce((s, b) => s + b.count, 0);
+    const recent5 = sumRange(5, 5);   // last 5 minutes
+    const prior5 = sumRange(10, 5);   // the 5 minutes before that
+    const trend = recent5 > prior5 ? 'up' : (recent5 < prior5 ? 'down' : 'flat');
+    const peak = buckets.reduce((m, b) => Math.max(m, b.count), 0);
+
+    return { buckets, eventsLastMin, eventsLastHour, recent5, prior5, trend, peak };
+}
+
+/**
+ * Lightweight payload for the /live.html wall board, safe to poll every few
+ * seconds. Runs ONLY cheap, index-friendly reads — deliberately skips
+ * loadRevenue (its LATERAL jsonb scan + outstanding-balance join is what makes
+ * loadDashboard slow). KPI counters are the same today-vs-yesterday counts the
+ * mobile dashboard shows, derived from the single shared loadDayBuckets read.
+ */
+async function loadLive(client) {
+    const bucketData = await loadDayBuckets(client);
+
+    const [feed, activeViewers, pulse] = await Promise.all([
+        loadLiveFeed(client),
+        loadActiveViewers(client),
+        loadActivityPulse(client)
+    ]);
+
+    return {
+        generatedAt: new Date().toISOString(),
+        kpis: countMetrics(bucketData, GENERAL_METRICS),
+        seda: countMetrics(bucketData, SEDA_METRICS),
+        receipts: countMetrics(bucketData, RECEIPT_METRICS),
+        newRegistrations: countMetrics(bucketData, SEDA_REG_METRICS),
+        feed,
+        activeViewers,
+        pulse
+    };
+}
+
 async function loadDashboard(client) {
     const bucketData = await loadDayBuckets(client);
 
-    const [revenue, activeViewers, topMovers, feed, sedaPipeline, sedaTransitions] = await Promise.all([
+    const [revenue, activeViewers, topMovers, feed, sedaPipeline, sedaTransitions, receiptsSent, newSedaRegistrations, referralWebchat] = await Promise.all([
         loadRevenue(client),
         loadActiveViewers(client),
         loadTopMovers(client),
         loadLiveFeed(client),
         loadSedaPipeline(client),
-        loadSedaTransitions(client)
+        loadSedaTransitions(client),
+        loadReceiptsSent(client),
+        loadNewSedaRegistrations(client),
+        loadReferralWebchat(client)
     ]);
 
     return {
@@ -365,10 +611,20 @@ async function loadDashboard(client) {
             kpis: countMetrics(bucketData, SEDA_METRICS),
             pipeline: sedaPipeline,
             transitions: sedaTransitions
-        }
+        },
+        receipts: {
+            kpis: countMetrics(bucketData, RECEIPT_METRICS),
+            list: receiptsSent
+        },
+        newSedaRegistrations: {
+            kpis: countMetrics(bucketData, SEDA_REG_METRICS),
+            list: newSedaRegistrations
+        },
+        referralWebchat
     };
 }
 
 module.exports = {
-    loadDashboard
+    loadDashboard,
+    loadLive
 };

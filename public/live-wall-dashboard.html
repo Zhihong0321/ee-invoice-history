@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Wall · Company Pulse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0A0F1A;
+      color: #E7EDF5;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container {
+      max-width: 1920px;
+      margin: 0 auto;
+      padding: 24px 32px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #1E2936;
+    }
+    .header h1 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .pulse-dot {
+      width: 12px;
+      height: 12px;
+      background: #22C55E;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.1); }
+    }
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 14px;
+      color: #93A4BC;
+      font-variant-numeric: tabular-nums;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .status-badge {
+      padding: 6px 12px;
+      background: #1E2936;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .status-badge.connected { background: #064E3B; color: #6EE7B7; }
+    .status-badge.error { background: #7F1D1D; color: #FCA5A5; }
+
+    /* Grid Layout */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    /* KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .kpi-card {
+      background: #121A2A;
+      border: 1px solid #1E2936;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.2s ease;
+    }
+    .kpi-card:hover {
+      border-color: #2E3A4D;
+      transform: translateY(-2px);
+    }
+    .kpi-label {
+      font-size: 13px;
+      color: #93A4BC;
+      font-weight: 500;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .kpi-value {
+      font-size: 36px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 6px;
+    }
+    .kpi-delta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .kpi-delta.up { color: #6EE7B7; }
+    .kpi-delta.down { color: #FCA5A5; }
+    .kpi-delta.flat { color: #93A4BC; }
+
+    /* Activity Pulse Chart */
+    .pulse-chart {
+      background: #121A2A;
+      border: 1px solid #1E2936;
+      border-radius: 12px;
+      padding: 24px;
+      grid-column: 1 / -1;
+    }
+    .pulse-chart h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .pulse-stats {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: #93A4BC;
+    }
+    .pulse-stats strong {
+      color: #E7EDF5;
+      font-weight: 700;
+      margin-left: 4px;
+    }
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 120px;
+      padding: 4px 0;
+    }
+    .chart-bar {
+      flex: 1;
+      background: linear-gradient(to top, #3B82F6, #60A5FA);
+      border-radius: 2px 2px 0 0;
+      min-height: 2px;
+      transition: all 0.3s ease;
+      opacity: 0.7;
+    }
+    .chart-bar:hover {
+      opacity: 1;
+      background: linear-gradient(to top, #2563EB, #3B82F6);
+    }
+
+    /* Feed Section */
+    .feed-section {
+      background: #121A2A;
+      border: 1px solid #1E2936;
+      border-radius: 12px;
+      padding: 24px;
+      max-height: 800px;
+      overflow-y: auto;
+    }
+    .feed-section h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      position: sticky;
+      top: -24px;
+      background: #121A2A;
+      padding: 8px 0;
+      z-index: 10;
+    }
+    .feed-item {
+      padding: 16px;
+      border-bottom: 1px solid #1E2936;
+      transition: background 0.15s ease;
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .feed-item:hover {
+      background: rgba(59, 130, 246, 0.05);
+    }
+    .feed-item:last-child {
+      border-bottom: none;
+    }
+    .feed-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #93A4BC;
+    }
+    .category-badge {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .category-created { background: #1E3A8A; color: #93C5FD; }
+    .category-updated { background: #78350F; color: #FCD34D; }
+    .category-deleted { background: #7F1D1D; color: #FCA5A5; }
+    .category-viewed { background: #0C4A6E; color: #7DD3FC; }
+    .category-payment { background: #064E3B; color: #6EE7B7; }
+    .category-other { background: #1E293B; color: #94A3B8; }
+    .feed-summary {
+      font-size: 15px;
+      color: #E7EDF5;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+    .feed-actor {
+      font-size: 13px;
+      color: #93A4BC;
+    }
+    .feed-invoice {
+      font-size: 13px;
+      color: #60A5FA;
+      font-weight: 500;
+    }
+
+    /* Active Viewers */
+    .viewers-section {
+      background: #121A2A;
+      border: 1px solid #1E2936;
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .viewers-section h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .viewer-item {
+      padding: 12px;
+      border-left: 3px solid #22C55E;
+      background: rgba(34, 197, 94, 0.05);
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+    .viewer-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #E7EDF5;
+      margin-bottom: 4px;
+    }
+    .viewer-invoice {
+      font-size: 13px;
+      color: #93A4BC;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 32px;
+      color: #5E6F88;
+      font-size: 14px;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0A0F1A;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2E3A4D;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3E4A5D;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>
+        <span class="pulse-dot"></span>
+        Live Wall Dashboard
+      </h1>
+      <div class="header-meta">
+        <div id="clock">--:--:--</div>
+        <div class="status-badge" id="status">Connecting...</div>
+      </div>
+    </header>
+
+    <div class="kpi-grid" id="kpis"></div>
+
+    <div class="pulse-chart">
+      <h2>
+        <span style="color: #3B82F6;">⚡</span>
+        Activity Pulse (Last 60 Minutes)
+      </h2>
+      <div class="pulse-stats" id="pulse-stats"></div>
+      <div class="chart-bars" id="pulse-chart"></div>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="feed-section">
+        <h2>Live Event Feed</h2>
+        <div id="feed"></div>
+      </div>
+
+      <div class="viewers-section">
+        <h2>🟢 Active Viewers</h2>
+        <div id="viewers"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let state = { data: null, lastFetch: null };
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function timeAgo(iso) {
+      const s = Math.floor((Date.now() - new Date(iso)) / 1000);
+      if (s < 5) return 'just now';
+      if (s < 60) return `${s}s ago`;
+      const m = Math.floor(s / 60);
+      if (m < 60) return `${m}m ago`;
+      const h = Math.floor(m / 60);
+      if (h < 24) return `${h}h ago`;
+      return `${Math.floor(h / 24)}d ago`;
+    }
+
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      });
+    }
+
+    function renderKPIs(kpis) {
+      const grid = document.getElementById('kpis');
+      grid.innerHTML = kpis.map(kpi => `
+        <div class="kpi-card">
+          <div class="kpi-label">${escapeHtml(kpi.label)}</div>
+          <div class="kpi-value">${kpi.today.toLocaleString()}</div>
+          <div class="kpi-delta ${kpi.delta.direction}">
+            ${kpi.delta.direction === 'up' ? '▲' : kpi.delta.direction === 'down' ? '▼' : '–'}
+            ${escapeHtml(kpi.delta.label)}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderPulse(pulse) {
+      const statsEl = document.getElementById('pulse-stats');
+      const chartEl = document.getElementById('pulse-chart');
+
+      statsEl.innerHTML = `
+        <span>Last minute:<strong>${pulse.eventsLastMin}</strong></span>
+        <span>Last hour:<strong>${pulse.eventsLastHour}</strong></span>
+        <span>Trend:<strong style="color: ${pulse.trend === 'up' ? '#6EE7B7' : pulse.trend === 'down' ? '#FCA5A5' : '#93A4BC'}">${pulse.trend}</strong></span>
+        <span>Peak:<strong>${pulse.peak}</strong></span>
+      `;
+
+      const maxHeight = Math.max(...pulse.buckets.map(b => b.count), 1);
+      chartEl.innerHTML = pulse.buckets.map(b => {
+        const pct = (b.count / maxHeight) * 100;
+        return `<div class="chart-bar" style="height: ${pct}%" title="${b.count} events at ${new Date(b.minute).toLocaleTimeString()}"></div>`;
+      }).join('');
+    }
+
+    function renderFeed(feed) {
+      const feedEl = document.getElementById('feed');
+      if (!feed || feed.length === 0) {
+        feedEl.innerHTML = '<div class="empty-state">No recent activity</div>';
+        return;
+      }
+
+      feedEl.innerHTML = feed.map(item => `
+        <div class="feed-item">
+          <div class="feed-meta">
+            <span class="category-badge category-${item.category}">${escapeHtml(item.action_label)}</span>
+            <span>${timeAgo(item.edited_at)}</span>
+            ${item.invoice_number ? `<span class="feed-invoice">${escapeHtml(item.invoice_number)}</span>` : ''}
+          </div>
+          <div class="feed-summary">${escapeHtml(item.summary)}</div>
+          <div class="feed-actor">
+            ${item.actor?.name ? escapeHtml(item.actor.name) : 'Unknown'}
+            ${item.customer_name ? ` · ${escapeHtml(item.customer_name)}` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderViewers(viewers) {
+      const viewersEl = document.getElementById('viewers');
+      if (!viewers || viewers.length === 0) {
+        viewersEl.innerHTML = '<div class="empty-state">No active viewers</div>';
+        return;
+      }
+
+      viewersEl.innerHTML = viewers.slice(0, 10).map(v => `
+        <div class="viewer-item">
+          <div class="viewer-name">${escapeHtml(v.customer_name)}</div>
+          <div class="viewer-invoice">
+            ${v.invoice_number ? escapeHtml(v.invoice_number) : 'Unknown invoice'} · ${timeAgo(v.edited_at)}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function fetchData() {
+      try {
+        const res = await fetch('/api/live');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        if (!json.ok) throw new Error(json.error || 'API error');
+
+        state.data = json.data;
+        state.lastFetch = Date.now();
+
+        renderKPIs(state.data.kpis);
+        renderPulse(state.data.pulse);
+        renderFeed(state.data.feed);
+        renderViewers(state.data.activeViewers);
+
+        document.getElementById('status').textContent = 'Connected';
+        document.getElementById('status').className = 'status-badge connected';
+      } catch (err) {
+        console.error('Fetch failed:', err);
+        document.getElementById('status').textContent = 'Error';
+        document.getElementById('status').className = 'status-badge error';
+      }
+    }
+
+    // Initial load + polling every 3 seconds
+    fetchData();
+    setInterval(fetchData, 3000);
+
+    // Update clock every second
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>

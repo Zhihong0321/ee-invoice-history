@@ -686,24 +686,27 @@ async function loadCategories(client) {
             });
         });
 
-        // Action breakdown: sum today's counts per action across category's entity types
-        const actionCounts = {};
+        // Action breakdown: sum today's counts per *display label* across the
+        // category's entity types. Keying by the human label (not the raw
+        // action) merges actions that categorize to the same label — e.g.
+        // viewer_activity's invoice_viewed + proposal_viewed both read
+        // "Viewed", and seda's update + updated both read "Updated" — so they
+        // show as one combined row instead of duplicates.
+        const { categorizeAction } = require('./invoiceFeed');
+        const labelCounts = {};
         def.entityTypes.forEach((et) => {
             def.topActions.forEach((action) => {
-                const key = `${et}:${action}`;
-                const count = dayBuckets[today][key] || 0;
-                actionCounts[action] = (actionCounts[action] || 0) + count;
+                const count = dayBuckets[today][`${et}:${action}`] || 0;
+                if (count === 0) return;
+                const { label } = categorizeAction(action, et);
+                labelCounts[label] = (labelCounts[label] || 0) + count;
             });
         });
 
-        const actions = Object.entries(actionCounts)
-            .filter(([, count]) => count > 0)
+        const actions = Object.entries(labelCounts)
             .sort((a, b) => b[1] - a[1])
             .slice(0, 4)
-            .map(([action, count]) => {
-                const { label } = require('./invoiceFeed').categorizeAction(action, def.entityTypes[0]);
-                return { label, count };
-            });
+            .map(([label, count]) => ({ label, count }));
 
         // 14-day sparkline: sum across all entity types in this category
         const sparkline = days14.map((day) => {

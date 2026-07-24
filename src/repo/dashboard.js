@@ -512,6 +512,79 @@ async function loadReferralWebchat(client) {
     return { kpis, threads };
 }
 
+/**
+ * Events-per-minute over the last 60 minutes — the "is the system breathing"
+ * pulse for the live wall. Cheap (indexed on edited_at, small grouped result).
+ * Empty minutes are zero-filled in JS so the graph is a continuous 60-bar
+ * shape. Uses the same Asia/Kuala_Lumpur convention as the day buckets.
+ */
+async function loadActivityPulse(client) {
+    const result = await client.query(
+        `SELECT date_trunc('minute', edited_at AT TIME ZONE 'Asia/Kuala_Lumpur') AS minute,
+                count(*) AS c
+           FROM invoice_audit_log
+          WHERE edited_at > now() - interval '60 minutes'
+          GROUP BY 1
+          ORDER BY 1`
+    );
+
+    // Key observed counts by 'YYYY-MM-DDTHH:MM' (KL local, from the shifted timestamp).
+    const counts = new Map();
+    result.rows.forEach((row) => {
+        const key = String(row.minute instanceof Date ? row.minute.toISOString() : row.minute).slice(0, 16);
+        counts.set(key, Number(row.c) || 0);
+    });
+
+    // Build 60 contiguous minute buckets ending at "now" (KL local minute).
+    const nowMs = Date.now();
+    const buckets = [];
+    for (let i = 59; i >= 0; i--) {
+        const d = new Date(nowMs - i * 60 * 1000);
+        // Shift to KL (UTC+8) so the key matches the DB's AT TIME ZONE output.
+        const kl = new Date(d.getTime() + 8 * 60 * 60 * 1000);
+        const key = kl.toISOString().slice(0, 16);
+        buckets.push({ minute: d.toISOString(), count: counts.get(key) || 0 });
+    }
+
+    const sumRange = (fromEnd, len) => buckets.slice(buckets.length - fromEnd, buckets.length - fromEnd + len).reduce((s, b) => s + b.count, 0);
+    const eventsLastMin = buckets[buckets.length - 1].count;
+    const eventsLastHour = buckets.reduce((s, b) => s + b.count, 0);
+    const recent5 = sumRange(5, 5);   // last 5 minutes
+    const prior5 = sumRange(10, 5);   // the 5 minutes before that
+    const trend = recent5 > prior5 ? 'up' : (recent5 < prior5 ? 'down' : 'flat');
+    const peak = buckets.reduce((m, b) => Math.max(m, b.count), 0);
+
+    return { buckets, eventsLastMin, eventsLastHour, recent5, prior5, trend, peak };
+}
+
+/**
+ * Lightweight payload for the /live.html wall board, safe to poll every few
+ * seconds. Runs ONLY cheap, index-friendly reads — deliberately skips
+ * loadRevenue (its LATERAL jsonb scan + outstanding-balance join is what makes
+ * loadDashboard slow). KPI counters are the same today-vs-yesterday counts the
+ * mobile dashboard shows, derived from the single shared loadDayBuckets read.
+ */
+async function loadLive(client) {
+    const bucketData = await loadDayBuckets(client);
+
+    const [feed, activeViewers, pulse] = await Promise.all([
+        loadLiveFeed(client),
+        loadActiveViewers(client),
+        loadActivityPulse(client)
+    ]);
+
+    return {
+        generatedAt: new Date().toISOString(),
+        kpis: countMetrics(bucketData, GENERAL_METRICS),
+        seda: countMetrics(bucketData, SEDA_METRICS),
+        receipts: countMetrics(bucketData, RECEIPT_METRICS),
+        newRegistrations: countMetrics(bucketData, SEDA_REG_METRICS),
+        feed,
+        activeViewers,
+        pulse
+    };
+}
+
 async function loadDashboard(client) {
     const bucketData = await loadDayBuckets(client);
 
@@ -552,5 +625,6 @@ async function loadDashboard(client) {
 }
 
 module.exports = {
-    loadDashboard
+    loadDashboard,
+    loadLive
 };

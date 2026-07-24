@@ -5,7 +5,7 @@ const { pool } = require('../db');
 const { loadInvoiceHistory } = require('../repo/history');
 const { loadViewerActivity } = require('../repo/viewerActivity');
 const { listInvoices, loadInvoiceDetail } = require('../repo/invoiceFeed');
-const { loadDashboard } = require('../repo/dashboard');
+const { loadDashboard, loadLive } = require('../repo/dashboard');
 
 const router = express.Router();
 
@@ -153,6 +153,28 @@ router.get('/dashboard', async (req, res) => {
         res.json({ ok: true, data });
     } catch (err) {
         console.error('[api] /dashboard failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * Lightweight, high-frequency companion to /dashboard for the /live.html wall
+ * board. Cheap queries only (no revenue/outstanding scan) so it can be polled
+ * every few seconds. Powers the live event ticker, ticking KPI counters, and
+ * the events-per-minute activity pulse.
+ *
+ * Returns: 200 { ok: true, data: { generatedAt, kpis, seda, receipts, newRegistrations, feed, activeViewers, pulse } }
+ */
+router.get('/live', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const data = await loadLive(client);
+        res.json({ ok: true, data });
+    } catch (err) {
+        console.error('[api] /live failed:', err.message);
         res.status(500).json({ ok: false, error: err.message });
     } finally {
         if (client) client.release();

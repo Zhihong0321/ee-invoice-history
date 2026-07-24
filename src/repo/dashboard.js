@@ -558,6 +558,181 @@ async function loadActivityPulse(client) {
 }
 
 /**
+ * Six semantic business categories for the live wall dashboard. Each maps one
+ * or more entity_type values from invoice_audit_log to a human-friendly group
+ * with icon, label, and top action breakdowns.
+ */
+const CATEGORY_DEFS = [
+    {
+        id: 'customer_views',
+        label: 'Customer Views',
+        icon: '👁',
+        entityTypes: ['viewer_activity'],
+        topActions: ['invoice_viewed', 'invoice_session_ended', 'invoice_button_clicked', 'proposal_viewed']
+    },
+    {
+        id: 'invoices',
+        label: 'Invoices',
+        icon: '📄',
+        entityTypes: ['invoice'],
+        topActions: ['update', 'insert']
+    },
+    {
+        id: 'line_items',
+        label: 'Line Items',
+        icon: '📝',
+        entityTypes: ['invoice_item'],
+        topActions: ['insert', 'update', 'delete', 'create']
+    },
+    {
+        id: 'payments',
+        label: 'Payments',
+        icon: '💰',
+        entityTypes: ['payment', 'submitted_payment', 'verified_payment'],
+        topActions: ['verify', 'insert', 'update', 'delete']
+    },
+    {
+        id: 'documents',
+        label: 'Documents',
+        icon: '📎',
+        entityTypes: ['invoice_upload', 'seda_upload', 'drawing'],
+        topActions: ['added', 'upload', 'deleted']
+    },
+    {
+        id: 'seda',
+        label: 'SEDA',
+        icon: '🏛',
+        entityTypes: ['seda', 'seda_registration'],
+        topActions: ['insert', 'updated', 'update']
+    }
+];
+
+/**
+ * Load category-grouped activity: today/yesterday counts, action breakdowns,
+ * 14-day sparklines, and last activity timestamp for each of the six semantic
+ * categories. Powers the live wall's category cards.
+ */
+async function loadCategories(client) {
+    const [dayData, sparklineData, lastActivityData] = await Promise.all([
+        // Today + yesterday entity/action counts
+        client.query(
+            `SELECT (edited_at AT TIME ZONE 'Asia/Kuala_Lumpur')::date AS day,
+                    entity_type, action_type, count(*) AS c
+               FROM invoice_audit_log
+              WHERE edited_at > now() - interval '3 days'
+              GROUP BY 1, 2, 3`
+        ),
+        // 14-day daily series per entity_type for sparklines
+        client.query(
+            `SELECT (edited_at AT TIME ZONE 'Asia/Kuala_Lumpur')::date AS day,
+                    entity_type, count(*) AS c
+               FROM invoice_audit_log
+              WHERE edited_at > now() - interval '14 days'
+              GROUP BY 1, 2
+              ORDER BY 1 DESC`
+        ),
+        // Last activity per entity_type
+        client.query(
+            `SELECT entity_type, max(edited_at) AS last_activity
+               FROM invoice_audit_log
+              WHERE edited_at > now() - interval '24 hours'
+              GROUP BY 1`
+        )
+    ]);
+
+    const { today, yesterday } = todayYesterdayKeys();
+
+    // Build day buckets: { day: { 'entity:action': count } }
+    const dayBuckets = { [today]: {}, [yesterday]: {} };
+    dayData.rows.forEach((row) => {
+        const day = toDayKey(row.day);
+        if (!dayBuckets[day]) return;
+        const key = `${row.entity_type}:${row.action_type}`;
+        dayBuckets[day][key] = (dayBuckets[day][key] || 0) + Number(row.c);
+    });
+
+    // Build sparkline buckets: { entity_type: { day: count } }
+    const sparklineBuckets = {};
+    sparklineData.rows.forEach((row) => {
+        const day = toDayKey(row.day);
+        const et = row.entity_type;
+        if (!sparklineBuckets[et]) sparklineBuckets[et] = {};
+        sparklineBuckets[et][day] = Number(row.c) || 0;
+    });
+
+    // Build last activity map: { entity_type: iso_timestamp }
+    const lastActivityMap = {};
+    lastActivityData.rows.forEach((row) => {
+        lastActivityMap[row.entity_type] = row.last_activity;
+    });
+
+    // Generate 14 contiguous day keys (today back to 13 days ago)
+    const days14 = [];
+    const fmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kuala_Lumpur' });
+    for (let i = 0; i < 14; i++) {
+        days14.push(fmt.format(new Date(Date.now() - i * 24 * 60 * 60 * 1000)));
+    }
+    days14.reverse(); // oldest first
+
+    return CATEGORY_DEFS.map((def) => {
+        // Sum today/yesterday across all entity types in this category
+        let todayTotal = 0;
+        let yesterdayTotal = 0;
+        def.entityTypes.forEach((et) => {
+            def.topActions.forEach((action) => {
+                const key = `${et}:${action}`;
+                todayTotal += dayBuckets[today][key] || 0;
+                yesterdayTotal += dayBuckets[yesterday][key] || 0;
+            });
+        });
+
+        // Action breakdown: sum today's counts per action across category's entity types
+        const actionCounts = {};
+        def.entityTypes.forEach((et) => {
+            def.topActions.forEach((action) => {
+                const key = `${et}:${action}`;
+                const count = dayBuckets[today][key] || 0;
+                actionCounts[action] = (actionCounts[action] || 0) + count;
+            });
+        });
+
+        const actions = Object.entries(actionCounts)
+            .filter(([, count]) => count > 0)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 4)
+            .map(([action, count]) => {
+                const { label } = require('./invoiceFeed').categorizeAction(action, def.entityTypes[0]);
+                return { label, count };
+            });
+
+        // 14-day sparkline: sum across all entity types in this category
+        const sparkline = days14.map((day) => {
+            let sum = 0;
+            def.entityTypes.forEach((et) => {
+                sum += (sparklineBuckets[et] && sparklineBuckets[et][day]) || 0;
+            });
+            return sum;
+        });
+
+        // Last activity: most recent across all entity types in this category
+        const lastActivities = def.entityTypes.map((et) => lastActivityMap[et]).filter(Boolean);
+        const lastActivity = lastActivities.length > 0 ? lastActivities.reduce((a, b) => (a > b ? a : b)) : null;
+
+        return {
+            id: def.id,
+            label: def.label,
+            icon: def.icon,
+            today: todayTotal,
+            yesterday: yesterdayTotal,
+            delta: pctDelta(todayTotal, yesterdayTotal),
+            actions,
+            sparkline,
+            lastActivity
+        };
+    });
+}
+
+/**
  * Lightweight payload for the /live.html wall board, safe to poll every few
  * seconds. Runs ONLY cheap, index-friendly reads — deliberately skips
  * loadRevenue (its LATERAL jsonb scan + outstanding-balance join is what makes
@@ -567,14 +742,25 @@ async function loadActivityPulse(client) {
 async function loadLive(client) {
     const bucketData = await loadDayBuckets(client);
 
-    const [feed, activeViewers, pulse] = await Promise.all([
+    const [categories, feed, activeViewers, pulse] = await Promise.all([
+        loadCategories(client),
         loadLiveFeed(client),
         loadActiveViewers(client),
         loadActivityPulse(client)
     ]);
 
+    // Augment feed items with category_id for frontend filtering
+    const entityToCategory = new Map();
+    CATEGORY_DEFS.forEach((def) => {
+        def.entityTypes.forEach((et) => entityToCategory.set(et, def.id));
+    });
+    feed.forEach((item) => {
+        item.category_id = entityToCategory.get(item.entity_type) || 'other';
+    });
+
     return {
         generatedAt: new Date().toISOString(),
+        categories,
         kpis: countMetrics(bucketData, GENERAL_METRICS),
         seda: countMetrics(bucketData, SEDA_METRICS),
         receipts: countMetrics(bucketData, RECEIPT_METRICS),

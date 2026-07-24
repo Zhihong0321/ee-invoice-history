@@ -6,7 +6,7 @@
   <title>Live Wall · Company Pulse</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -19,7 +19,7 @@
     .container {
       max-width: 1920px;
       margin: 0 auto;
-      padding: 24px 32px;
+      padding: 20px 28px;
     }
 
     /* Header */
@@ -27,178 +27,266 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 32px;
-      padding-bottom: 20px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
       border-bottom: 1px solid #1E2936;
     }
     .header h1 {
-      font-size: 32px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
     .pulse-dot {
-      width: 12px;
-      height: 12px;
+      width: 10px;
+      height: 10px;
       background: #22C55E;
       border-radius: 50%;
       animation: pulse 2s ease-in-out infinite;
     }
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.6; transform: scale(1.1); }
+      50% { opacity: 0.5; transform: scale(1.15); }
     }
     .header-meta {
       display: flex;
       align-items: center;
-      gap: 24px;
-      font-size: 14px;
+      gap: 20px;
+      font-size: 13px;
       color: #93A4BC;
       font-variant-numeric: tabular-nums;
       font-family: 'JetBrains Mono', monospace;
     }
     .status-badge {
-      padding: 6px 12px;
+      padding: 5px 11px;
       background: #1E2936;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 500;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: 600;
     }
     .status-badge.connected { background: #064E3B; color: #6EE7B7; }
     .status-badge.error { background: #7F1D1D; color: #FCA5A5; }
 
-    /* Grid Layout */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 24px;
-      margin-bottom: 24px;
-    }
-
-    /* KPI Cards */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .kpi-card {
+    /* Activity Pulse */
+    .pulse-section {
       background: #121A2A;
       border: 1px solid #1E2936;
-      border-radius: 12px;
-      padding: 20px;
-      transition: all 0.2s ease;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
     }
-    .kpi-card:hover {
-      border-color: #2E3A4D;
-      transform: translateY(-2px);
-    }
-    .kpi-label {
-      font-size: 13px;
-      color: #93A4BC;
-      font-weight: 500;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .kpi-value {
-      font-size: 36px;
-      font-weight: 800;
-      font-variant-numeric: tabular-nums;
-      margin-bottom: 6px;
-    }
-    .kpi-delta {
+    .pulse-header {
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 14px;
-      font-weight: 600;
+      justify-content: space-between;
+      margin-bottom: 12px;
     }
-    .kpi-delta.up { color: #6EE7B7; }
-    .kpi-delta.down { color: #FCA5A5; }
-    .kpi-delta.flat { color: #93A4BC; }
-
-    /* Activity Pulse Chart */
-    .pulse-chart {
-      background: #121A2A;
-      border: 1px solid #1E2936;
-      border-radius: 12px;
-      padding: 24px;
-      grid-column: 1 / -1;
-    }
-    .pulse-chart h2 {
-      font-size: 18px;
+    .pulse-title {
+      font-size: 16px;
       font-weight: 700;
-      margin-bottom: 16px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
     .pulse-stats {
       display: flex;
-      gap: 24px;
-      margin-bottom: 20px;
-      font-size: 14px;
+      gap: 20px;
+      font-size: 12px;
       color: #93A4BC;
+      font-family: 'JetBrains Mono', monospace;
     }
     .pulse-stats strong {
       color: #E7EDF5;
       font-weight: 700;
-      margin-left: 4px;
+      margin-left: 3px;
     }
     .chart-bars {
       display: flex;
       align-items: flex-end;
-      gap: 3px;
-      height: 120px;
-      padding: 4px 0;
+      gap: 2px;
+      height: 80px;
+      padding: 2px 0;
     }
     .chart-bar {
       flex: 1;
-      background: linear-gradient(to top, #3B82F6, #60A5FA);
-      border-radius: 2px 2px 0 0;
-      min-height: 2px;
-      transition: all 0.3s ease;
-      opacity: 0.7;
+      background: linear-gradient(to top, #1E40AF, #3B82F6);
+      border-radius: 1px 1px 0 0;
+      min-height: 1px;
+      transition: all 0.25s ease;
+      opacity: 0.75;
     }
     .chart-bar:hover {
       opacity: 1;
-      background: linear-gradient(to top, #2563EB, #3B82F6);
+      background: linear-gradient(to top, #2563EB, #60A5FA);
+    }
+
+    /* Category Grid */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .category-card {
+      background: #121A2A;
+      border: 1px solid #1E2936;
+      border-radius: 10px;
+      padding: 18px 20px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      position: relative;
+    }
+    .category-card:hover {
+      border-color: #2E3A4D;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+    .category-card.active {
+      border-color: #3B82F6;
+      background: rgba(59, 130, 246, 0.08);
+    }
+    .category-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .category-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #93A4BC;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .category-icon {
+      font-size: 18px;
+    }
+    .category-count {
+      font-size: 40px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 6px;
+      line-height: 1;
+    }
+    .category-delta {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+    .category-delta.up { background: rgba(34, 197, 94, 0.15); color: #6EE7B7; }
+    .category-delta.down { background: rgba(239, 68, 68, 0.15); color: #FCA5A5; }
+    .category-delta.flat { background: rgba(100, 116, 139, 0.15); color: #93A4BC; }
+    .category-actions {
+      margin-bottom: 12px;
+      min-height: 60px;
+    }
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 3px 0;
+      color: #93A4BC;
+    }
+    .action-row strong {
+      color: #E7EDF5;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .category-sparkline {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 28px;
+      margin-bottom: 8px;
+    }
+    .sparkline-bar {
+      flex: 1;
+      background: #3B82F6;
+      border-radius: 1px 1px 0 0;
+      min-height: 1px;
+      opacity: 0.6;
+    }
+    .category-footer {
+      font-size: 11px;
+      color: #5E6F88;
+      font-variant-numeric: tabular-nums;
     }
 
     /* Feed Section */
     .feed-section {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+    }
+    .feed-panel {
       background: #121A2A;
       border: 1px solid #1E2936;
-      border-radius: 12px;
-      padding: 24px;
-      max-height: 800px;
+      border-radius: 10px;
+      padding: 20px;
+      max-height: 600px;
       overflow-y: auto;
     }
-    .feed-section h2 {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 16px;
+    .feed-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
       position: sticky;
-      top: -24px;
+      top: -20px;
       background: #121A2A;
       padding: 8px 0;
       z-index: 10;
     }
+    .feed-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .feed-filters {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .filter-chip {
+      padding: 4px 10px;
+      background: #1E2936;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      color: #93A4BC;
+    }
+    .filter-chip:hover {
+      background: #2E3A4D;
+    }
+    .filter-chip.active {
+      background: #3B82F6;
+      color: #FFFFFF;
+      border-color: #3B82F6;
+    }
     .feed-item {
-      padding: 16px;
+      padding: 12px 14px;
       border-bottom: 1px solid #1E2936;
       transition: background 0.15s ease;
       animation: slideIn 0.3s ease;
     }
     @keyframes slideIn {
-      from { opacity: 0; transform: translateY(-8px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateX(-6px); }
+      to { opacity: 1; transform: translateX(0); }
     }
     .feed-item:hover {
-      background: rgba(59, 130, 246, 0.05);
+      background: rgba(59, 130, 246, 0.04);
     }
     .feed-item:last-child {
       border-bottom: none;
@@ -206,16 +294,19 @@
     .feed-meta {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 8px;
-      font-size: 13px;
+      gap: 10px;
+      margin-bottom: 6px;
+      font-size: 12px;
       color: #93A4BC;
     }
+    .feed-icon {
+      font-size: 14px;
+    }
     .category-badge {
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
+      padding: 3px 7px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
@@ -224,69 +315,75 @@
     .category-deleted { background: #7F1D1D; color: #FCA5A5; }
     .category-viewed { background: #0C4A6E; color: #7DD3FC; }
     .category-payment { background: #064E3B; color: #6EE7B7; }
+    .category-session { background: #1E293B; color: #94A3B8; }
+    .category-click { background: #581C87; color: #C084FC; }
     .category-other { background: #1E293B; color: #94A3B8; }
     .feed-summary {
-      font-size: 15px;
+      font-size: 13px;
       color: #E7EDF5;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
       font-weight: 500;
     }
-    .feed-actor {
-      font-size: 13px;
+    .feed-details {
+      font-size: 12px;
       color: #93A4BC;
     }
     .feed-invoice {
-      font-size: 13px;
       color: #60A5FA;
       font-weight: 500;
     }
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #5E6F88;
+      font-size: 13px;
+    }
 
-    /* Active Viewers */
-    .viewers-section {
+    /* Viewers Panel */
+    .viewers-panel {
       background: #121A2A;
       border: 1px solid #1E2936;
-      border-radius: 12px;
-      padding: 24px;
+      border-radius: 10px;
+      padding: 20px;
+      max-height: 600px;
+      overflow-y: auto;
     }
-    .viewers-section h2 {
-      font-size: 18px;
+    .viewers-title {
+      font-size: 16px;
       font-weight: 700;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     .viewer-item {
-      padding: 12px;
+      padding: 10px 12px;
       border-left: 3px solid #22C55E;
       background: rgba(34, 197, 94, 0.05);
       border-radius: 4px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .viewer-name {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       color: #E7EDF5;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
     .viewer-invoice {
-      font-size: 13px;
+      font-size: 12px;
       color: #93A4BC;
-    }
-    .empty-state {
-      text-align: center;
-      padding: 32px;
-      color: #5E6F88;
-      font-size: 14px;
     }
 
     ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
     }
     ::-webkit-scrollbar-track {
       background: #0A0F1A;
     }
     ::-webkit-scrollbar-thumb {
       background: #2E3A4D;
-      border-radius: 4px;
+      border-radius: 3px;
     }
     ::-webkit-scrollbar-thumb:hover {
       background: #3E4A5D;
@@ -306,32 +403,40 @@
       </div>
     </header>
 
-    <div class="kpi-grid" id="kpis"></div>
-
-    <div class="pulse-chart">
-      <h2>
-        <span style="color: #3B82F6;">⚡</span>
-        Activity Pulse (Last 60 Minutes)
-      </h2>
-      <div class="pulse-stats" id="pulse-stats"></div>
+    <div class="pulse-section">
+      <div class="pulse-header">
+        <div class="pulse-title">
+          <span style="color: #3B82F6;">⚡</span>
+          Activity Pulse (Last 60 Minutes)
+        </div>
+        <div class="pulse-stats" id="pulse-stats"></div>
+      </div>
       <div class="chart-bars" id="pulse-chart"></div>
     </div>
 
-    <div class="dashboard-grid">
-      <div class="feed-section">
-        <h2>Live Event Feed</h2>
+    <div class="category-grid" id="categories"></div>
+
+    <div class="feed-section">
+      <div class="feed-panel">
+        <div class="feed-header">
+          <div class="feed-title">Live Event Feed</div>
+          <div class="feed-filters" id="feed-filters"></div>
+        </div>
         <div id="feed"></div>
       </div>
 
-      <div class="viewers-section">
-        <h2>🟢 Active Viewers</h2>
+      <div class="viewers-panel">
+        <div class="viewers-title">
+          <span style="color: #22C55E;">🟢</span>
+          Active Viewers
+        </div>
         <div id="viewers"></div>
       </div>
     </div>
   </div>
 
   <script>
-    let state = { data: null, lastFetch: null };
+    let state = { data: null, activeFilter: 'all' };
 
     function escapeHtml(str) {
       const div = document.createElement('div');
@@ -340,6 +445,7 @@
     }
 
     function timeAgo(iso) {
+      if (!iso) return '';
       const s = Math.floor((Date.now() - new Date(iso)) / 1000);
       if (s < 5) return 'just now';
       if (s < 60) return `${s}s ago`;
@@ -360,59 +466,106 @@
       });
     }
 
-    function renderKPIs(kpis) {
-      const grid = document.getElementById('kpis');
-      grid.innerHTML = kpis.map(kpi => `
-        <div class="kpi-card">
-          <div class="kpi-label">${escapeHtml(kpi.label)}</div>
-          <div class="kpi-value">${kpi.today.toLocaleString()}</div>
-          <div class="kpi-delta ${kpi.delta.direction}">
-            ${kpi.delta.direction === 'up' ? '▲' : kpi.delta.direction === 'down' ? '▼' : '–'}
-            ${escapeHtml(kpi.delta.label)}
+    function renderCategories(categories) {
+      const grid = document.getElementById('categories');
+      grid.innerHTML = categories.map(cat => {
+        const maxSpark = Math.max(...cat.sparkline, 1);
+        const sparkBars = cat.sparkline.map(v => {
+          const pct = (v / maxSpark) * 100;
+          return `<div class="sparkline-bar" style="height: ${pct}%"></div>`;
+        }).join('');
+
+        const actionRows = cat.actions.slice(0, 3).map(a =>
+          `<div class="action-row"><span>${escapeHtml(a.label)}</span><strong>${a.count}</strong></div>`
+        ).join('');
+
+        return `
+          <div class="category-card" data-category="${cat.id}" onclick="filterByCategory('${cat.id}')">
+            <div class="category-header">
+              <div class="category-label">
+                <span class="category-icon">${cat.icon}</span>
+                ${escapeHtml(cat.label)}
+              </div>
+            </div>
+            <div class="category-count">${cat.today.toLocaleString()}</div>
+            <div class="category-delta ${cat.delta.direction}">
+              ${cat.delta.direction === 'up' ? '▲' : cat.delta.direction === 'down' ? '▼' : '–'}
+              ${escapeHtml(cat.delta.label)}
+            </div>
+            <div class="category-actions">${actionRows || '<div class="action-row"><span>No activity</span></div>'}</div>
+            <div class="category-sparkline">${sparkBars}</div>
+            <div class="category-footer">${timeAgo(cat.lastActivity)}</div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function renderPulse(pulse) {
       const statsEl = document.getElementById('pulse-stats');
       const chartEl = document.getElementById('pulse-chart');
 
+      const trendColor = pulse.trend === 'up' ? '#6EE7B7' : pulse.trend === 'down' ? '#FCA5A5' : '#93A4BC';
+      const trendArrow = pulse.trend === 'up' ? '↑' : pulse.trend === 'down' ? '↓' : '–';
+
       statsEl.innerHTML = `
-        <span>Last minute:<strong>${pulse.eventsLastMin}</strong></span>
+        <span>Last min:<strong>${pulse.eventsLastMin}</strong></span>
         <span>Last hour:<strong>${pulse.eventsLastHour}</strong></span>
-        <span>Trend:<strong style="color: ${pulse.trend === 'up' ? '#6EE7B7' : pulse.trend === 'down' ? '#FCA5A5' : '#93A4BC'}">${pulse.trend}</strong></span>
         <span>Peak:<strong>${pulse.peak}</strong></span>
+        <span style="color: ${trendColor}">Trend:<strong>${trendArrow}</strong></span>
       `;
 
       const maxHeight = Math.max(...pulse.buckets.map(b => b.count), 1);
       chartEl.innerHTML = pulse.buckets.map(b => {
         const pct = (b.count / maxHeight) * 100;
-        return `<div class="chart-bar" style="height: ${pct}%" title="${b.count} events at ${new Date(b.minute).toLocaleTimeString()}"></div>`;
+        const time = new Date(b.minute).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        return `<div class="chart-bar" style="height: ${pct}%" title="${b.count} events at ${time}"></div>`;
+      }).join('');
+    }
+
+    function renderFeedFilters(categories) {
+      const filtersEl = document.getElementById('feed-filters');
+      const chips = [
+        { id: 'all', label: 'All', icon: '' },
+        ...categories.map(c => ({ id: c.id, label: c.icon, icon: c.icon }))
+      ];
+
+      filtersEl.innerHTML = chips.map(chip => {
+        const active = state.activeFilter === chip.id ? 'active' : '';
+        return `<div class="filter-chip ${active}" onclick="setFilter('${chip.id}')">${chip.label}</div>`;
       }).join('');
     }
 
     function renderFeed(feed) {
       const feedEl = document.getElementById('feed');
-      if (!feed || feed.length === 0) {
-        feedEl.innerHTML = '<div class="empty-state">No recent activity</div>';
+      const filtered = state.activeFilter === 'all'
+        ? feed
+        : feed.filter(item => item.category_id === state.activeFilter);
+
+      if (!filtered || filtered.length === 0) {
+        feedEl.innerHTML = '<div class="empty-state">No activity in this category</div>';
         return;
       }
 
-      feedEl.innerHTML = feed.map(item => `
-        <div class="feed-item">
-          <div class="feed-meta">
-            <span class="category-badge category-${item.category}">${escapeHtml(item.action_label)}</span>
-            <span>${timeAgo(item.edited_at)}</span>
-            ${item.invoice_number ? `<span class="feed-invoice">${escapeHtml(item.invoice_number)}</span>` : ''}
+      feedEl.innerHTML = filtered.map(item => {
+        const cat = state.data.categories.find(c => c.id === item.category_id);
+        const icon = cat ? cat.icon : '•';
+
+        return `
+          <div class="feed-item">
+            <div class="feed-meta">
+              <span class="feed-icon">${icon}</span>
+              <span class="category-badge category-${item.category}">${escapeHtml(item.action_label)}</span>
+              <span>${timeAgo(item.edited_at)}</span>
+              ${item.invoice_number ? `<span class="feed-invoice">${escapeHtml(item.invoice_number)}</span>` : ''}
+            </div>
+            <div class="feed-summary">${escapeHtml(item.summary)}</div>
+            <div class="feed-details">
+              ${item.actor?.name ? escapeHtml(item.actor.name) : 'System'}
+              ${item.customer_name ? ` · ${escapeHtml(item.customer_name)}` : ''}
+            </div>
           </div>
-          <div class="feed-summary">${escapeHtml(item.summary)}</div>
-          <div class="feed-actor">
-            ${item.actor?.name ? escapeHtml(item.actor.name) : 'Unknown'}
-            ${item.customer_name ? ` · ${escapeHtml(item.customer_name)}` : ''}
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function renderViewers(viewers) {
@@ -422,14 +575,38 @@
         return;
       }
 
-      viewersEl.innerHTML = viewers.slice(0, 10).map(v => `
+      viewersEl.innerHTML = viewers.slice(0, 12).map(v => `
         <div class="viewer-item">
           <div class="viewer-name">${escapeHtml(v.customer_name)}</div>
           <div class="viewer-invoice">
-            ${v.invoice_number ? escapeHtml(v.invoice_number) : 'Unknown invoice'} · ${timeAgo(v.edited_at)}
+            ${v.invoice_number ? escapeHtml(v.invoice_number) : 'Unknown'} · ${timeAgo(v.edited_at)}
           </div>
         </div>
       `).join('');
+    }
+
+    function setFilter(filterId) {
+      state.activeFilter = filterId;
+
+      // Update filter chips
+      document.querySelectorAll('.filter-chip').forEach(chip => {
+        chip.classList.toggle('active', chip.textContent.trim() === filterId ||
+          (filterId === 'all' && chip.textContent === 'All'));
+      });
+
+      // Update category cards
+      document.querySelectorAll('.category-card').forEach(card => {
+        card.classList.toggle('active', card.dataset.category === filterId);
+      });
+
+      // Re-render feed
+      if (state.data && state.data.feed) {
+        renderFeed(state.data.feed);
+      }
+    }
+
+    function filterByCategory(categoryId) {
+      setFilter(categoryId);
     }
 
     async function fetchData() {
@@ -440,10 +617,10 @@
         if (!json.ok) throw new Error(json.error || 'API error');
 
         state.data = json.data;
-        state.lastFetch = Date.now();
 
-        renderKPIs(state.data.kpis);
+        renderCategories(state.data.categories);
         renderPulse(state.data.pulse);
+        renderFeedFilters(state.data.categories);
         renderFeed(state.data.feed);
         renderViewers(state.data.activeViewers);
 

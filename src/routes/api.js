@@ -6,6 +6,7 @@ const { loadInvoiceHistory } = require('../repo/history');
 const { loadViewerActivity } = require('../repo/viewerActivity');
 const { listInvoices, loadInvoiceDetail } = require('../repo/invoiceFeed');
 const { loadDashboard, loadLive } = require('../repo/dashboard');
+const { loadActivityLog, loadActivityLogFacets, loadActivityLogSummary } = require('../repo/activityLog');
 
 const router = express.Router();
 
@@ -175,6 +176,48 @@ router.get('/live', async (req, res) => {
         res.json({ ok: true, data });
     } catch (err) {
         console.error('[api] /live failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log
+ * Global cross-app feed from the shared `activity_log` table (prod_main).
+ * Query params:
+ *   app         - exact match on the writing app's slug (optional)
+ *   entityType  - exact match on entity_type (optional)
+ *   actor       - substring match on actor_name (optional)
+ *   search      - substring match on description / entity_label / action (optional)
+ *   cursor      - "<occurred_at ISO>|<id>" from a previous response's nextCursor
+ *   limit       - page size, default 50, max 200
+ *
+ * `facets` (distinct apps/entity_types) and `summary` (per-app counters) are
+ * only computed on the first page of a filter set (no cursor) to avoid
+ * re-running them on every "load more" click.
+ *
+ * Returns: 200 { ok: true, data: { rows, hasMore, nextCursor, facets, summary, generatedAt } }
+ */
+router.get('/activity-log', async (req, res) => {
+    const { app, entityType, actor, search, cursor, limit } = req.query;
+    let client = null;
+    try {
+        client = await pool.connect();
+        const feed = await loadActivityLog(client, { app, entityType, actor, search, cursor, limit });
+
+        let facets = null;
+        let summary = null;
+        if (!cursor) {
+            [facets, summary] = await Promise.all([
+                loadActivityLogFacets(client),
+                loadActivityLogSummary(client)
+            ]);
+        }
+
+        res.json({ ok: true, data: { ...feed, facets, summary, generatedAt: new Date().toISOString() } });
+    } catch (err) {
+        console.error('[api] /activity-log failed:', err.message);
         res.status(500).json({ ok: false, error: err.message });
     } finally {
         if (client) client.release();

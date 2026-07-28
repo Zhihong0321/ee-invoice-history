@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Activity Log · Cross-App Feed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0A0F1A;
+      color: #E7EDF5;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px 28px 60px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #1E2936;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header h1 {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header .subtitle {
+      font-size: 12px;
+      color: #5E6F88;
+      font-weight: 500;
+      margin-top: 3px;
+    }
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: #93A4BC;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .status-badge {
+      padding: 5px 11px;
+      background: #1E2936;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .status-badge.connected { background: #064E3B; color: #6EE7B7; }
+    .status-badge.error { background: #7F1D1D; color: #FCA5A5; }
+    .btn {
+      padding: 7px 14px;
+      background: #1E2936;
+      border: 1px solid #2E3A4D;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #E7EDF5;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn:hover { background: #2E3A4D; }
+    .btn:disabled { opacity: 0.5; cursor: default; }
+
+    /* Summary cards */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .summary-card {
+      background: #121A2A;
+      border: 1px solid #1E2936;
+      border-radius: 10px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .summary-card:hover { border-color: #2E3A4D; }
+    .summary-card.active { border-color: #3B82F6; background: rgba(59, 130, 246, 0.08); }
+    .summary-app {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #93A4BC;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+    .app-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+    .summary-count {
+      font-size: 26px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .summary-total {
+      font-size: 11px;
+      color: #5E6F88;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Filter bar */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      background: #121A2A;
+      border: 1px solid #1E2936;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+    }
+    .filter-bar input, .filter-bar select {
+      background: #0A0F1A;
+      border: 1px solid #2E3A4D;
+      border-radius: 6px;
+      color: #E7EDF5;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-family: inherit;
+    }
+    .filter-bar input::placeholder { color: #5E6F88; }
+    .filter-bar input { min-width: 200px; flex: 1; }
+    .filter-count {
+      font-size: 12px;
+      color: #5E6F88;
+      margin-left: auto;
+      font-family: 'JetBrains Mono', monospace;
+      white-space: nowrap;
+    }
+
+    /* Feed */
+    .feed-panel {
+      background: #121A2A;
+      border: 1px solid #1E2936;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .feed-item {
+      padding: 13px 16px;
+      border-bottom: 1px solid #1E2936;
+    }
+    .feed-item:last-child { border-bottom: none; }
+    .feed-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 11px;
+      color: #93A4BC;
+      flex-wrap: wrap;
+    }
+    .app-badge {
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #0A0F1A;
+    }
+    .status-pill {
+      padding: 2px 7px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 700;
+      background: #7F1D1D;
+      color: #FCA5A5;
+    }
+    .kind-pill {
+      padding: 2px 7px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 600;
+      background: #1E293B;
+      color: #94A3B8;
+    }
+    .feed-time {
+      font-family: 'JetBrains Mono', monospace;
+      color: #5E6F88;
+    }
+    .feed-desc {
+      font-size: 13px;
+      color: #E7EDF5;
+      margin-bottom: 3px;
+      font-weight: 500;
+    }
+    .feed-sub {
+      font-size: 12px;
+      color: #93A4BC;
+    }
+    .feed-sub .entity-label { color: #60A5FA; }
+    .empty-state, .loading-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: #5E6F88;
+      font-size: 13px;
+    }
+    .load-more-row {
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div>
+        <h1>Activity Log</h1>
+        <div class="subtitle">Shared cross-app feed &middot; activity_log &middot; 30-day retention</div>
+      </div>
+      <div class="header-meta">
+        <button class="btn" id="refresh-btn" onclick="reload()">Refresh</button>
+        <div class="status-badge" id="status">Connecting...</div>
+      </div>
+    </header>
+
+    <div class="summary-grid" id="summary"></div>
+
+    <div class="filter-bar">
+      <select id="app-filter" onchange="onFilterChange()">
+        <option value="">All apps</option>
+      </select>
+      <select id="entity-filter" onchange="onFilterChange()">
+        <option value="">All entity types</option>
+      </select>
+      <input id="actor-filter" type="text" placeholder="Actor name..." oninput="onFilterDebounced()">
+      <input id="search-filter" type="text" placeholder="Search description / entity / action..." oninput="onFilterDebounced()">
+      <button class="btn" onclick="clearFilters()">Clear</button>
+      <div class="filter-count" id="filter-count"></div>
+    </div>
+
+    <div class="feed-panel">
+      <div id="feed" class="loading-state">Loading...</div>
+    </div>
+    <div class="load-more-row" id="load-more-row" style="display:none">
+      <button class="btn" id="load-more-btn" onclick="loadMore()">Load more</button>
+    </div>
+  </div>
+
+  <script>
+    const state = {
+      rows: [],
+      cursor: null,
+      hasMore: false,
+      facets: { apps: [], entityTypes: [] },
+      summary: [],
+      filters: { app: '', entityType: '', actor: '', search: '' },
+      loading: false
+    };
+    let debounceTimer = null;
+
+    const APP_COLORS = ['#3B82F6', '#22C55E', '#F59E0B', '#A855F7', '#EC4899', '#14B8A6', '#F97316', '#EAB308'];
+    function colorForApp(app) {
+      let h = 0;
+      for (let i = 0; i < app.length; i++) h = (h * 31 + app.charCodeAt(i)) >>> 0;
+      return APP_COLORS[h % APP_COLORS.length];
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str == null ? '' : String(str);
+      return div.innerHTML;
+    }
+
+    function timeAgo(iso) {
+      if (!iso) return '';
+      const s = Math.floor((Date.now() - new Date(iso)) / 1000);
+      if (s < 5) return 'just now';
+      if (s < 60) return `${s}s ago`;
+      const m = Math.floor(s / 60);
+      if (m < 60) return `${m}m ago`;
+      const h = Math.floor(m / 60);
+      if (h < 24) return `${h}h ago`;
+      return `${Math.floor(h / 24)}d ago`;
+    }
+
+    function describeRow(row) {
+      if (row.description) return row.description;
+      // Fallback per SOP §8: "{actor_name} {action} {entity_type} {entity_label}"
+      const parts = [row.actor_name || 'Someone', row.action, row.entity_type, row.entity_label].filter(Boolean);
+      return parts.join(' ');
+    }
+
+    function renderSummary() {
+      const el = document.getElementById('summary');
+      if (!state.summary || state.summary.length === 0) {
+        el.innerHTML = '';
+        return;
+      }
+      el.innerHTML = state.summary.map(s => {
+        const active = state.filters.app === s.app ? 'active' : '';
+        return `
+          <div class="summary-card ${active}" onclick="toggleAppFilter('${escapeHtml(s.app)}')">
+            <div class="summary-app"><span class="app-dot" style="background:${colorForApp(s.app)}"></span>${escapeHtml(s.app)}</div>
+            <div class="summary-count">${s.today.toLocaleString()}</div>
+            <div class="summary-total">today &middot; ${s.total.toLocaleString()} in window &middot; ${timeAgo(s.lastEventAt)}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderFacets() {
+      const appSel = document.getElementById('app-filter');
+      const entitySel = document.getElementById('entity-filter');
+      const appVal = state.filters.app;
+      const entityVal = state.filters.entityType;
+
+      appSel.innerHTML = '<option value="">All apps</option>' +
+        state.facets.apps.map(a => `<option value="${escapeHtml(a)}">${escapeHtml(a)}</option>`).join('');
+      entitySel.innerHTML = '<option value="">All entity types</option>' +
+        state.facets.entityTypes.map(e => `<option value="${escapeHtml(e)}">${escapeHtml(e)}</option>`).join('');
+
+      appSel.value = appVal;
+      entitySel.value = entityVal;
+    }
+
+    function renderFeed() {
+      const feedEl = document.getElementById('feed');
+      if (!state.rows.length) {
+        feedEl.innerHTML = '<div class="empty-state">No activity matches these filters</div>';
+        document.getElementById('load-more-row').style.display = 'none';
+        return;
+      }
+
+      feedEl.innerHTML = state.rows.map(row => {
+        const color = colorForApp(row.app);
+        const statusPill = row.status && row.status !== 'success'
+          ? `<span class="status-pill">${escapeHtml(row.status)}</span>` : '';
+        const kindPill = row.actor_kind && row.actor_kind !== 'user'
+          ? `<span class="kind-pill">${escapeHtml(row.actor_kind)}</span>` : '';
+        const entityBit = row.entity_label
+          ? `<span class="entity-label">${escapeHtml(row.entity_label)}</span>`
+          : (row.entity_type ? `<span class="entity-label">${escapeHtml(row.entity_type)}</span>` : '');
+        const actorBit = row.actor_name ? escapeHtml(row.actor_name) : (row.actor_kind === 'user' ? 'Unknown user' : '');
+
+        return `
+          <div class="feed-item">
+            <div class="feed-meta">
+              <span class="app-badge" style="background:${color}">${escapeHtml(row.app)}</span>
+              ${kindPill}
+              ${statusPill}
+              <span class="feed-time" title="${escapeHtml(row.occurred_at)}">${timeAgo(row.occurred_at)}</span>
+            </div>
+            <div class="feed-desc">${escapeHtml(describeRow(row))}</div>
+            <div class="feed-sub">${actorBit}${actorBit && entityBit ? ' &middot; ' : ''}${entityBit}</div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('load-more-row').style.display = state.hasMore ? 'flex' : 'none';
+    }
+
+    function toggleAppFilter(app) {
+      state.filters.app = state.filters.app === app ? '' : app;
+      document.getElementById('app-filter').value = state.filters.app;
+      fetchFeed({ reset: true });
+    }
+
+    function onFilterChange() {
+      state.filters.app = document.getElementById('app-filter').value;
+      state.filters.entityType = document.getElementById('entity-filter').value;
+      fetchFeed({ reset: true });
+    }
+
+    function onFilterDebounced() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        state.filters.actor = document.getElementById('actor-filter').value.trim();
+        state.filters.search = document.getElementById('search-filter').value.trim();
+        fetchFeed({ reset: true });
+      }, 350);
+    }
+
+    function clearFilters() {
+      state.filters = { app: '', entityType: '', actor: '', search: '' };
+      document.getElementById('app-filter').value = '';
+      document.getElementById('entity-filter').value = '';
+      document.getElementById('actor-filter').value = '';
+      document.getElementById('search-filter').value = '';
+      fetchFeed({ reset: true });
+    }
+
+    function reload() {
+      fetchFeed({ reset: true });
+    }
+
+    function loadMore() {
+      if (state.hasMore && !state.loading) fetchFeed({ reset: false });
+    }
+
+    async function fetchFeed({ reset }) {
+      if (state.loading) return;
+      state.loading = true;
+      document.getElementById('load-more-btn').disabled = true;
+      if (reset) document.getElementById('feed').innerHTML = '<div class="loading-state">Loading...</div>';
+
+      const params = new URLSearchParams();
+      if (state.filters.app) params.set('app', state.filters.app);
+      if (state.filters.entityType) params.set('entityType', state.filters.entityType);
+      if (state.filters.actor) params.set('actor', state.filters.actor);
+      if (state.filters.search) params.set('search', state.filters.search);
+      if (!reset && state.cursor) params.set('cursor', state.cursor);
+
+      try {
+        const res = await fetch(`/api/activity-log?${params.toString()}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        if (!json.ok) throw new Error(json.error || 'API error');
+
+        const data = json.data;
+        state.rows = reset ? data.rows : state.rows.concat(data.rows);
+        state.cursor = data.nextCursor;
+        state.hasMore = data.hasMore;
+        if (data.facets) state.facets = data.facets;
+        if (data.summary) state.summary = data.summary;
+
+        renderSummary();
+        renderFacets();
+        renderFeed();
+
+        document.getElementById('filter-count').textContent = `${state.rows.length} loaded${state.hasMore ? ' +' : ''}`;
+        document.getElementById('status').textContent = 'Connected';
+        document.getElementById('status').className = 'status-badge connected';
+      } catch (err) {
+        console.error('Fetch failed:', err);
+        document.getElementById('status').textContent = 'Error';
+        document.getElementById('status').className = 'status-badge error';
+        if (reset) document.getElementById('feed').innerHTML = `<div class="empty-state">Failed to load: ${escapeHtml(err.message)}</div>`;
+      } finally {
+        state.loading = false;
+        document.getElementById('load-more-btn').disabled = !state.hasMore;
+      }
+    }
+
+    fetchFeed({ reset: true });
+  </script>
+</body>
+</html>

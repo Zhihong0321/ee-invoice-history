@@ -161,16 +161,21 @@ function renderHeader() {
                         </div>
                     </div>
 
-                    <button id="btn-theme-toggle" aria-label="Toggle theme" style="width:38px; height:38px; flex:0 0 38px; border-radius:11px; border:1px solid var(--border); background:var(--surface); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text2); outline:none;">
-                        ${isDark ? `
-                            <span style="width:14px; height:14px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 2px color-mix(in srgb, var(--accent) 32%, transparent);"></span>
-                        ` : `
-                            <span style="position:relative; width:16px; height:16px; display:block;">
-                                <span style="position:absolute; inset:0; border-radius:50%; background:var(--text2);"></span>
-                                <span style="position:absolute; top:-3px; right:-3px; width:13px; height:13px; border-radius:50%; background:var(--surface);"></span>
-                            </span>
-                        `}
-                    </button>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <a id="btn-activity-log" href="/activity-log.html" aria-label="Activity log" style="width:38px; height:38px; flex:0 0 38px; border-radius:11px; border:1px solid var(--border); background:var(--surface); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text2); outline:none; text-decoration:none;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
+                        </a>
+                        <button id="btn-theme-toggle" aria-label="Toggle theme" style="width:38px; height:38px; flex:0 0 38px; border-radius:11px; border:1px solid var(--border); background:var(--surface); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text2); outline:none;">
+                            ${isDark ? `
+                                <span style="width:14px; height:14px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 2px color-mix(in srgb, var(--accent) 32%, transparent);"></span>
+                            ` : `
+                                <span style="position:relative; width:16px; height:16px; display:block;">
+                                    <span style="position:absolute; inset:0; border-radius:50%; background:var(--text2);"></span>
+                                    <span style="position:absolute; top:-3px; right:-3px; width:13px; height:13px; border-radius:50%; background:var(--surface);"></span>
+                                </span>
+                            `}
+                        </button>
+                    </div>
                 </div>
 
                 <!-- SEARCH -->

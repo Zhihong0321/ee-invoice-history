@@ -2,125 +2,3900 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5.0, viewport-fit=cover">
-  <title>Invoice History</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Activity Log V2 · Department View</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --accent: #3B82F6;
-      /* Light theme tokens */
-      --bg-light: #EDF1F6;
-      --surface-light: #FFFFFF;
-      --surface2-light: #F5F8FB;
-      --border-light: #E4E9F0;
-      --text-light: #101B2D;
-      --text2-light: #566379;
-      --text3-light: #93A1B5;
-      --shadow-light: 0 1px 2px rgba(16,27,45,.05), 0 2px 6px rgba(16,27,45,.04);
-
-      /* Dark theme tokens */
-      --bg-dark: #0A0F1A;
-      --surface-dark: #121A2A;
-      --surface2-dark: #0E1626;
-      --border-dark: #212C40;
-      --text-dark: #E7EDF5;
-      --text2-dark: #93A4BC;
-      --text3-dark: #5E6F88;
-      --shadow-dark: 0 1px 2px rgba(0,0,0,.4), 0 4px 12px rgba(0,0,0,.3);
-    }
-
-    body.theme-light {
-      --bg: var(--bg-light);
-      --surface: var(--surface-light);
-      --surface2: var(--surface2-light);
-      --border: var(--border-light);
-      --text: var(--text-light);
-      --text2: var(--text2-light);
-      --text3: var(--text3-light);
-      --shadow: var(--shadow-light);
-    }
-
-    body.theme-dark {
-      --bg: var(--bg-dark);
-      --surface: var(--surface-dark);
-      --surface2: var(--surface2-dark);
-      --border: var(--border-dark);
-      --text: var(--text-dark);
-      --text2: var(--text2-dark);
-      --text3: var(--text3-dark);
-      --shadow: var(--shadow-dark);
-    }
-
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
-      padding: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+      background: #0A0F1A;
+      color: #E7EDF5;
+      font-family: 'Inter', system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
-      transition: background 0.15s ease, color 0.15s ease;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
     }
 
-    ::-webkit-scrollbar {
-      width: 0;
-      height: 0;
+    /* Mobile menu toggle */
+    .mobile-menu-btn {
       display: none;
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 200;
+      background: #1E2936;
+      border: 1px solid #2E3A4D;
+      border-radius: 8px;
+      width: 44px;
+      height: 44px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+    }
+    .mobile-menu-btn:active {
+      background: #2E3A4D;
     }
 
-    input::placeholder {
-      color: var(--text3);
+    /* Overlay for mobile */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 150;
+    }
+    .sidebar-overlay.visible {
+      display: block;
     }
 
-    @keyframes ihpulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: .35; }
+    /* Left Sidebar - Department Navigation */
+    .sidebar {
+      width: 280px;
+      background: #121A2A;
+      border-right: 1px solid #1E2936;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      z-index: 160;
     }
 
-    @keyframes fadein {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: none; }
+    @media (max-width: 768px) {
+      .mobile-menu-btn {
+        display: flex;
+      }
+
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+    }
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid #1E2936;
+    }
+    .sidebar-header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .sidebar-header .subtitle {
+      font-size: 11px;
+      color: #5E6F88;
+      font-weight: 500;
     }
 
-    .animated-fadein {
-      animation: fadein 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+    /* Department Group */
+    .dept-group {
+      border-bottom: 1px solid #1E2936;
+    }
+    .dept-header {
+      padding: 14px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #93A4BC;
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s;
+    }
+    .dept-header:hover {
+      background: #0E1626;
+    }
+    .dept-header.active {
+      background: #0E1626;
+      color: #E7EDF5;
+    }
+    .dept-icon {
+      font-size: 12px;
+      transition: transform 0.2s;
+    }
+    .dept-header.collapsed .dept-icon {
+      transform: rotate(-90deg);
     }
 
-    /* Stagger helpers */
-    .stagger-0 { animation-delay: 0ms; }
-    .stagger-1 { animation-delay: 40ms; }
-    .stagger-2 { animation-delay: 80ms; }
-    .stagger-3 { animation-delay: 120ms; }
-    .stagger-4 { animation-delay: 160ms; }
-    .stagger-5 { animation-delay: 200ms; }
-    .stagger-6 { animation-delay: 240ms; }
-    .stagger-7 { animation-delay: 280ms; }
+    /* Sub-menu items */
+    .submenu {
+      display: none;
+      background: #0E1626;
+    }
+    .submenu.open {
+      display: block;
+    }
+    .submenu-item {
+      padding: 10px 20px 10px 48px;
+      font-size: 12px;
+      color: #93A4BC;
+      cursor: pointer;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+    }
+    .submenu-item:hover {
+      background: #1E2936;
+      color: #E7EDF5;
+    }
+    .submenu-item.active {
+      background: #1E2936;
+      color: #3B82F6;
+      border-left-color: #3B82F6;
+      font-weight: 600;
+    }
+
+    /* Main Content Area */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Top bar */
+    .top-bar {
+      background: #121A2A;
+      border-bottom: 1px solid #1E2936;
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #93A4BC;
+    }
+    .breadcrumb .current {
+      color: #E7EDF5;
+      font-weight: 600;
+    }
+    .top-bar-actions {
+      display: flex;
+      gap: 12px;
+    }
+    .btn {
+      padding: 7px 14px;
+      background: #1E2936;
+      border: 1px solid #2E3A4D;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #E7EDF5;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn:hover { background: #2E3A4D; }
+
+    @media (max-width: 768px) {
+      .top-bar {
+        padding: 16px 16px 16px 68px;
+      }
+      .breadcrumb {
+        font-size: 12px;
+      }
+      .btn {
+        padding: 6px 12px;
+        font-size: 11px;
+      }
+    }
+
+    /* Content scroll area */
+    .content-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px;
+    }
+
+    @media (max-width: 768px) {
+      .content-scroll {
+        padding: 16px;
+      }
+    }
+
+    /* Activity feed */
+    .activity-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .activity-header h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .activity-header .description {
+      font-size: 13px;
+      color: #93A4BC;
+    }
+    .header-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      background: #2563EB;
+      color: #fff;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .header-link-btn:hover {
+      background: #1D4ED8;
+    }
+
+    @media (max-width: 768px) {
+      .activity-header {
+        flex-direction: column;
+      }
+      .activity-header h2 {
+        font-size: 18px;
+      }
+      .activity-header .description {
+        font-size: 12px;
+      }
+    }
+
+    .activity-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .activity-item {
+      background: #121A2A;
+      border: 1px solid #1E2936;
+      border-radius: 8px;
+      padding: 16px 18px;
+      transition: all 0.15s;
+    }
+    .activity-item:hover {
+      border-color: #2E3A4D;
+      background: #0E1626;
+    }
+
+    @media (max-width: 768px) {
+      .activity-item {
+        padding: 14px;
+      }
+    }
+
+    .activity-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .activity-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      background: #1E2936;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .activity-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+    .activity-icon.with-emoji::before {
+      content: attr(data-emoji);
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 16px;
+      height: 16px;
+      background: #121A2A;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      border: 1px solid #1E2936;
+    }
+    .activity-icon-initials {
+      font-size: 13px;
+      font-weight: 600;
+      color: #93A4BC;
+    }
+    .activity-icon.bot-logo {
+      padding: 6px;
+      box-sizing: border-box;
+    }
+    .activity-icon.bot-logo img {
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    .activity-icon.bot-logo-ai {
+      background: rgba(59, 130, 246, 0.20);
+      border: 1px solid rgba(59, 130, 246, 0.45);
+    }
+    .activity-icon.bot-logo-search {
+      background: rgba(168, 85, 247, 0.20);
+      border: 1px solid rgba(168, 85, 247, 0.45);
+    }
+
+    @media (max-width: 768px) {
+      .activity-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+      }
+      .activity-icon.with-emoji::before {
+        width: 14px;
+        height: 14px;
+        font-size: 9px;
+      }
+      .activity-icon-initials {
+        font-size: 11px;
+      }
+    }
+    .activity-body {
+      flex: 1;
+      min-width: 0;
+    }
+    .activity-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #E7EDF5;
+      margin-bottom: 4px;
+    }
+    .activity-desc {
+      font-size: 12px;
+      color: #93A4BC;
+      margin-bottom: 8px;
+    }
+    /* Per-row metadata chips. Keeps otherwise identical descriptions distinct. */
+    .activity-detail {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .activity-detail .chip {
+      font-size: 11px;
+      color: #C7D3E4;
+      background: #1A2436;
+      border: 1px solid #26334A;
+      border-radius: 5px;
+      padding: 2px 7px;
+      white-space: nowrap;
+    }
+    .activity-detail .chip b {
+      color: #7D8FA8;
+      font-weight: 500;
+    }
+    .activity-detail .chip.accent {
+      color: #8BE3B0;
+      background: #10241B;
+      border-color: #24523B;
+    }
+    .activity-detail .chip.accent b {
+      color: #5FA37D;
+    }
+
+    /* Per-user seven-day summary, attached to each calculator activity card. */
+    .calculator-user-summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 7px 0 8px;
+    }
+    .calculator-user-summary .user-metric {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 5px;
+      padding: 3px 7px;
+      border: 1px solid #2B4160;
+      border-radius: 5px;
+      background: #111E31;
+      color: #AFC0D8;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+    .calculator-user-summary .user-metric.accent {
+      border-color: #24523B;
+      background: #10241B;
+      color: #9AE6B4;
+    }
+    .calculator-user-summary .user-metric b {
+      color: #7D8FA8;
+      font-size: 9px;
+      letter-spacing: 0.05em;
+    }
+    .calculator-user-summary .user-metric.accent b {
+      color: #5FA37D;
+    }
+    .calculator-user-summary .user-metric strong {
+      color: #E7EDF5;
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+    .calculator-user-summary .user-metric.accent strong {
+      color: #6EE7B7;
+    }
+
+    /* SALES › Proposal — Top-five agent calculator board. */
+    .agent-board {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .agent-overview {
+      display: grid;
+      grid-template-columns: minmax(170px, 1.45fr) repeat(3, minmax(120px, 1fr));
+      gap: 10px;
+    }
+    .agent-overview-stat {
+      min-width: 0;
+      padding: 13px 14px;
+      border: 1px solid #263955;
+      border-radius: 9px;
+      background: #101B2D;
+    }
+    .agent-overview-label {
+      display: block;
+      color: #7D8FA8;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .agent-overview-value {
+      display: block;
+      margin-top: 5px;
+      color: #E7EDF5;
+      font-size: 24px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+    .agent-overview-note {
+      display: block;
+      margin-top: 2px;
+      color: #93A4BC;
+      font-size: 10px;
+    }
+    .agent-overview-stat.low { border-color: #315282; }
+    .agent-overview-stat.mid { border-color: #4C3D7F; }
+    .agent-overview-stat.high { border-color: #24523B; }
+    .agent-overview-stat.low .agent-overview-value { color: #7DD3FC; }
+    .agent-overview-stat.mid .agent-overview-value { color: #C4B5FD; }
+    .agent-overview-stat.high .agent-overview-value { color: #6EE7B7; }
+
+    .agent-board-kicker {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: #93A4BC;
+      font-size: 12px;
+    }
+    .agent-board-kicker .period {
+      color: #7DD3FC;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .agent-board-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
+      gap: 14px;
+    }
+    .agent-card {
+      background: #121A2A;
+      border: 1px solid #1E2936;
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .agent-card:hover {
+      border-color: #385376;
+    }
+    .agent-card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .agent-rank {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      flex: 0 0 auto;
+      border-radius: 7px;
+      background: #172943;
+      color: #93C5FD;
+      font-size: 12px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+    .agent-name {
+      overflow: hidden;
+      color: #E7EDF5;
+      font-size: 14px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .agent-usage {
+      margin-left: auto;
+      color: #93A4BC;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    .agent-usage b {
+      color: #E7EDF5;
+      font-size: 16px;
+      font-variant-numeric: tabular-nums;
+    }
+    .agent-average {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 16px 0 14px;
+    }
+    .agent-average-label {
+      color: #7D8FA8;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .agent-average-value {
+      color: #6EE7B7;
+      font-size: 21px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+    .agent-chart-title {
+      margin-bottom: 8px;
+      color: #93A4BC;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .agent-chart-row {
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr) 28px;
+      align-items: center;
+      gap: 8px;
+      margin-top: 7px;
+    }
+    .agent-chart-label,
+    .agent-chart-value {
+      color: #93A4BC;
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+    }
+    .agent-chart-value {
+      color: #C7D3E4;
+      font-weight: 700;
+      text-align: right;
+    }
+    .agent-chart-track {
+      height: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #1C2738;
+    }
+    .agent-chart-bar {
+      height: 100%;
+      min-width: 0;
+      border-radius: inherit;
+      background: #3B82F6;
+    }
+    .agent-chart-row.mid .agent-chart-bar { background: #A78BFA; }
+    .agent-chart-row.high .agent-chart-bar { background: #34D399; }
+
+    @media (max-width: 768px) {
+      .agent-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .agent-overview-stat:first-child { grid-column: 1 / -1; }
+      .agent-board-grid { grid-template-columns: 1fr; }
+      .agent-card { padding: 14px; }
+    }
+    .activity-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      color: #5E6F88;
+      flex-wrap: wrap;
+    }
+    .activity-meta span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .activity-title {
+        font-size: 13px;
+      }
+      .activity-desc {
+        font-size: 11px;
+      }
+      .activity-detail {
+        gap: 4px;
+      }
+      .activity-detail .chip {
+        font-size: 10px;
+        padding: 2px 6px;
+      }
+      .activity-meta {
+        font-size: 10px;
+        gap: 8px;
+      }
+    }
+
+    /* ---------- INVOICE department ---------- */
+
+    /* Filter bar above the feed */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .filter-chip {
+      padding: 6px 12px;
+      background: #121A2A;
+      border: 1px solid #2E3A4D;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #93A4BC;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .filter-chip:hover { border-color: #3B82F6; color: #E7EDF5; }
+    .filter-chip.active {
+      background: #1D4ED8;
+      border-color: #3B82F6;
+      color: #FFFFFF;
+    }
+
+    /* Dotted vertical timeline — date dividers + a clock node per event */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+    }
+    .tl-day {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin: 26px 0 16px;
+    }
+    .tl-day:first-child { margin-top: 4px; }
+    .tl-day::before,
+    .tl-day::after {
+      content: '';
+      flex: 1;
+      border-top: 2px dotted #2E3A4D;
+    }
+    .tl-day-label {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: #93A4BC;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .tl-entry {
+      display: flex;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .tl-rail {
+      width: 56px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    /* Dotted connector runs from the middle of this node to the next one.
+       The node's opaque background sits on top of it. */
+    .tl-rail::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 2px dotted #2E3A4D;
+    }
+    .tl-entry.tl-last .tl-rail::before { display: none; }
+    .tl-node {
+      position: relative;
+      z-index: 1;
+      width: 54px;
+      height: 54px;
+      border-radius: 13px;
+      border: 2px solid #2E3A4D;
+      background: #121A2A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-variant-numeric: tabular-nums;
+    }
+    /* AM / PM written large and faint behind the digits */
+    .tl-node::after {
+      content: attr(data-meridiem);
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      opacity: 0.16;
+      pointer-events: none;
+    }
+    .tl-time {
+      position: relative;
+      z-index: 1;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #E7EDF5;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+    }
+
+    /* Morning — warm */
+    .tl-node.am {
+      background: linear-gradient(155deg, #21283A 0%, #2C2418 100%);
+      border-color: #5C4526;
+    }
+    .tl-node.am::after { color: #F59E0B; }
+
+    /* Afternoon / evening — cool */
+    .tl-node.pm {
+      background: linear-gradient(155deg, #151D33 0%, #221C42 100%);
+      border-color: #3B3572;
+    }
+    .tl-node.pm::after { color: #818CF8; }
+
+    /* A visitor read the invoice — keeps the AM/PM fill, gains the accent ring */
+    .tl-node.visitor {
+      border-color: #8B5CF6;
+      box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.35);
+    }
+    .tl-card {
+      flex: 1;
+      min-width: 0;
+      padding-bottom: 16px;
+    }
+
+    /* A row that arrived on an auto-refresh drops in and flashes once */
+    @keyframes tl-drop-in {
+      from { opacity: 0; transform: translateY(-14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes tl-flash {
+      0%   { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.55); border-color: #3B82F6; }
+      100% { box-shadow: 0 0 0 14px rgba(59, 130, 246, 0); }
+    }
+    @keyframes tl-node-pop {
+      0%   { transform: scale(0.6); }
+      60%  { transform: scale(1.12); }
+      100% { transform: scale(1); }
+    }
+    .tl-entry.tl-new {
+      animation: tl-drop-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .tl-entry.tl-new .activity-item {
+      animation: tl-flash 1.6s ease-out 0.2s both;
+    }
+    .tl-entry.tl-new .tl-node {
+      animation: tl-node-pop 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+      border-color: #3B82F6;
+      color: #93C5FD;
+    }
+
+    /* "3 new" pill that rides above the feed after a refresh brings rows in */
+    .new-pulse {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      margin-bottom: 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #1D4ED8;
+      color: #FFFFFF;
+      animation: tl-drop-in 0.35s ease both;
+    }
+    .new-pulse .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #93C5FD;
+      animation: tl-flash 1.4s ease-out infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tl-entry.tl-new,
+      .tl-entry.tl-new .activity-item,
+      .tl-entry.tl-new .tl-node,
+      .new-pulse,
+      .new-pulse .dot {
+        animation: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .tl-entry { gap: 10px; }
+      .tl-rail { width: 44px; }
+      .tl-node { width: 44px; height: 44px; border-radius: 11px; }
+      .tl-node::after { font-size: 20px; }
+      .tl-time { font-size: 12px; }
+      .tl-rail::before { top: 22px; }
+      .tl-day-label { font-size: 15px; }
+    }
+
+    /* Mode tabs — Prep / Edit / View within one Invoice Activity page */
+    .mode-bar {
+      gap: 4px;
+      margin-bottom: 10px;
+      padding: 4px;
+      background: #0E1626;
+      border: 1px solid #1E2936;
+      border-radius: 10px;
+      width: fit-content;
+      max-width: 100%;
+    }
+    .mode-tab {
+      padding: 8px 16px;
+      background: transparent;
+      border: none;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #93A4BC;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .mode-tab:hover { color: #E7EDF5; background: #16203352; }
+    .mode-tab.active {
+      background: #1E2936;
+      color: #E7EDF5;
+      box-shadow: inset 0 0 0 1px #2E3A4D;
+    }
+
+    /* Kind chip — tells prep / edit / view apart in the combined stream */
+    .kind-chip {
+      display: inline-block;
+      padding: 2px 7px;
+      margin-right: 6px;
+      border-radius: 5px;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      vertical-align: middle;
+      border: 1px solid transparent;
+    }
+    .kind-chip.prep { background: #14304A; color: #7DD3FC; border-color: #1E4E75; }
+    .kind-chip.edit { background: #3A2F1E; color: #FCD34D; border-color: #6B532A; }
+    .kind-chip.view { background: #2A1E4A; color: #C4B5FD; border-color: #4A3A80; }
+
+    /* Small inline tags (item type, field names, buttons clicked) */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 600;
+      background: #1E2936;
+      color: #93A4BC;
+      border: 1px solid #2E3A4D;
+    }
+    .tag.discount { background: #3B1D2B; color: #F9A8D4; border-color: #6B2740; }
+    .tag.voucher  { background: #1E3A2B; color: #86EFAC; border-color: #276B45; }
+    .tag.package  { background: #1E2A4D; color: #93C5FD; border-color: #2E4A8D; }
+    .tag.extra    { background: #3A2F1E; color: #FCD34D; border-color: #6B532A; }
+    .tag.danger   { background: #3A1E22; color: #FCA5A5; border-color: #7F2D33; }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0;
+    }
+
+    /* Prep card: line items */
+    .item-list {
+      margin: 10px 0 4px;
+      border-top: 1px solid #1E2936;
+    }
+    .item-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px solid #151F30;
+      font-size: 12px;
+      color: #93A4BC;
+    }
+    .item-line .item-desc {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .item-line .item-amt {
+      font-variant-numeric: tabular-nums;
+      color: #E7EDF5;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .item-line .item-amt.negative { color: #F9A8D4; }
+    .item-more {
+      padding: 6px 0;
+      font-size: 11px;
+      color: #5E6F88;
+      cursor: pointer;
+    }
+    .item-more:hover { color: #93A4BC; }
+
+    /* Edit card: field diffs */
+    .diff-list {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .diff-line {
+      font-size: 12px;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .diff-field {
+      color: #5E6F88;
+      font-weight: 600;
+      font-size: 11px;
+      min-width: 130px;
+    }
+    .diff-before {
+      color: #93A4BC;
+      text-decoration: line-through;
+      opacity: 0.7;
+      word-break: break-word;
+    }
+    .diff-arrow { color: #5E6F88; }
+    .diff-after { color: #86EFAC; word-break: break-word; }
+
+    /* SEDA: cycle-time strip */
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .stat-tile {
+      background: #131C2B;
+      border: 1px solid #22304A;
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .stat-tile .stat-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #5E6F88;
+      font-weight: 700;
+    }
+    .stat-tile .stat-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: #E6EDF7;
+      margin-top: 6px;
+      line-height: 1.1;
+    }
+    .stat-tile .stat-value small {
+      font-size: 13px;
+      font-weight: 500;
+      color: #93A4BC;
+    }
+    .stat-tile .stat-sub {
+      font-size: 11px;
+      color: #5E6F88;
+      margin-top: 6px;
+    }
+    /* Qualifier chip on a stat label (e.g. a coverage window) */
+    .stat-tile .stat-derived {
+      margin-left: 6px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: #1D2839;
+      border: 1px solid #2C3A54;
+      color: #93A4BC;
+      font-size: 9px;
+      letter-spacing: 0.04em;
+    }
+    .stat-tile.thin { border-color: #4A3A18; }
+    .stat-tile.thin .stat-sub { color: #D9A441; }
+
+    /* Payment Activity: daily verified-total chart */
+    .verify-chart {
+      background: #131C2B;
+      border: 1px solid #22304A;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+    }
+    .verify-chart-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #5E6F88;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .verify-chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 90px;
+    }
+    .verify-chart-bar {
+      flex: 1;
+      min-width: 2px;
+      background: #34D399;
+      border-radius: 2px 2px 0 0;
+    }
+    .verify-chart-bar.empty { background: #22304A; }
+    .verify-chart-bar:hover { opacity: 0.7; }
+
+    /* Payment Submission card: 1st-payment → 60% → full-paid cycle, as two boxes */
+    .cycle-box-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .cycle-box {
+      flex: 1;
+      min-width: 0;
+      background: #131C2B;
+      border: 1px solid #22304A;
+      border-radius: 8px;
+      padding: 8px 10px;
+    }
+    .cycle-box .cycle-box-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #5E6F88;
+      font-weight: 700;
+    }
+    .cycle-box .cycle-box-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #8BE3B0;
+      margin-top: 3px;
+      line-height: 1.1;
+    }
+    .cycle-box .cycle-box-value small {
+      font-size: 12px;
+      font-weight: 500;
+      color: #5FA37D;
+      margin-left: 1px;
+    }
+    .cycle-box.muted .cycle-box-value {
+      color: #5E6F88;
+      font-size: 13px;
+    }
+
+    /* SEDA: status transition pills */
+    .status-flow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .status-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 9px;
+      border-radius: 999px;
+      background: #1D2839;
+      color: #93A4BC;
+      border: 1px solid #2C3A54;
+    }
+    /* SEDA cards split on one thing: has money come in or not.
+       Unpaid stays flat and recessed; paid gets a lighter body and a neon
+       edge, so a scroll reads as "which of these are live deals". */
+    .activity-item.seda-card.unpaid {
+      background: #0E1523;
+      border-color: #1B2434;
+    }
+    .activity-item.seda-card.paid {
+      background: #16223A;
+      border-color: rgba(52, 227, 178, 0.55);
+      box-shadow:
+        0 0 0 1px rgba(52, 227, 178, 0.35),
+        0 0 14px rgba(52, 227, 178, 0.22),
+        inset 0 0 22px rgba(52, 227, 178, 0.06);
+    }
+
+    .pay-badge {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      vertical-align: middle;
+      color: #34E3B2;
+      background: rgba(52, 227, 178, 0.12);
+      border: 1px solid rgba(52, 227, 178, 0.45);
+    }
+    .pay-badge.unpaid {
+      color: #6B7A92;
+      background: transparent;
+      border-color: #2A3548;
+      font-weight: 600;
+    }
+
+    /* Per-row stage lengths for this invoice */
+    .stage-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .stage-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      padding: 5px 10px;
+      border-radius: 8px;
+      background: #131C2B;
+      border: 1px solid #22304A;
+      min-width: 108px;
+    }
+    .stage-cell .stage-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #5E6F88;
+      font-weight: 700;
+    }
+    .stage-cell .stage-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: #E6EDF7;
+    }
+    .stage-cell.pending .stage-value { color: #4A5A73; }
+    /* Negative is real: collection can cross 59% before approval is keyed. */
+    .stage-cell.negative .stage-value { color: #D9A441; }
+    /* Deposit taken, still not submitted, and it has been a while. */
+    .stage-cell.alert {
+      border-color: #5A2733;
+      background: #22151C;
+    }
+    .stage-cell.alert .stage-value { color: #F87171; }
+
+    /* SEDA header: customer · kWp · city. The event name and invoice number
+       drop to a second line — who and where is what the eye scans for. */
+    .activity-sub {
+      font-size: 11px;
+      color: #5E6F88;
+      margin-top: 2px;
+    }
+    .hdr-sep { color: #3A4A66; margin: 0 2px; }
+    .hdr-missing { color: #4A5A73; font-weight: 500; }
+
+    /* "now <pill>" — current application status, carried on every SEDA row */
+    .status-now {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-left: 8px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #5E6F88;
+      vertical-align: middle;
+    }
+    .status-now.muted { opacity: 0.55; }
+
+    .status-pill.pending { color: #D9A441; border-color: #4A3A18; }
+    .status-pill.submitted { color: #7FB2F0; border-color: #1E3A5F; }
+    .status-pill.approved { color: #86EFAC; border-color: #1E4632; }
+    .status-pill.danger { color: #FCA5A5; border-color: #7F2D33; }
+
+    /* View card: visitor treatment */
+    @property --ring-angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+    @keyframes ring-spin {
+      to { --ring-angle: 360deg; }
+    }
+    @keyframes ring-breathe {
+      0%, 100% { opacity: 0.55; transform: scale(1); }
+      50%      { opacity: 1;    transform: scale(1.012); }
+    }
+
+    /* A visitor (not a logged-in staff member) read this invoice.
+       Very likely the customer — give it a living gradient ring. */
+    .activity-item.visitor {
+      position: relative;
+      background: #0F1626;
+      border-color: transparent;
+      isolation: isolate;
+    }
+    .activity-item.visitor::before {
+      content: '';
+      position: absolute;
+      inset: -1.5px;
+      border-radius: 10px;
+      z-index: -1;
+      background: conic-gradient(
+        from var(--ring-angle),
+        #3B82F6, #8B5CF6, #EC4899, #F59E0B, #22D3EE, #3B82F6
+      );
+      opacity: 0.55;
+    }
+    /* Fresh visit — the ring grows and rotates */
+    .activity-item.visitor.live::before {
+      animation: ring-spin 6s linear infinite, ring-breathe 2.6s ease-in-out infinite;
+    }
+    .activity-item.visitor.live {
+      background: #101A2E;
+    }
+    .activity-item.visitor:hover {
+      background: #0C1424;
+      border-color: transparent;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .activity-item.visitor.live::before {
+        animation: none;
+        opacity: 0.75;
+      }
+    }
+
+    .visitor-avatar {
+      background: linear-gradient(135deg, #1E2936, #2E3A4D);
+      color: #93C5FD;
+      font-size: 15px;
+    }
+    .visitor-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      background: linear-gradient(90deg, #1D4ED8, #7C3AED);
+      color: #FFFFFF;
+    }
+
+    /* Loading state */
+    .loading-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #5E6F88;
+      font-size: 13px;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+    }
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+    .empty-state h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #93A4BC;
+      margin-bottom: 6px;
+    }
+    .empty-state p {
+      font-size: 13px;
+      color: #5E6F88;
+    }
   </style>
 </head>
-<body class="theme-light">
-  <!-- Site Navigation -->
-  <nav style="background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 16px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow);">
-    <div style="max-width: 452px; margin: 0 auto; display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
-      <a href="/" style="color: var(--text); text-decoration: none; font-weight: 600; font-size: 14px;">Invoice History</a>
-      <a href="/dashboard.html" style="color: var(--text2); text-decoration: none; font-size: 13px;">Dashboard</a>
-      <a href="/live-wall-dashboard.html" style="color: var(--text2); text-decoration: none; font-size: 13px;">Live Wall</a>
-      <a href="/activity-log.html" style="color: var(--text2); text-decoration: none; font-size: 13px;">Activity Log</a>
+<body>
+  <!-- Load user profile cache -->
+  <script src="/js/userProfileCache.js"></script>
+  <!-- Mobile menu button -->
+  <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+
+  <!-- Sidebar overlay for mobile -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- Left Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h1>Activity Log V2</h1>
+      <div class="subtitle">Department-based view</div>
     </div>
-  </nav>
 
-  <div id="app" style="position:relative; min-height:100vh; max-width:452px; margin:0 auto; padding-bottom:48px;">
-    <!-- Chrome Header & View Controls will be managed here dynamically -->
-    <div id="view-header"></div>
-    <!-- Main Content Timeline -->
-    <main id="view-content" style="padding:6px 14px 0;"></main>
-  </div>
+    <!-- SALES Department -->
+    <div class="dept-group">
+      <div class="dept-header active" data-dept="sales">
+        <span class="dept-icon">▼</span>
+        <span>SALES</span>
+      </div>
+      <div class="submenu open" data-dept="sales">
+        <div class="submenu-item active" data-route="sales/calculator">Calculator</div>
+        <div class="submenu-item" data-route="sales/proposal">Sales Agent Activity</div>
+        <div class="submenu-item" data-route="sales/auto-proposal">Auto Proposal AI-Voiced</div>
+      </div>
+    </div>
 
-  <script src="/js/app.js" defer></script>
+    <!-- INVOICE Department -->
+    <div class="dept-group">
+      <div class="dept-header collapsed" data-dept="invoice">
+        <span class="dept-icon">▼</span>
+        <span>INVOICE</span>
+      </div>
+      <div class="submenu" data-dept="invoice">
+        <div class="submenu-item" data-route="invoice/activity">Invoice Activity</div>
+      </div>
+    </div>
+
+    <!-- SEDA Department -->
+    <div class="dept-group">
+      <div class="dept-header collapsed" data-dept="seda">
+        <span class="dept-icon">▼</span>
+        <span>SEDA</span>
+      </div>
+      <div class="submenu" data-dept="seda">
+        <div class="submenu-item" data-route="seda/activity">SEDA Activity</div>
+      </div>
+    </div>
+
+    <!-- Finance Department -->
+    <div class="dept-group">
+      <div class="dept-header collapsed" data-dept="finance">
+        <span class="dept-icon">▼</span>
+        <span>FINANCE</span>
+      </div>
+      <div class="submenu" data-dept="finance">
+        <div class="submenu-item" data-route="finance/payment-activity">Payment Activity</div>
+        <div class="submenu-item" data-route="finance/receipt">Official Receipt</div>
+      </div>
+    </div>
+
+    <!-- Marketing Department -->
+    <div class="dept-group">
+      <div class="dept-header collapsed" data-dept="marketing">
+        <span class="dept-icon">▼</span>
+        <span>MARKETING</span>
+      </div>
+      <div class="submenu" data-dept="marketing">
+        <div class="submenu-item" data-route="marketing/ads-research">Market Ads Research Automation</div>
+        <div class="submenu-item" data-route="marketing/seo-geo-site">SEO+GEO Site</div>
+      </div>
+    </div>
+
+    <!-- PR Department -->
+    <div class="dept-group">
+      <div class="dept-header collapsed" data-dept="pr">
+        <span class="dept-icon">▼</span>
+        <span>PR</span>
+      </div>
+      <div class="submenu" data-dept="pr">
+        <div class="submenu-item" data-route="pr/company-info">Company Info Collection</div>
+        <div class="submenu-item" data-route="pr/email">Email Received</div>
+      </div>
+    </div>
+
+    <!-- Admin Department -->
+    <div class="dept-group">
+      <div class="dept-header collapsed" data-dept="admin">
+        <span class="dept-icon">▼</span>
+        <span>ADMIN</span>
+      </div>
+      <div class="submenu" data-dept="admin">
+        <div class="submenu-item" data-route="admin/console">Admin Console</div>
+      </div>
+    </div>
+
+    <!-- HR Department -->
+    <div class="dept-group">
+      <div class="dept-header collapsed" data-dept="hr">
+        <span class="dept-icon">▼</span>
+        <span>HR</span>
+      </div>
+      <div class="submenu" data-dept="hr">
+        <div class="submenu-item" data-route="hr/vacancy">Vacancy Email Handling</div>
+      </div>
+    </div>
+
+    <!-- User App -->
+    <div class="dept-group">
+      <div class="dept-header collapsed" data-dept="user-app">
+        <span class="dept-icon">▼</span>
+        <span>USER APP</span>
+      </div>
+      <div class="submenu" data-dept="user-app">
+        <div class="submenu-item" data-route="user-app/saj-api">SAJ API</div>
+        <div class="submenu-item" data-route="user-app/activity">User APP Activity Log</div>
+      </div>
+    </div>
+
+    <!-- AI Workflow -->
+    <div class="dept-group">
+      <div class="dept-header collapsed" data-dept="ai-workflow">
+        <span class="dept-icon">▼</span>
+        <span>AI WORKFLOW</span>
+      </div>
+      <div class="submenu" data-dept="ai-workflow">
+        <div class="submenu-item" data-route="ai-workflow/main">Main</div>
+      </div>
+    </div>
+
+    <!-- AI Router -->
+    <div class="dept-group">
+      <div class="dept-header collapsed" data-dept="ai-router">
+        <span class="dept-icon">▼</span>
+        <span>AI ROUTER</span>
+      </div>
+      <div class="submenu" data-dept="ai-router">
+        <div class="submenu-item" data-route="ai-router/logs">Request Logs</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="top-bar">
+      <div class="breadcrumb">
+        <span>SALES</span>
+        <span>›</span>
+        <span class="current">Calculator</span>
+      </div>
+      <div class="top-bar-actions">
+        <button class="btn" onclick="reload()">Refresh</button>
+      </div>
+    </div>
+
+    <div class="content-scroll">
+      <div class="activity-header">
+        <div class="activity-header-text">
+          <h2>Calculator Usage Activity</h2>
+          <div class="description">Residential & Commercial ROI calculation logs</div>
+        </div>
+        <div class="activity-header-action"></div>
+      </div>
+
+      <div id="filters"></div>
+
+      <div id="finance-stats"></div>
+
+      <div id="feed" class="loading-state">Loading calculator activity...</div>
+    </div>
+  </main>
+
+  <script>
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+    function openSidebar() {
+      sidebar.classList.add('open');
+      sidebarOverlay.classList.add('visible');
+    }
+
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('visible');
+    }
+
+    mobileMenuBtn.addEventListener('click', openSidebar);
+    sidebarOverlay.addEventListener('click', closeSidebar);
+
+    // Department toggle
+    document.querySelectorAll('.dept-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const dept = header.getAttribute('data-dept');
+        const submenu = document.querySelector(`.submenu[data-dept="${dept}"]`);
+
+        header.classList.toggle('collapsed');
+        submenu.classList.toggle('open');
+      });
+    });
+
+    // Submenu navigation
+    document.querySelectorAll('.submenu-item').forEach(item => {
+      item.addEventListener('click', () => {
+        // Clear all active states
+        document.querySelectorAll('.submenu-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+
+        const route = item.getAttribute('data-route');
+        console.log('Navigate to:', route);
+
+        // Close mobile menu
+        closeSidebar();
+
+        // Update breadcrumb and load content
+        loadRoute(route);
+      });
+    });
+
+    function loadRoute(route) {
+      const [dept, page] = route.split('/');
+
+      // Only the Payment Activity page populates this; every other route
+      // must start from empty or a stale stats bar leaks across pages.
+      document.getElementById('finance-stats').innerHTML = '';
+
+      // Update breadcrumb
+      const breadcrumb = document.querySelector('.breadcrumb');
+      breadcrumb.innerHTML = `
+        <span>${dept.toUpperCase()}</span>
+        <span>›</span>
+        <span class="current">${document.querySelector(`[data-route="${route}"]`).textContent}</span>
+      `;
+
+      // Only the live feeds poll; leaving them must stop the timer.
+      const LIVE_ROUTES = [
+        'invoice/activity', 'sales/calculator', 'sales/auto-proposal', 'seda/activity',
+        'finance/payment-activity', 'finance/receipt',
+        'admin/console', 'ai-workflow/main', 'ai-router/logs'
+      ];
+      if (!LIVE_ROUTES.includes(route)) stopAutoRefresh();
+
+      // Load content based on route
+      if (route === 'sales/calculator') {
+        setHeader('Calculator Usage Activity', 'Residential & Commercial ROI calculation logs');
+        clearFilters();
+        loadCalculatorActivity();
+      } else if (route === 'sales/proposal') {
+        setHeader('Sales Agent Activity', 'Top 5 calculator users — last 30 days');
+        clearFilters();
+        loadSalesAgentActivityBoard();
+      } else if (route === 'sales/auto-proposal') {
+        setHeader('Auto Proposal AI-Voiced Activity', 'AI workflow and app activity from solar-presentation',
+          '<a class="header-link-btn" href="https://e.atap.solar/p/c4e472781c45887eeb25fd270ca3c40553e050ed45095817cc10f30de5fef21c" target="_blank" rel="noopener noreferrer">VISIT DEMO AUTO-PRESENTATION</a>');
+        loadAutoProposalActivity();
+      } else if (route === 'invoice/activity') {
+        loadInvoiceActivity();
+      } else if (route === 'seda/activity') {
+        setHeader('SEDA Activity', 'Registrations, documents and admin status — one combined log');
+        loadSedaActivity();
+      } else if (route === 'admin/console') {
+        setHeader('Admin Console Activity', 'What back-office staff did in admin.atap.solar — last 30 days');
+        loadAdminActivity();
+      } else if (route === 'ai-workflow/main') {
+        setHeader('AI Workflow Activity', 'Every AI agent run across all Eternalgy apps — tokens, cost and outcome');
+        clearFilters();
+        loadAiWorkflowActivity();
+      } else if (route === 'ai-router/logs') {
+        setHeader('AI Router Request Logs', 'Every request that passed through the AI router — provider, model, tokens, latency and cost');
+        loadAiRouterLogs();
+      } else if (route === 'finance/payment-activity') {
+        loadPaymentActivity();
+      } else if (route === 'finance/receipt') {
+        setHeader('Official Receipt', 'Receipts sent to customers — merged with WhatsApp delivery status');
+        loadPaymentReceiptLog();
+      } else if (route === 'marketing/seo-geo-site') {
+        setHeader('SEO+GEO Site Activity', 'Cross-app activity log filtered to app = main-site',
+          '<a class="header-link-btn" href="https://eternalgy.me" target="_blank" rel="noopener noreferrer">VISIT Eternalgy.me</a>');
+        clearFilters();
+        loadMarketingSeoGeoActivity();
+      } else {
+        clearFilters();
+        showPlaceholder(route);
+      }
+    }
+
+    function setHeader(title, description, actionHtml) {
+      document.querySelector('.activity-header h2').textContent = title;
+      document.querySelector('.activity-header .description').textContent = description;
+      document.querySelector('.activity-header-action').innerHTML = actionHtml || '';
+    }
+
+    function clearFilters() {
+      document.getElementById('filters').innerHTML = '';
+    }
+
+    function setLoading(message) {
+      const feed = document.getElementById('feed');
+      feed.className = 'loading-state';
+      feed.textContent = message;
+      return feed;
+    }
+
+    function renderEmpty(feed, icon, title, message) {
+      feed.className = 'empty-state';
+      feed.innerHTML = `
+        <div class="empty-state-icon">${icon}</div>
+        <h3>${title}</h3>
+        <p>${message}</p>
+      `;
+    }
+
+    function renderError(feed, err) {
+      renderEmpty(feed, '⚠️', 'Failed to load', escapeHtml(err.message));
+    }
+
+    function escapeHtml(value) {
+      if (value === null || value === undefined) return '';
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function money(value) {
+      const n = Number(value);
+      if (!isFinite(n)) return escapeHtml(value);
+      return 'RM ' + n.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function duration(seconds) {
+      if (seconds === null || seconds === undefined) return null;
+      if (seconds < 60) return `${seconds}s`;
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return s ? `${m}m ${s}s` : `${m}m`;
+    }
+
+    // Exact wall-clock time. Relative labels ("7m ago") collapse bursts of
+    // events that happened seconds apart, so calculator rows show this too.
+    function formatClock(iso) {
+      const date = new Date(iso);
+      if (isNaN(date)) return '';
+      return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+
+    function chip(label, value, accent) {
+      if (value === null || value === undefined || value === '') return '';
+      return `<span class="chip${accent ? ' accent' : ''}"><b>${escapeHtml(label)}</b> ${escapeHtml(value)}</span>`;
+    }
+
+    function num(value, digits) {
+      const n = Number(value);
+      if (!isFinite(n)) return null;
+      return n.toLocaleString('en-MY', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+    }
+
+    // The calculator's `description` is a fixed template, so the inputs that
+    // actually differ between rows live in `metadata`. Surface them as chips.
+    function calcDetailChips(row) {
+      const m = row.metadata || {};
+      const chips = [];
+
+      if (row.entity_type === 'residential_roi_calculation') {
+        const bill = num(m.billAmount, 0);
+        const battery = num(m.batterySize, 0);
+        const sun = num(m.sunPeakHour, 1);
+        const savings = num(m.monthlySavings, 2);
+
+        if (bill !== null) chips.push(chip('Bill', 'RM ' + bill));
+        if (battery !== null) chips.push(chip('Battery', battery === '0' ? 'none' : battery + ' kWh'));
+        if (sun !== null) chips.push(chip('Sun peak', sun + ' h'));
+        if (savings !== null) chips.push(chip('Saves', 'RM ' + savings + '/mo', true));
+      } else if (row.entity_type === 'commercial_roi_lookup') {
+        const usage = num(m.usageKwh, 0);
+        if (usage !== null) chips.push(chip('Usage', usage + ' kWh'));
+        if (m.matched !== undefined && m.matched !== null) {
+          chips.push(chip('Tariff', m.matched ? 'matched' : 'no match', m.matched === true));
+        }
+      }
+
+      if (!chips.length) return '';
+      return `<div class="activity-detail">${chips.join('')}</div>`;
+    }
+
+    /* ---------- INVOICE › Activity ----------
+       One page, three modes. The audit log splits cleanly into preparing an
+       invoice, editing it, and someone reading it, so those are tabs rather
+       than separate sidebar entries. */
+
+    const INVOICE_MODES = [
+      { key: 'all', tab: '📋 All', title: 'Invoice Activity',
+        desc: 'Everything that happened to an invoice — prepared, edited and read — in one stream' },
+      { key: 'prep', tab: '🧾 Prep', title: 'Prep Invoice',
+        desc: 'Invoices created, with the line items they were built from' },
+      { key: 'edit', tab: '✏️ Edit', title: 'Edit Invoice',
+        desc: 'Field-level changes to invoices and their line items' },
+      { key: 'view', tab: '👀 View', title: 'View Invoice',
+        desc: 'Reading sessions on the public invoice page — visitors highlighted' }
+    ];
+    let invoiceMode = 'all';
+
+    /* ---------- Auto-refresh, shared by every live feed ----------
+       Each feed remembers the row ids it has already shown, so a poll that
+       brings something back can animate only the genuinely new rows instead of
+       flashing the whole list. Only one feed is on screen at a time, so a
+       single timer is enough. */
+
+    const REFRESH_MS = 15000;
+    const seenRowIds = {
+      all: new Set(), prep: new Set(), edit: new Set(), view: new Set(), calculator: new Set(), seda: new Set(),
+      submission: new Set(), verification: new Set(), receipt: new Set(), financeAll: new Set(), admin: new Set(),
+      aiWorkflow: new Set(), marketingSeoGeo: new Set(), autoProposal: new Set(), aiRouter: new Set()
+    };
+    let refreshTimer = null;
+    let newRowCount = 0;
+
+    /**
+     * Tag rows this feed has never rendered before.
+     * The very first load seeds the set silently — nothing animates on arrival.
+     */
+    function markNewRows(feedKey, rows, idOf) {
+      const seen = seenRowIds[feedKey];
+      const firstLoad = seen.size === 0;
+      const flags = rows.map(row => {
+        const id = idOf(row);
+        const isNew = !firstLoad && !seen.has(id);
+        seen.add(id);
+        return isNew;
+      });
+      newRowCount = flags.filter(Boolean).length;
+      return flags;
+    }
+
+    function newPulseHtml() {
+      if (!newRowCount) return '';
+      return `
+        <div class="new-pulse">
+          <span class="dot"></span>
+          ${newRowCount} new event${newRowCount === 1 ? '' : 's'}
+        </div>
+      `;
+    }
+
+    function startAutoRefresh(reload) {
+      stopAutoRefresh();
+      refreshTimer = setInterval(() => {
+        // Don't poll a tab nobody is looking at.
+        if (document.hidden) return;
+        reload();
+      }, REFRESH_MS);
+    }
+
+    function stopAutoRefresh() {
+      if (refreshTimer) {
+        clearInterval(refreshTimer);
+        refreshTimer = null;
+      }
+    }
+
+    function loadInvoiceActivity(opts = {}) {
+      const mode = INVOICE_MODES.find(m => m.key === invoiceMode) || INVOICE_MODES[0];
+      setHeader(mode.title, mode.desc);
+      startAutoRefresh(() => loadInvoiceActivity({ silent: true }));
+      if (invoiceMode === 'prep') return loadInvoicePrep(opts);
+      if (invoiceMode === 'edit') return loadInvoiceEdit(opts);
+      if (invoiceMode === 'view') return loadInvoiceView(opts);
+      return loadInvoiceAll(opts);
+    }
+
+    /* ---------- Timeline scaffolding ---------- */
+
+    // "30-07-2026" — the divider label, one per calendar day.
+    function timelineDayKey(iso) {
+      const d = new Date(iso);
+      const pad = n => String(n).padStart(2, '0');
+      return `${pad(d.getDate())}-${pad(d.getMonth() + 1)}-${d.getFullYear()}`;
+    }
+
+    /**
+     * Clock node. The time reads normally ("1:53"); AM vs PM is carried by the
+     * node's background — warm amber for morning, cool indigo for afternoon —
+     * with the meridiem itself set as a large watermark behind the digits.
+     * Same box size either way.
+     */
+    function timelineNode(iso, extraClass = '') {
+      const d = new Date(iso);
+      const minute = String(d.getMinutes()).padStart(2, '0');
+      const isAm = d.getHours() < 12;
+      const meridiem = isAm ? 'AM' : 'PM';
+      const hour = d.getHours() % 12 || 12;
+      return `
+        <div class="tl-node ${isAm ? 'am' : 'pm'} ${extraClass}" data-meridiem="${meridiem}">
+          <span class="tl-time">${hour}:${minute}</span>
+        </div>
+      `;
+    }
+
+    /**
+     * Lay cards out down a dotted rail, grouped under a date divider.
+     * entries: [{ occurredAt, html, nodeClass? }]
+     * Always newest first — today's date sits at the top, and within a day the
+     * most recent event leads.
+     */
+    function renderTimeline(entries) {
+      let out = '';
+      let currentDay = null;
+
+      const ordered = entries
+        .slice()
+        .sort((a, b) => new Date(b.occurredAt) - new Date(a.occurredAt));
+
+      ordered.forEach((entry, i) => {
+        const day = timelineDayKey(entry.occurredAt);
+        if (day !== currentDay) {
+          currentDay = day;
+          out += `<div class="tl-day"><span class="tl-day-label">${day}</span></div>`;
+        }
+
+        // The connector must stop at the last node of each day, otherwise it
+        // runs into the next date divider.
+        const next = ordered[i + 1];
+        const isLast = !next || timelineDayKey(next.occurredAt) !== day;
+
+        out += `
+          <div class="tl-entry${isLast ? ' tl-last' : ''}${entry.isNew ? ' tl-new' : ''}">
+            <div class="tl-rail">${timelineNode(entry.occurredAt, entry.nodeClass || '')}</div>
+            <div class="tl-card">${entry.html}</div>
+          </div>
+        `;
+      });
+
+      return out;
+    }
+
+    function invoiceTabsHtml() {
+      return `
+        <div class="filter-bar mode-bar">
+          ${INVOICE_MODES.map(m => `
+            <button class="mode-tab ${invoiceMode === m.key ? 'active' : ''}"
+                    data-invoice-mode="${m.key}">${m.tab}</button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function bindInvoiceTabs() {
+      document.querySelectorAll('[data-invoice-mode]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          invoiceMode = btn.getAttribute('data-invoice-mode');
+          loadInvoiceActivity();
+        });
+      });
+    }
+
+    /* ---------- Card builders ----------
+       Kept separate from the loaders so the combined "All" stream can mix all
+       three kinds of card in one timeline. */
+
+    async function prepCardHtml(row) {
+      const icon = await renderActorIcon(row.actorUserId, row.actorName, '🧾');
+      const shown = prepItemFilter && invoiceMode === 'prep'
+        ? row.items.filter(it => it.itemType === prepItemFilter)
+        : row.items;
+      const visible = shown.slice(0, 5);
+
+      return `
+        <div class="activity-item">
+          <div class="activity-row">
+            ${icon}
+            <div class="activity-body">
+              <div class="activity-title">
+                ${kindChip('prep')}
+                ${escapeHtml(row.invoiceNumber || 'Invoice')}
+                ${row.customerName ? ' · ' + escapeHtml(row.customerName) : ''}
+              </div>
+              <div class="activity-desc">
+                ${row.package ? escapeHtml(row.package) + ' · ' : ''}${row.totalAmount !== null ? money(row.totalAmount) : 'No total'}
+              </div>
+              <div class="tag-row">
+                <span class="tag">${row.itemCount} item${row.itemCount === 1 ? '' : 's'}</span>
+                ${row.discountCount ? `<span class="tag discount">${row.discountCount} discount</span>` : ''}
+                ${row.voucherCount ? `<span class="tag voucher">${row.voucherCount} voucher</span>` : ''}
+                ${row.status ? `<span class="tag">${escapeHtml(row.status)}</span>` : ''}
+              </div>
+              ${visible.length ? `
+                <div class="item-list">
+                  ${visible.map(it => `
+                    <div class="item-line">
+                      ${it.itemType ? `<span class="tag ${escapeHtml(it.itemType)}">${escapeHtml(it.itemType)}</span>` : ''}
+                      <span class="item-desc">${escapeHtml(it.description || '—')}</span>
+                      <span class="item-amt ${Number(it.amount) < 0 ? 'negative' : ''}">${it.amount !== null ? money(it.amount) : ''}</span>
+                    </div>
+                  `).join('')}
+                  ${shown.length > visible.length
+                    ? `<div class="item-more">+ ${shown.length - visible.length} more line${shown.length - visible.length === 1 ? '' : 's'}</div>`
+                    : ''}
+                </div>
+              ` : ''}
+              <div class="activity-meta">
+                <span>⏱ ${formatTime(row.occurredAt)}</span>
+                ${row.actorName ? `<span>👤 ${escapeHtml(row.actorName)}</span>` : ''}
+                ${row.sourceApp ? `<span>📱 ${escapeHtml(row.sourceApp)}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function editCardHtml(row) {
+      const emoji = row.isDeletion ? '🗑' : (row.entityType === 'invoice_item' ? '📦' : '✏️');
+      const icon = await renderActorIcon(row.actorUserId, row.actorName, emoji);
+      const scope = row.entityType === 'invoice_item'
+        ? `Line item${row.itemLabel ? ': ' + escapeHtml(row.itemLabel) : ''}`
+        : 'Invoice';
+
+      return `
+        <div class="activity-item">
+          <div class="activity-row">
+            ${icon}
+            <div class="activity-body">
+              <div class="activity-title">
+                ${kindChip('edit')}
+                ${escapeHtml(row.invoiceNumber || 'Invoice')}
+                ${row.customerName ? ' · ' + escapeHtml(row.customerName) : ''}
+              </div>
+              <div class="activity-desc">
+                ${scope}
+                ${row.isDeletion ? '<span class="tag danger">deleted</span>' : ''}
+              </div>
+              <div class="diff-list">
+                ${row.changes.map(c => `
+                  <div class="diff-line">
+                    <span class="diff-field">${escapeHtml(c.field)}</span>
+                    ${c.before !== null ? `<span class="diff-before">${escapeHtml(formatValue(c.before))}</span><span class="diff-arrow">→</span>` : ''}
+                    <span class="diff-after">${escapeHtml(formatValue(c.after))}</span>
+                  </div>
+                `).join('')}
+              </div>
+              <div class="activity-meta">
+                <span>⏱ ${formatTime(row.occurredAt)}</span>
+                ${row.actorName ? `<span>👤 ${escapeHtml(row.actorName)}</span>` : ''}
+                ${row.sourceApp ? `<span>📱 ${escapeHtml(row.sourceApp)}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function viewCardHtml(session, now) {
+      const isVisitor = session.viewerType === 'anonymous';
+      // "live" = started within the last 15 minutes; the ring only animates
+      // for sessions recent enough that someone may still be reading.
+      const isLive = isVisitor && (now - new Date(session.startedAt).getTime()) < 15 * 60 * 1000;
+
+      const icon = isVisitor
+        ? `<div class="activity-icon visitor-avatar">👤</div>`
+        : await renderActorIcon(session.actorUserId, session.actorName, '👀');
+
+      const dur = duration(session.durationSeconds);
+
+      return `
+        <div class="activity-item ${isVisitor ? 'visitor' : ''} ${isLive ? 'live' : ''}">
+          <div class="activity-row">
+            ${icon}
+            <div class="activity-body">
+              <div class="activity-title">
+                ${kindChip('view')}
+                ${escapeHtml(session.invoiceNumber || 'Invoice')}
+                ${session.customerName ? ' · ' + escapeHtml(session.customerName) : ''}
+              </div>
+              <div class="activity-desc">
+                ${isVisitor
+                  ? `<span class="visitor-badge">VISITOR</span> Visitor #${escapeHtml(session.deviceTag)} read this invoice`
+                  : `${escapeHtml(session.actorName || 'Staff')} opened this invoice`}
+              </div>
+              ${session.buttons.length ? `
+                <div class="tag-row">
+                  ${[...new Set(session.buttons)].map(b => `<span class="tag">👆 ${escapeHtml(b)}</span>`).join('')}
+                </div>
+              ` : ''}
+              <div class="activity-meta">
+                <span>⏱ ${formatTime(session.startedAt)}</span>
+                ${dur ? `<span>⏳ ${dur} on page</span>` : '<span>⏳ still open</span>'}
+                ${session.timezone ? `<span>🌏 ${escapeHtml(session.timezone)}</span>` : ''}
+                ${session.screen ? `<span>🖥 ${escapeHtml(session.screen)}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Only shown in the combined stream, where the three kinds are interleaved.
+    function kindChip(kind) {
+      if (invoiceMode !== 'all') return '';
+      const label = { prep: 'PREP', edit: 'EDIT', view: 'VIEW' }[kind] || kind;
+      return `<span class="kind-chip ${kind}">${label}</span>`;
+    }
+
+    /* ---------- INVOICE › Activity › All ---------- */
+
+    async function loadInvoiceAll(opts = {}) {
+      renderAllFilters();
+      const feed = opts.silent
+        ? document.getElementById('feed')
+        : setLoading('Loading all invoice activity...');
+
+      try {
+        if (!window.userProfileCache.initialized) await window.userProfileCache.init();
+
+        const params = new URLSearchParams({
+          showAgentReassign: showAgentReassign ? '1' : '0',
+          viewerType: viewerTypeFilter
+        });
+        const res = await fetch(`/api/activity-log/invoice/all?${params}`);
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error);
+
+        if (data.rows.length === 0) {
+          renderEmpty(feed, '📋', 'No invoice activity found', 'Nothing has happened yet');
+          return;
+        }
+
+        feed.className = 'timeline';
+        const now = Date.now();
+
+        const html = await Promise.all(data.rows.map(row => {
+          if (row.kind === 'edit') return editCardHtml(row);
+          if (row.kind === 'view') return viewCardHtml(row, now);
+          return prepCardHtml(row);
+        }));
+
+        // Ids collide across sources (each table numbers its own rows), so the
+        // dedupe key has to include the kind.
+        const isNew = markNewRows('all', data.rows, r => `${r.kind}:${r.id}`);
+
+        feed.innerHTML = newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
+          occurredAt: row.occurredAt,
+          nodeClass: row.kind === 'view' && row.viewerType === 'anonymous' ? 'visitor' : '',
+          html: html[i],
+          isNew: isNew[i]
+        })));
+      } catch (err) {
+        if (!opts.silent) renderError(feed, err);
+      }
+    }
+
+    function renderAllFilters() {
+      document.getElementById('filters').innerHTML = `
+        ${invoiceTabsHtml()}
+        <div class="filter-bar">
+          <button class="filter-chip ${showAgentReassign ? 'active' : ''}" id="agent-toggle-all">
+            ${showAgentReassign ? '✓ ' : ''}Show agent reassignments
+          </button>
+          <button class="filter-chip ${viewerTypeFilter === 'anonymous' ? 'active' : ''}" id="visitors-only">
+            ${viewerTypeFilter === 'anonymous' ? '✓ ' : ''}Visitors only
+          </button>
+        </div>
+      `;
+      bindInvoiceTabs();
+      document.getElementById('agent-toggle-all').addEventListener('click', () => {
+        showAgentReassign = !showAgentReassign;
+        loadInvoiceAll();
+      });
+      document.getElementById('visitors-only').addEventListener('click', () => {
+        viewerTypeFilter = viewerTypeFilter === 'anonymous' ? 'all' : 'anonymous';
+        loadInvoiceAll();
+      });
+    }
+
+    /* ---------- INVOICE › Activity › Prep ---------- */
+
+    // Which line-item types to show. null = all.
+    let prepItemFilter = null;
+
+    function renderPrepFilters() {
+      const options = [
+        { key: null, label: 'All items' },
+        { key: 'discount', label: 'Discount' },
+        { key: 'voucher', label: 'Voucher' },
+        { key: 'package', label: 'Package' },
+        { key: 'extra', label: 'Extra' }
+      ];
+      document.getElementById('filters').innerHTML = `
+        ${invoiceTabsHtml()}
+        <div class="filter-bar">
+          ${options.map(o => `
+            <button class="filter-chip ${prepItemFilter === o.key ? 'active' : ''}"
+                    data-item-filter="${o.key === null ? '' : o.key}">${o.label}</button>
+          `).join('')}
+        </div>
+      `;
+      bindInvoiceTabs();
+      document.querySelectorAll('[data-item-filter]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          prepItemFilter = btn.getAttribute('data-item-filter') || null;
+          loadInvoicePrep();
+        });
+      });
+    }
+
+    async function loadInvoicePrep(opts = {}) {
+      renderPrepFilters();
+      const feed = opts.silent
+        ? document.getElementById('feed')
+        : setLoading('Loading prepared invoices...');
+
+      try {
+        if (!window.userProfileCache.initialized) await window.userProfileCache.init();
+
+        const res = await fetch('/api/activity-log/invoice/prep');
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error);
+
+        let rows = data.rows;
+        if (prepItemFilter) {
+          rows = rows.filter(r => r.items.some(it => it.itemType === prepItemFilter));
+        }
+
+        if (rows.length === 0) {
+          renderEmpty(feed, '🧾', 'No prepared invoices found',
+            prepItemFilter ? `No recent invoice contains a "${prepItemFilter}" line` : 'Nothing has been created yet');
+          return;
+        }
+
+        feed.className = 'timeline';
+        const html = await Promise.all(rows.map(row => prepCardHtml(row)));
+
+        const isNew = markNewRows('prep', rows, r => r.id);
+        feed.innerHTML = newPulseHtml() + renderTimeline(rows.map((row, i) => ({
+          occurredAt: row.occurredAt,
+          html: html[i],
+          isNew: isNew[i]
+        })));
+      } catch (err) {
+        // A failed background poll must not wipe what is already on screen.
+        if (!opts.silent) renderError(feed, err);
+      }
+    }
+
+    /* ---------- INVOICE › Edit ---------- */
+
+    // linked_agent-only updates are ~65% of edit volume and carry no signal.
+    let showAgentReassign = false;
+
+    function renderEditFilters() {
+      document.getElementById('filters').innerHTML = `
+        ${invoiceTabsHtml()}
+        <div class="filter-bar">
+          <button class="filter-chip ${showAgentReassign ? 'active' : ''}" id="agent-toggle">
+            ${showAgentReassign ? '✓ ' : ''}Show agent reassignments
+          </button>
+        </div>
+      `;
+      bindInvoiceTabs();
+      document.getElementById('agent-toggle').addEventListener('click', () => {
+        showAgentReassign = !showAgentReassign;
+        loadInvoiceEdit();
+      });
+    }
+
+    async function loadInvoiceEdit(opts = {}) {
+      renderEditFilters();
+      const feed = opts.silent
+        ? document.getElementById('feed')
+        : setLoading('Loading invoice edits...');
+
+      try {
+        if (!window.userProfileCache.initialized) await window.userProfileCache.init();
+
+        const res = await fetch(`/api/activity-log/invoice/edit?showAgentReassign=${showAgentReassign ? '1' : '0'}`);
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error);
+
+        if (data.rows.length === 0) {
+          renderEmpty(feed, '✏️', 'No invoice edits found', 'Nothing has been changed yet');
+          return;
+        }
+
+        feed.className = 'timeline';
+        const html = await Promise.all(data.rows.map(async row => {
+          return editCardHtml(row);
+        }));
+
+        const isNew = markNewRows('edit', data.rows, r => r.id);
+        feed.innerHTML = newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
+          occurredAt: row.occurredAt,
+          html: html[i],
+          isNew: isNew[i]
+        })));
+      } catch (err) {
+        if (!opts.silent) renderError(feed, err);
+      }
+    }
+
+    function formatValue(value) {
+      if (value === null || value === undefined || value === '') return '—';
+      if (typeof value === 'object') return JSON.stringify(value);
+      const s = String(value);
+      // Raw ISO datetimes ("2026-07-23T00:00:00.000Z") read as noise in a
+      // diff line — show a plain date, adding the time only if it isn't
+      // midnight (payment/invoice dates are almost always date-only).
+      if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z?$/.test(s)) {
+        const d = new Date(s);
+        if (!isNaN(d)) {
+          const datePart = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' });
+          const isMidnight = d.getUTCHours() === 0 && d.getUTCMinutes() === 0 && d.getUTCSeconds() === 0;
+          return isMidnight ? datePart : `${datePart}, ${d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' })}`;
+        }
+      }
+      return s;
+    }
+
+    /* ---------- INVOICE › View ---------- */
+
+    let viewerTypeFilter = 'all';
+
+    function renderViewFilters() {
+      const options = [
+        { key: 'all', label: 'Everyone' },
+        { key: 'anonymous', label: 'Visitors only' },
+        { key: 'logged_in', label: 'Staff only' }
+      ];
+      document.getElementById('filters').innerHTML = `
+        ${invoiceTabsHtml()}
+        <div class="filter-bar">
+          ${options.map(o => `
+            <button class="filter-chip ${viewerTypeFilter === o.key ? 'active' : ''}"
+                    data-viewer-filter="${o.key}">${o.label}</button>
+          `).join('')}
+        </div>
+      `;
+      bindInvoiceTabs();
+      document.querySelectorAll('[data-viewer-filter]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          viewerTypeFilter = btn.getAttribute('data-viewer-filter');
+          loadInvoiceView();
+        });
+      });
+    }
+
+    async function loadInvoiceView(opts = {}) {
+      renderViewFilters();
+      const feed = opts.silent
+        ? document.getElementById('feed')
+        : setLoading('Loading invoice viewing sessions...');
+
+      try {
+        if (!window.userProfileCache.initialized) await window.userProfileCache.init();
+
+        const res = await fetch(`/api/activity-log/invoice/view?viewerType=${viewerTypeFilter}`);
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error);
+
+        if (data.rows.length === 0) {
+          renderEmpty(feed, '👀', 'No viewing sessions found', 'Nobody has opened an invoice page yet');
+          return;
+        }
+
+        feed.className = 'timeline';
+        const now = Date.now();
+
+        const html = await Promise.all(data.rows.map(session => viewCardHtml(session, now)));
+
+        const isNew = markNewRows('view', data.rows, s => s.id);
+        feed.innerHTML = newPulseHtml() + renderTimeline(data.rows.map((session, i) => ({
+          occurredAt: session.startedAt,
+          nodeClass: session.viewerType === 'anonymous' ? 'visitor' : '',
+          html: html[i],
+          isNew: isNew[i]
+        })));
+      } catch (err) {
+        if (!opts.silent) renderError(feed, err);
+      }
+    }
+
+    function calculatorUserKey(actorUserId, actorName) {
+      if (actorUserId !== null && actorUserId !== undefined) return `id:${actorUserId}`;
+      return `name:${String(actorName || 'unknown').trim().toLowerCase()}`;
+    }
+
+    function calculatorUserSummaryHtml(row, summariesByUser) {
+      const summary = summariesByUser.get(calculatorUserKey(row.actor_user_id, row.actor_name));
+      if (!summary) return '';
+
+      const averageBill = summary.averageTnbInput === null
+        ? null
+        : Number(summary.averageTnbInput);
+      const averageText = Number.isFinite(averageBill)
+        ? 'RM ' + averageBill.toLocaleString('en-MY', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        })
+        : '—';
+
+      return `
+        <div class="calculator-user-summary">
+          <span class="user-metric">
+            <b>TOTAL USE</b>
+            <strong>${Number(summary.totalUseLast7Days) || 0}</strong>
+            <span>last 7 days</span>
+          </span>
+          <span class="user-metric accent">
+            <b>AVG TNB INPUT</b>
+            <strong>${averageText}</strong>
+          </span>
+        </div>
+      `;
+    }
+
+    async function loadCalculatorActivity(opts = {}) {
+      const feed = opts.silent
+        ? document.getElementById('feed')
+        : setLoading('Loading calculator activity...');
+
+      // Use the same polling cadence and visibility guard as the invoice feeds.
+      startAutoRefresh(() => loadCalculatorActivity({ silent: true }));
+
+      try {
+        // Initialize profile cache if not already done
+        if (!window.userProfileCache.initialized) {
+          await window.userProfileCache.init();
+        }
+
+        const res = await fetch('/api/activity-log/calculator');
+        const data = await res.json();
+
+        if (!data.ok) throw new Error(data.error);
+
+        const summariesByUser = new Map((data.userSummaries || []).map(summary => [
+          calculatorUserKey(summary.actorUserId, summary.actorName), summary
+        ]));
+
+        if (data.rows.length === 0) {
+          renderEmpty(feed, '📊', 'No calculator activity found',
+            'No ROI calculations have been logged yet');
+          return;
+        }
+
+        // Mirror invoice activity: group rows by calendar date, give every
+        // event a clock node, and animate only ids first observed after load.
+        feed.className = 'timeline';
+        const itemsHtml = await Promise.all(data.rows.map(async row => {
+          const actorIcon = await renderActorIcon(row.actor_user_id, row.actor_name);
+
+          return `
+            <div class="activity-item">
+              <div class="activity-row">
+                ${actorIcon}
+                <div class="activity-body">
+                  <div class="activity-title">${escapeHtml(row.description)}</div>
+                  ${calculatorUserSummaryHtml(row, summariesByUser)}
+                  <div class="activity-desc">
+                    ${row.entity_type === 'residential_roi_calculation' ? 'Residential' : 'Commercial'} ROI Calculation
+                  </div>
+                  ${calcDetailChips(row)}
+                  <div class="activity-meta">
+                    <span>⏱ ${formatTime(row.occurred_at)} · ${formatClock(row.occurred_at)}</span>
+                    ${row.actor_name ? `<span>👤 ${escapeHtml(row.actor_name)}</span>` : ''}
+                    ${row.app ? `<span>📱 ${escapeHtml(row.app)}</span>` : ''}
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }));
+
+        const isNew = markNewRows('calculator', data.rows, row => row.id);
+        feed.innerHTML = newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
+          occurredAt: row.occurred_at,
+          html: itemsHtml[i],
+          isNew: isNew[i]
+        })));
+      } catch (err) {
+        // A failed background poll must leave the current results visible.
+        if (!opts.silent) renderError(feed, err);
+      }
+    }
+
+    function tnbBillDisplay(value) {
+      const amount = Number(value);
+      if (!Number.isFinite(amount)) return '—';
+      return 'RM ' + amount.toLocaleString('en-MY', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function salesAgentBar(label, count, maxCount, kind) {
+      const width = count ? Math.max(4, Math.round((count / maxCount) * 100)) : 0;
+      return `
+        <div class="agent-chart-row ${kind}">
+          <span class="agent-chart-label">${label}</span>
+          <div class="agent-chart-track"
+               role="progressbar"
+               aria-label="${label} frequency"
+               aria-valuemin="0"
+               aria-valuemax="${maxCount}"
+               aria-valuenow="${count}">
+            <div class="agent-chart-bar" style="width: ${width}%"></div>
+          </div>
+          <span class="agent-chart-value">${count}</span>
+        </div>
+      `;
+    }
+
+    function salesAgentBoardHtml(agents, summary = {}) {
+      const maxFrequency = Math.max(1, ...agents.flatMap(agent => [
+        agent.tnb0To300, agent.tnb301To800, agent.tnbAbove800
+      ]));
+      const totalUses = Number(summary.totalUseLast30Days) || 0;
+      const lowFrequency = Number(summary.lowFrequency) || 0;
+      const midFrequency = Number(summary.midFrequency) || 0;
+      const highFrequency = Number(summary.highFrequency) || 0;
+
+      return `
+        <div class="agent-overview" aria-label="All valid sales-agent logs in the last 30 days">
+          <div class="agent-overview-stat">
+            <span class="agent-overview-label">Total use</span>
+            <strong class="agent-overview-value">${totalUses}</strong>
+            <span class="agent-overview-note">all valid logs · last 30 days</span>
+          </div>
+          <div class="agent-overview-stat low">
+            <span class="agent-overview-label">Low</span>
+            <strong class="agent-overview-value">${lowFrequency}</strong>
+            <span class="agent-overview-note">RM 0–300 inputs</span>
+          </div>
+          <div class="agent-overview-stat mid">
+            <span class="agent-overview-label">Mid</span>
+            <strong class="agent-overview-value">${midFrequency}</strong>
+            <span class="agent-overview-note">RM 301–800 inputs</span>
+          </div>
+          <div class="agent-overview-stat high">
+            <span class="agent-overview-label">High</span>
+            <strong class="agent-overview-value">${highFrequency}</strong>
+            <span class="agent-overview-note">RM 800+ inputs</span>
+          </div>
+        </div>
+        <div class="agent-board-kicker">
+          <span class="period">Last 30 days</span>
+          <span>Frequency = residential TNB bill inputs</span>
+        </div>
+        <div class="agent-board-grid">
+          ${agents.map((agent, index) => `
+            <section class="agent-card" aria-label="#${index + 1} ${escapeHtml(agent.agentName)}">
+              <div class="agent-card-head">
+                <span class="agent-rank">#${index + 1}</span>
+                <span class="agent-name">${escapeHtml(agent.agentName)}</span>
+                <span class="agent-usage"><b>${agent.usageCount30Days}</b> uses</span>
+              </div>
+              <div class="agent-average">
+                <span class="agent-average-label">Average TNB bill input</span>
+                <span class="agent-average-value">${tnbBillDisplay(agent.averageTnbBill)}</span>
+              </div>
+              <div class="agent-chart-title">Input frequency</div>
+              ${salesAgentBar('RM 0–300', agent.tnb0To300, maxFrequency, 'low')}
+              ${salesAgentBar('RM 301–800', agent.tnb301To800, maxFrequency, 'mid')}
+              ${salesAgentBar('RM 800+', agent.tnbAbove800, maxFrequency, 'high')}
+            </section>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    async function loadSalesAgentActivityBoard() {
+      const feed = setLoading('Loading Sales Agent Activity...');
+
+      try {
+        const res = await fetch('/api/activity-log/sales-agent-board');
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error);
+
+        // Defensive client-side guard: never display system placeholder names,
+        // even if a stale API response is served during deployment.
+        const agents = (data.agents || []).filter(agent => {
+          const name = String(agent.agentName || '').trim().toLowerCase();
+          return name !== 'unknown' && name !== 'unknown agent';
+        });
+
+        if (!agents.length) {
+          renderEmpty(feed, '📈', 'No Sales Agent Activity found',
+            'No valid sales-agent calculator activity was logged in the last 30 days');
+          return;
+        }
+
+        feed.className = 'agent-board';
+        feed.innerHTML = salesAgentBoardHtml(agents, data.summary);
+      } catch (err) {
+        renderError(feed, err);
+      }
+    }
+
+    /* ---------- SEDA › Activity ----------
+       One feed, not three. A SEDA application only makes sense read end to
+       end: the agent opens a registration, fills the form, drops documents,
+       then admin flips the status. Splitting those into sidebar pages hid the
+       journey, so they are merged here and filtered with chips instead. */
+
+    const SEDA_KINDS = [
+      { key: null, label: 'All' },
+      { key: 'registration', label: '📝 Registrations' },
+      { key: 'documents', label: '📎 Documents' },
+      { key: 'status', label: '🏛 Status' }
+    ];
+    let sedaKind = null;
+    // The null -> status writes are a bulk backfill, hidden unless asked for.
+    let sedaShowBackfill = false;
+
+    function renderSedaFilters() {
+      document.getElementById('filters').innerHTML = `
+        <div class="filter-bar">
+          ${SEDA_KINDS.map(k => `
+            <button class="filter-chip ${sedaKind === k.key ? 'active' : ''}"
+                    data-seda-kind="${k.key === null ? '' : k.key}">${k.label}</button>
+          `).join('')}
+          <button class="filter-chip ${sedaShowBackfill ? 'active' : ''}"
+                  data-seda-backfill="1">Show backfill</button>
+        </div>
+      `;
+      document.querySelectorAll('[data-seda-kind]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          sedaKind = btn.getAttribute('data-seda-kind') || null;
+          loadSedaActivity();
+        });
+      });
+      document.querySelector('[data-seda-backfill]').addEventListener('click', () => {
+        sedaShowBackfill = !sedaShowBackfill;
+        loadSedaActivity();
+      });
+    }
+
+    function statusPill(value) {
+      const v = String(value || '').toLowerCase();
+      const cls = v.startsWith('approved') || v.includes('approved') ? 'approved'
+        : v === 'submitted' ? 'submitted'
+        : v === 'pending' ? 'pending' : '';
+      return `<span class="status-pill ${cls}">${escapeHtml(value)}</span>`;
+    }
+
+    /* Per-row stage lengths for THIS invoice — not the dataset averages in the
+       strip above. A stage reads "—" until both of its milestones exist. */
+    function renderSedaStages(stages) {
+      const cell = (label, days, alert = false) => `
+        <div class="stage-cell ${days === null ? 'pending' : alert ? 'alert' : days < 0 ? 'negative' : ''}">
+          <span class="stage-label">${label}</span>
+          <span class="stage-value">${days === null ? '—' : days + 'd'}</span>
+        </div>`;
+      return `
+        <div class="stage-row">
+          ${cell('days since deposit', stages.daysSinceDeposit, stages.daysSinceDeposit !== null && stages.daysSinceDeposit > 30)}
+          ${cell('1st pay → submit', stages.paymentToSubmission)}
+          ${cell('submit → approve', stages.submissionToApproval)}
+          ${cell('approve → 59% paid', stages.approvalToPaymentCross)}
+        </div>`;
+    }
+
+    function renderSedaCycleTimes(stats) {
+      // n is tiny on the approval stage, so every tile carries its sample size.
+      return `
+        <div class="stat-strip">
+          ${stats.map(s => `
+            <div class="stat-tile ${s.n < 30 ? 'thin' : ''}" title="${escapeHtml(s.note || '')}">
+              <div class="stat-label">${escapeHtml(s.label)}</div>
+              <div class="stat-value">
+                ${s.medianDays === null ? '—' : s.medianDays + ' <small>days median</small>'}
+              </div>
+              <div class="stat-sub">
+                ${s.n === 0 ? 'no measurable pairs' : `n=${s.n}${s.avgDays !== null ? ` · avg ${s.avgDays}d` : ''}`}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    async function loadSedaActivity(opts = {}) {
+      renderSedaFilters();
+      startAutoRefresh(() => loadSedaActivity({ silent: true }));
+      const feed = opts.silent
+        ? document.getElementById('feed')
+        : setLoading('Loading SEDA activity...');
+
+      try {
+        if (!window.userProfileCache.initialized) await window.userProfileCache.init();
+
+        const params = new URLSearchParams();
+        if (sedaKind) params.set('kinds', sedaKind);
+        if (sedaShowBackfill) params.set('includeBackfill', '1');
+
+        const [feedRes, cycleRes] = await Promise.all([
+          fetch('/api/activity-log/seda?' + params.toString()),
+          fetch('/api/activity-log/seda/cycle-times')
+        ]);
+        const data = await feedRes.json();
+        const cycle = await cycleRes.json();
+        if (!data.ok) throw new Error(data.error);
+
+        if (data.rows.length === 0) {
+          renderEmpty(feed, '🏛', 'No SEDA activity found',
+            sedaKind ? `Nothing recent under "${sedaKind}"` : 'Nothing has been logged yet');
+          return;
+        }
+
+        feed.className = 'timeline';
+        const cards = await Promise.all(data.rows.map(async row => {
+          // seda:update and seda_registration:insert carry no actor at all —
+          // fall back to the event emoji rather than an empty avatar.
+          const icon = row.actorName
+            ? await renderActorIcon(row.actorUserId, row.actorName, row.icon)
+            : `<div class="activity-icon"><span class="activity-icon-initials">${row.icon}</span></div>`;
+
+          const flow = row.statusFrom
+            ? `<div class="status-flow">${statusPill(row.statusFrom)}<span class="diff-arrow">→</span>${statusPill(row.statusTo)}</div>`
+            : row.statusTo ? `<div class="status-flow">${statusPill(row.statusTo)}</div>` : '';
+
+          // Where this application stands today — shown on EVERY row, not just
+          // the admin status ones, so a form edit or upload can be read in
+          // context ("still Pending" vs "already Submitted").
+          // Money in vs no money in is the loudest split in this feed, so it
+          // drives the whole card treatment, not just a badge.
+          const paidBadge = row.hasPayment
+            ? `<span class="pay-badge">${row.paidPercent === null ? 'paid' : row.paidPercent + '% paid'}</span>`
+            : `<span class="pay-badge unpaid">unpaid</span>`;
+
+          const current = row.sedaStatus
+            ? `<span class="status-now">now ${statusPill(row.sedaStatus)}</span>`
+            : `<span class="status-now muted">no SEDA status</span>`;
+
+          const docs = row.docs.length
+            ? `<div class="tag-row">${row.docs.slice(0, 6).map(d => `<span class="tag">${escapeHtml(d)}</span>`).join('')}
+               ${row.docs.length > 6 ? `<span class="item-more">+${row.docs.length - 6} more</span>` : ''}</div>`
+            : '';
+
+          const diff = row.diff.length && row.diff.length <= 4
+            ? `<div class="diff-list">${row.diff.map(d => `
+                <div class="diff-line">
+                  <span class="diff-field">${escapeHtml(d.field)}</span>
+                  ${d.before ? `<span class="diff-before">${escapeHtml(d.before)}</span><span class="diff-arrow">→</span>` : ''}
+                  <span class="diff-after">${escapeHtml(d.after)}</span>
+                </div>`).join('')}</div>`
+            : row.diff.length
+              ? `<div class="tag-row">${row.diff.slice(0, 8).map(d => `<span class="tag">${escapeHtml(d.field)}</span>`).join('')}
+                 ${row.diff.length > 8 ? `<span class="item-more">+${row.diff.length - 8} more</span>` : ''}</div>`
+              : '';
+
+          return `
+            <div class="activity-item seda-card ${row.hasPayment ? 'paid' : 'unpaid'}">
+              <div class="activity-row">
+                ${icon}
+                <div class="activity-body">
+                  <div class="activity-title">
+                    ${escapeHtml(row.customerName || 'Unknown customer')}
+                    <span class="hdr-sep">·</span>
+                    ${row.systemKwp ? escapeHtml(row.systemKwp + ' kWp') : '<span class="hdr-missing">kWp —</span>'}
+                    <span class="hdr-sep">·</span>
+                    ${row.installCity ? escapeHtml(row.installCity) : '<span class="hdr-missing">city —</span>'}
+                    ${paidBadge}
+                    ${current}
+                  </div>
+                  <div class="activity-sub">
+                    ${escapeHtml(row.title)} · ${escapeHtml(row.invoiceNumber || 'Invoice')}
+                  </div>
+                  ${row.summary ? `<div class="activity-desc">${escapeHtml(row.summary)}</div>` : ''}
+                  ${flow}
+                  ${docs}
+                  ${diff}
+                  ${renderSedaStages(row.stages)}
+                  <div class="activity-meta">
+                    <span>⏱ ${formatTime(row.occurredAt)}</span>
+                    ${row.actorName ? `<span>👤 ${escapeHtml(row.actorName)}</span>` : ''}
+                    ${row.sourceApp ? `<span>📱 ${escapeHtml(row.sourceApp)}</span>` : ''}
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }));
+
+        const strip = cycle.ok ? renderSedaCycleTimes(cycle.stats) : '';
+        const isNew = markNewRows('seda', data.rows, r => r.id);
+
+        feed.innerHTML = strip + newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
+          occurredAt: row.occurredAt,
+          html: cards[i],
+          isNew: isNew[i]
+        })));
+      } catch (err) {
+        // A failed background poll must not wipe what is already on screen.
+        if (!opts.silent) renderError(feed, err);
+      }
+    }
+
+    /* ---------- ADMIN CONSOLE ----------
+       One combined feed of ee-admin activity_log rows, with area filter chips.
+       Collapses payment:verify + receipt:send into lifecycle cards. */
+
+    const ADMIN_AREAS = [
+      { key: null, label: 'All', icon: '' },
+      { key: 'print', label: '🖨 Print', icon: '🖨' },
+      { key: 'payment', label: '💳 Payments', icon: '💳' },
+      { key: 'receipt', label: '🧾 Receipts', icon: '🧾' },
+      { key: 'customer', label: '🏠 Customers', icon: '🏠' },
+      { key: 'user', label: '👤 Users', icon: '👤' },
+      { key: 'attachment', label: '📎 Attachments', icon: '📎' },
+      { key: 'invoice', label: '✏️ Invoice edits', icon: '✏️' },
+      { key: 'other', label: '📌 Other', icon: '📌' }
+    ];
+    let adminAreas = []; // multi-select
+    let adminHideDupes = false;
+
+    function renderAdminFilters() {
+      document.getElementById('filters').innerHTML = `
+        <div class="filter-bar">
+          ${ADMIN_AREAS.map(a => `
+            <button class="filter-chip ${!adminAreas.length && !a.key ? 'active' : ''} ${adminAreas.includes(a.key) ? 'active' : ''}"
+                    data-admin-area="${a.key || ''}">${a.label}</button>
+          `).join('')}
+          <button class="filter-chip ${adminHideDupes ? 'active' : ''}"
+                  data-admin-hide-dupes="1">Hide audit dupes</button>
+        </div>
+      `;
+      document.querySelectorAll('[data-admin-area]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const area = btn.getAttribute('data-admin-area') || null;
+          if (area === null) {
+            adminAreas = [];
+          } else {
+            const idx = adminAreas.indexOf(area);
+            if (idx >= 0) {
+              adminAreas.splice(idx, 1);
+            } else {
+              adminAreas.push(area);
+            }
+          }
+          loadAdminActivity();
+        });
+      });
+      document.querySelector('[data-admin-hide-dupes]').addEventListener('click', () => {
+        adminHideDupes = !adminHideDupes;
+        loadAdminActivity();
+      });
+    }
+
+    function renderAdminSummary(stats) {
+      return `
+        <div class="stat-strip">
+          ${stats.map(s => `
+            <div class="stat-tile ${s.danger ? 'danger' : ''}" title="${escapeHtml(s.note || '')}">
+              <div class="stat-label">${escapeHtml(s.label)}</div>
+              <div class="stat-value">${s.value}</div>
+              <div class="stat-sub">${escapeHtml(s.sub || '')}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    async function loadAdminActivity(opts = {}) {
+      renderAdminFilters();
+      startAutoRefresh(() => loadAdminActivity({ silent: true }));
+      const feed = opts.silent
+        ? document.getElementById('feed')
+        : setLoading('Loading admin console activity...');
+
+      try {
+        if (!window.userProfileCache.initialized) await window.userProfileCache.init();
+
+        const params = new URLSearchParams();
+        if (adminAreas.length) params.set('areas', adminAreas.join(','));
+        if (adminHideDupes) params.set('includeDuplicates', '0');
+        else params.set('includeDuplicates', '1');
+
+        const [dataRes, summaryRes] = await Promise.all([
+          fetch('/api/activity-log/admin?' + params.toString()),
+          fetch('/api/activity-log/admin/summary')
+        ]);
+        const data = await dataRes.json();
+        const summary = await summaryRes.json();
+        if (!data.ok) throw new Error(data.error);
+
+        if (data.rows.length === 0) {
+          renderEmpty(feed, '📋', 'No admin activity found',
+            adminAreas.length ? `Nothing recent under the selected areas` : 'Nothing has been logged yet');
+          return;
+        }
+
+        feed.className = 'timeline';
+        const cards = await Promise.all(data.rows.map(async row => {
+          const icon = await renderActorIcon(row.actorUserId, row.actorName, row.icon);
+
+          // Field chips — activity_log has field names only, no before/after
+          const fieldChips = row.fields.length
+            ? `<div class="tag-row">${row.fields.slice(0, 8).map(f => `<span class="tag">${escapeHtml(f)}</span>`).join('')}
+               ${row.fields.length > 8 ? `<span class="item-more">+${row.fields.length - 8} more</span>` : ''}</div>`
+            : '';
+
+          // Failed status
+          const failBadge = row.status !== 'success'
+            ? `<span class="tag danger">${escapeHtml(row.status)}</span>`
+            : '';
+          const errorMsg = row.errorMessage
+            ? `<div class="diff-before">${escapeHtml(row.errorMessage)}</div>`
+            : '';
+
+          // Selective metadata chips
+          const metaChips = [];
+          if (row.metadata.amount) metaChips.push(`${money(row.metadata.amount)}`);
+          if (row.metadata.payment_method) metaChips.push(escapeHtml(row.metadata.payment_method));
+          if (row.metadata.surface) metaChips.push(escapeHtml(row.metadata.surface));
+          if (row.metadata.upload_type) metaChips.push(escapeHtml(row.metadata.upload_type));
+          if (row.metadata.trigger) metaChips.push(`trigger: ${escapeHtml(row.metadata.trigger)}`);
+          if (row.metadata.receipt_status) metaChips.push(`receipt: ${escapeHtml(row.metadata.receipt_status)}`);
+          const metaRow = metaChips.length
+            ? `<div class="tag-row">${metaChips.map(m => `<span class="tag">${m}</span>`).join('')}</div>`
+            : '';
+
+          // Duplicate badge
+          const dupeBadge = row.isDuplicate
+            ? `<span class="tag muted">also in invoice log</span>`
+            : '';
+
+          // Lifecycle card special handling
+          const lifecycleBadge = row.isLifecycle
+            ? `<span class="kind-chip payment">LIFECYCLE</span>`
+            : '';
+
+          // User agent shortened
+          const ua = row.userAgent
+            ? escapeHtml(row.userAgent.split(' ').slice(0, 3).join(' '))
+            : null;
+
+          return `
+            <div class="activity-item ${row.status !== 'success' ? 'visitor' : ''}">
+              <div class="activity-row">
+                ${icon}
+                <div class="activity-body">
+                  <div class="activity-title">
+                    ${lifecycleBadge}
+                    ${escapeHtml(row.title)}
+                    ${row.invoiceNumber ? ' · ' + escapeHtml(row.invoiceNumber) : ''}
+                    ${row.customerName ? ' · ' + escapeHtml(row.customerName) : ''}
+                    ${failBadge}
+                    ${dupeBadge}
+                  </div>
+                  <div class="activity-desc">${escapeHtml(row.description)}</div>
+                  ${fieldChips}
+                  ${metaRow}
+                  ${errorMsg}
+                  <div class="activity-meta">
+                    <span>⏱ ${formatTime(row.occurredAt)}</span>
+                    ${row.actorName ? `<span>👤 ${escapeHtml(row.actorName)}${row.actorRole ? ` (${escapeHtml(row.actorRole)})` : ''}</span>` : ''}
+                    ${row.sourceUrl ? `<span>🔗 ${escapeHtml(row.sourceUrl.split('?')[0])}</span>` : ''}
+                    ${ua ? `<span>🖥 ${ua}</span>` : ''}
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }));
+
+        const strip = summary.ok ? renderAdminSummary(summary.stats) : '';
+        const isNew = markNewRows('admin', data.rows, r => r.id);
+
+        feed.innerHTML = strip + newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
+          occurredAt: row.occurredAt,
+          html: cards[i],
+          isNew: isNew[i]
+        })));
+      } catch (err) {
+        if (!opts.silent) renderError(feed, err);
+      }
+    }
+
+    /* ---------- AI WORKFLOW ----------
+       Reads `ai_activity_log`, a brand-new cross-app table every AI agent
+       run writes to (Claude sessions, MiniMax TTS, etc.), regardless of
+       which Eternalgy app it ran in. Very low volume today — one flat
+       stream, no mode tabs or area filters yet. */
+
+    function aiStatusPill(status) {
+      const v = String(status || '').toLowerCase();
+      const cls = v === 'success' ? 'approved' : v === 'pending' ? 'pending' : 'danger';
+      return `<span class="status-pill ${cls}">${escapeHtml(status)}</span>`;
+    }
+
+    function aiCostHtml(costUsd) {
+      if (costUsd === null || costUsd === undefined) return null;
+      return `$${Number(costUsd).toFixed(4)}`;
+    }
+
+    function aiTokensHtml(inTok, outTok) {
+      if (!inTok && !outTok) return null;
+      return `${(inTok || 0).toLocaleString()} in / ${(outTok || 0).toLocaleString()} out`;
+    }
+
+    async function aiWorkflowCardHtml(row) {
+      const icon = await renderActorIcon(row.triggeredByUserId, row.triggeredByName || row.agent, '🤖');
+      const failed = row.status !== 'success';
+
+      const tagChips = [
+        row.agent ? `<span class="tag">${escapeHtml(row.agent)}${row.model && row.model !== row.agent ? ' · ' + escapeHtml(row.model) : ''}</span>` : '',
+        row.agentKind ? `<span class="tag">${escapeHtml(row.agentKind)}</span>` : '',
+        row.toolName ? `<span class="tag">${escapeHtml(row.toolName)}</span>` : '',
+        row.appEnv ? `<span class="tag">${escapeHtml(row.appEnv)}</span>` : ''
+      ].filter(Boolean).join('');
+
+      const metaChips = [
+        aiCostHtml(row.costUsd) ? `<span class="tag accent">${aiCostHtml(row.costUsd)}</span>` : '',
+        aiTokensHtml(row.inputTokens, row.outputTokens) ? `<span class="tag">${aiTokensHtml(row.inputTokens, row.outputTokens)}</span>` : '',
+        row.durationMs !== null && row.durationMs !== undefined ? `<span class="tag">${row.durationMs.toLocaleString()}ms</span>` : ''
+      ].filter(Boolean).join('');
+
+      const errorMsg = row.errorMessage
+        ? `<div class="diff-before">${escapeHtml(row.errorMessage)}</div>`
+        : '';
+
+      return `
+        <div class="activity-item ${failed ? 'visitor' : ''}">
+          <div class="activity-row">
+            ${icon}
+            <div class="activity-body">
+              <div class="activity-title">
+                ${escapeHtml(row.app || 'unknown app')}
+                ${row.entityLabel ? ' · ' + escapeHtml(row.entityLabel) : ''}
+                ${aiStatusPill(row.status)}
+              </div>
+              <div class="activity-desc">${escapeHtml(row.description || row.action || '')}</div>
+              <div class="tag-row">${tagChips}</div>
+              ${metaChips ? `<div class="tag-row">${metaChips}</div>` : ''}
+              ${errorMsg}
+              <div class="activity-meta">
+                <span>⏱ ${formatTime(row.occurredAt)}</span>
+                ${row.triggeredByName ? `<span>👤 ${escapeHtml(row.triggeredByName)}</span>` : ''}
+                ${row.action ? `<span>⚙ ${escapeHtml(row.action)}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadAiWorkflowActivity(opts = {}) {
+      startAutoRefresh(() => loadAiWorkflowActivity({ silent: true }));
+      const feed = opts.silent
+        ? document.getElementById('feed')
+        : setLoading('Loading AI workflow activity...');
+
+      try {
+        if (!window.userProfileCache.initialized) await window.userProfileCache.init();
+
+        const [dataRes, summaryRes] = await Promise.all([
+          fetch('/api/activity-log/ai-workflow'),
+          fetch('/api/activity-log/ai-workflow/summary')
+        ]);
+        const data = await dataRes.json();
+        const summary = await summaryRes.json();
+        if (!data.ok) throw new Error(data.error);
+
+        if (data.rows.length === 0) {
+          renderEmpty(feed, '🤖', 'No AI activity found', 'Nothing has been logged to ai_activity_log yet');
+          return;
+        }
+
+        feed.className = 'timeline';
+        const cards = await Promise.all(data.rows.map(aiWorkflowCardHtml));
+
+        const strip = summary.ok ? renderAdminSummary(summary.stats) : '';
+        const isNew = markNewRows('aiWorkflow', data.rows, r => r.id);
+
+        feed.innerHTML = strip + newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
+          occurredAt: row.occurredAt,
+          html: cards[i],
+          isNew: isNew[i]
+        })));
+      } catch (err) {
+        if (!opts.silent) renderError(feed, err);
+      }
+    }
+
+    /* ---------- AI ROUTER ----------
+       Reads `request_logs` from a separate database (tnb-tariff, via
+       /api/ai-router/*) — not the same DB as everything else in this app.
+       One flat stream with a success/error status filter, same shape as
+       AI Workflow above. */
+
+    const AI_ROUTER_STATUSES = [
+      { key: 'all', label: '📋 All' },
+      { key: 'success', label: '✅ Success' },
+      { key: 'error', label: '⚠️ Error' }
+    ];
+    let aiRouterStatus = 'all';
+
+    function renderAiRouterFilters() {
+      document.getElementById('filters').innerHTML = `
+        <div class="filter-bar mode-bar">
+          ${AI_ROUTER_STATUSES.map(s => `
+            <button class="mode-tab ${aiRouterStatus === s.key ? 'active' : ''}"
+                    data-ai-router-status="${s.key}">${s.label}</button>
+          `).join('')}
+        </div>
+      `;
+      document.querySelectorAll('[data-ai-router-status]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          aiRouterStatus = btn.getAttribute('data-ai-router-status');
+          loadAiRouterLogs();
+        });
+      });
+    }
+
+    function aiRouterCardHtml(row) {
+      const failed = row.status !== 'success';
+
+      const tagChips = [
+        row.model ? `<span class="tag">${escapeHtml(row.model)}${row.modelMapped && row.modelMapped !== row.model ? ' → ' + escapeHtml(row.modelMapped) : ''}</span>` : '',
+        row.apiKeyPrefix ? `<span class="tag">${escapeHtml(row.apiKeyPrefix)}</span>` : '',
+        row.isStreaming ? `<span class="tag">streaming</span>` : ''
+      ].filter(Boolean).join('');
+
+      const metaChips = [
+        row.costUsd !== null ? `<span class="tag accent">$${row.costUsd.toFixed(4)}</span>` : '',
+        (row.promptTokens || row.completionTokens)
+          ? `<span class="tag">${(row.promptTokens || 0).toLocaleString()} in / ${(row.completionTokens || 0).toLocaleString()} out</span>` : '',
+        row.latencyMs !== null && row.latencyMs !== undefined ? `<span class="tag">${row.latencyMs.toLocaleString()}ms</span>` : ''
+      ].filter(Boolean).join('');
+
+      const errorMsg = row.errorMessage
+        ? `<div class="activity-desc">${escapeHtml(row.errorMessage)}</div>`
+        : '';
+
+      return `
+        <div class="activity-item">
+          <div class="activity-row">
+            <div class="activity-body">
+              <div class="activity-title">
+                ${escapeHtml(row.providerName || 'unknown provider')}
+                ${aiStatusPill(row.status)}
+              </div>
+              <div class="tag-row">${tagChips}</div>
+              ${metaChips ? `<div class="tag-row">${metaChips}</div>` : ''}
+              ${errorMsg}
+              <div class="activity-meta">
+                <span>⏱ ${formatTime(row.occurredAt)}</span>
+                ${row.ipAddress ? `<span>🌐 ${escapeHtml(row.ipAddress)}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadAiRouterLogs(opts = {}) {
+      renderAiRouterFilters();
+      startAutoRefresh(() => loadAiRouterLogs({ silent: true }));
+      const feed = opts.silent
+        ? document.getElementById('feed')
+        : setLoading('Loading AI router logs...');
+
+      try {
+        const params = new URLSearchParams({ limit: '150' });
+        if (aiRouterStatus !== 'all') params.set('status', aiRouterStatus);
+
+        const [dataRes, summaryRes] = await Promise.all([
+          fetch(`/api/ai-router/logs?${params}`),
+          fetch('/api/ai-router/summary')
+        ]);
+        const data = await dataRes.json();
+        const summary = await summaryRes.json();
+        if (!data.ok) throw new Error(data.error);
+
+        if (data.rows.length === 0) {
+          renderEmpty(feed, '🔀', 'No AI router requests found', 'Nothing has been logged to request_logs yet');
+          return;
+        }
+
+        feed.className = 'timeline';
+        const strip = summary.ok ? renderAdminSummary(summary.stats) : '';
+        const isNew = markNewRows('aiRouter', data.rows, r => r.id);
+
+        feed.innerHTML = strip + newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
+          occurredAt: row.occurredAt,
+          nodeClass: '',
+          html: aiRouterCardHtml(row),
+          isNew: isNew[i]
+        })));
+      } catch (err) {
+        if (!opts.silent) renderError(feed, err);
+      }
+    }
+
+    /* ---------- SALES › Auto Proposal AI-Voiced ----------
+       One chronological view of the app's user-facing actions and its detailed
+       AI runs. Both sources are filtered server-side to app='solar-presentation'. */
+
+    const AUTO_PROPOSAL_SOURCES = [
+      { key: 'all', label: '📋 All activity' },
+      { key: 'ai', label: '🤖 AI workflow' },
+      { key: 'activity', label: '⚙ App events' }
+    ];
+    let autoProposalSource = 'all';
+
+    function renderAutoProposalFilters() {
+      document.getElementById('filters').innerHTML = `
+        <div class="filter-bar mode-bar">
+          ${AUTO_PROPOSAL_SOURCES.map(source => `
+            <button class="mode-tab ${autoProposalSource === source.key ? 'active' : ''}"
+                    data-auto-proposal-source="${source.key}">${source.label}</button>
+          `).join('')}
+        </div>
+      `;
+      document.querySelectorAll('[data-auto-proposal-source]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          autoProposalSource = btn.getAttribute('data-auto-proposal-source');
+          loadAutoProposalActivity();
+        });
+      });
+    }
+
+    async function autoProposalActivityCardHtml(row) {
+      if (row.kind === 'ai') return aiWorkflowCardHtml(row);
+
+      const icon = await renderActorIcon(row.actorUserId, row.actorName, '⚙️');
+      const failed = row.status && row.status !== 'success';
+      const fields = Array.isArray(row.fields) ? row.fields : [];
+      const fieldChips = fields.length
+        ? `<div class="tag-row">${fields.slice(0, 8).map(field => `<span class="tag">${escapeHtml(field)}</span>`).join('')}
+           ${fields.length > 8 ? `<span class="item-more">+${fields.length - 8} more</span>` : ''}</div>`
+        : '';
+      const errorMsg = row.errorMessage
+        ? `<div class="diff-before">${escapeHtml(row.errorMessage)}</div>`
+        : '';
+
+      return `
+        <div class="activity-item ${failed ? 'visitor' : ''}">
+          <div class="activity-row">
+            ${icon}
+            <div class="activity-body">
+              <div class="activity-title">
+                <span class="kind-chip edit">APP</span>
+                ${escapeHtml(row.action || row.entityType || 'Event')}
+                ${row.entityLabel ? ' · ' + escapeHtml(row.entityLabel) : ''}
+                ${failed ? `<span class="tag danger">${escapeHtml(row.status)}</span>` : ''}
+              </div>
+              ${row.description ? `<div class="activity-desc">${escapeHtml(row.description)}</div>` : ''}
+              ${fieldChips}
+              ${errorMsg}
+              <div class="activity-meta">
+                <span>⏱ ${formatTime(row.occurredAt)}</span>
+                ${row.actorName ? `<span>👤 ${escapeHtml(row.actorName)}${row.actorRole ? ` (${escapeHtml(row.actorRole)})` : ''}</span>` : ''}
+                ${row.sourceUrl ? `<span>🔗 ${escapeHtml(row.sourceUrl.split('?')[0])}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadAutoProposalActivity(opts = {}) {
+      renderAutoProposalFilters();
+      startAutoRefresh(() => loadAutoProposalActivity({ silent: true }));
+      const feed = opts.silent
+        ? document.getElementById('feed')
+        : setLoading('Loading Auto Proposal activity...');
+
+      try {
+        if (!window.userProfileCache.initialized) await window.userProfileCache.init();
+
+        const params = new URLSearchParams({ limit: '100' });
+        if (autoProposalSource !== 'all') params.set('sources', autoProposalSource);
+        const res = await fetch(`/api/activity-log/solar-presentation?${params}`);
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error);
+
+        if (data.rows.length === 0) {
+          renderEmpty(feed, '🎙️', 'No Auto Proposal activity found',
+            'Nothing has been logged for app "solar-presentation" yet');
+          return;
+        }
+
+        feed.className = 'timeline';
+        const cards = await Promise.all(data.rows.map(autoProposalActivityCardHtml));
+        const isNew = markNewRows('autoProposal', data.rows, row => `${row.kind}:${row.id}`);
+
+        feed.innerHTML = newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
+          occurredAt: row.occurredAt,
+          nodeClass: row.kind === 'ai' ? 'visitor' : '',
+          html: cards[i],
+          isNew: isNew[i]
+        })));
+      } catch (err) {
+        // A failed background poll must leave the current results visible.
+        if (!opts.silent) renderError(feed, err);
+      }
+    }
+
+    /* ---------- MARKETING › SEO+GEO Site ----------
+       Generic cross-app feed (GET /api/activity-log) filtered to
+       app='main-site', the same table other departments' own dedicated
+       readers pull from — no dedicated repo query needed here.
+
+       Visitor icon: known AI crawlers / search engine bots get their brand
+       logo on a tinted background (blue = AI bot, purple = search engine);
+       anything else (generic bots, real visitors) falls back to the default
+       initials avatar — "possible human" territory. */
+
+    const BOT_BRANDS = [
+      { match: /google/i, logo: '/images/bot-logos/google.png', label: 'Googlebot', category: 'search' },
+      { match: /bing/i, logo: '/images/bot-logos/bing.png', label: 'Bingbot', category: 'search' },
+      { match: /openai|gpt|chatgpt/i, logo: '/images/bot-logos/openai.png', label: 'OpenAI', category: 'ai' },
+      { match: /claude|anthropic/i, logo: '/images/bot-logos/claude.png', label: 'Claude', category: 'ai' }
+    ];
+
+    function detectBotBrand(actorName) {
+      if (!actorName) return null;
+      return BOT_BRANDS.find(b => b.match.test(actorName)) || null;
+    }
+
+    async function marketingVisitorIconHtml(row) {
+      const brand = detectBotBrand(row.actor_name);
+      if (brand) {
+        const cls = brand.category === 'ai' ? 'bot-logo-ai' : 'bot-logo-search';
+        return `
+          <div class="activity-icon bot-logo ${cls}" title="${escapeHtml(brand.label)}">
+            <img src="${brand.logo}" alt="${escapeHtml(brand.label)}" loading="lazy">
+          </div>
+        `;
+      }
+      return renderActorIcon(row.actor_user_id, row.actor_name, '🔍');
+    }
+
+    async function marketingSeoGeoCardHtml(row) {
+      const icon = await marketingVisitorIconHtml(row);
+      const failed = row.status && row.status !== 'success';
+
+      const fieldChips = Array.isArray(row.fields) && row.fields.length
+        ? `<div class="tag-row">${row.fields.slice(0, 8).map(f => `<span class="tag">${escapeHtml(f)}</span>`).join('')}
+           ${row.fields.length > 8 ? `<span class="item-more">+${row.fields.length - 8} more</span>` : ''}</div>`
+        : '';
+
+      const errorMsg = row.error_message
+        ? `<div class="diff-before">${escapeHtml(row.error_message)}</div>`
+        : '';
+
+      return `
+        <div class="activity-item ${failed ? 'visitor' : ''}">
+          <div class="activity-row">
+            ${icon}
+            <div class="activity-body">
+              <div class="activity-title">
+                ${escapeHtml(row.action || row.entity_type || 'Event')}
+                ${row.entity_label ? ' · ' + escapeHtml(row.entity_label) : ''}
+                ${failed ? `<span class="tag danger">${escapeHtml(row.status)}</span>` : ''}
+              </div>
+              ${row.description ? `<div class="activity-desc">${escapeHtml(row.description)}</div>` : ''}
+              ${fieldChips}
+              ${errorMsg}
+              <div class="activity-meta">
+                <span>⏱ ${formatTime(row.occurred_at)}</span>
+                ${row.actor_name ? `<span>👤 ${escapeHtml(row.actor_name)}${row.actor_role ? ` (${escapeHtml(row.actor_role)})` : ''}</span>` : ''}
+                ${row.source_url ? `<span>🔗 ${escapeHtml(row.source_url.split('?')[0])}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadMarketingSeoGeoActivity(opts = {}) {
+      const feed = opts.silent
+        ? document.getElementById('feed')
+        : setLoading('Loading main-site activity...');
+
+      try {
+        if (!window.userProfileCache.initialized) await window.userProfileCache.init();
+
+        const res = await fetch('/api/activity-log?' + new URLSearchParams({ app: 'main-site', limit: '100' }));
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error);
+        const rows = data.data.rows;
+
+        if (rows.length === 0) {
+          renderEmpty(feed, '🔍', 'No main-site activity found', 'Nothing has been logged for app "main-site" yet');
+          return;
+        }
+
+        feed.className = 'timeline';
+        const cards = await Promise.all(rows.map(marketingSeoGeoCardHtml));
+        const isNew = markNewRows('marketingSeoGeo', rows, r => r.id);
+
+        feed.innerHTML = newPulseHtml() + renderTimeline(rows.map((row, i) => ({
+          occurredAt: row.occurred_at,
+          html: cards[i],
+          isNew: isNew[i]
+        })));
+      } catch (err) {
+        if (!opts.silent) renderError(feed, err);
+      }
+    }
+
+    /* ---------- FINANCE ----------
+       "Payment Activity" mirrors INVOICE's tab design: submission and
+       verification are two sides of the same payment, so they live on one
+       page with mode tabs (All / Submission / Verification) instead of two
+       separate sidebar entries. Official Receipt stays separate — it reads
+       a different pair of sources and doesn't share a timeline shape with
+       the other two. */
+
+    const FINANCE_MODES = [
+      { key: 'all', tab: '📋 All', title: 'Payment Activity',
+        desc: 'Submission and verification merged into one stream' },
+      { key: 'submission', tab: '💳 Submission', title: 'Payment Submission',
+        desc: 'Payments claimed by agents, with how each one was resolved' },
+      { key: 'verification', tab: '✅ Verification', title: 'Payment Verification',
+        desc: 'Field-level verify / correct / delete actions on submitted payments' }
+    ];
+    let financeMode = 'all';
+
+    function financeTabsHtml() {
+      return `
+        <div class="filter-bar mode-bar">
+          ${FINANCE_MODES.map(m => `
+            <button class="mode-tab ${financeMode === m.key ? 'active' : ''}"
+                    data-finance-mode="${m.key}">${m.tab}</button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function bindFinanceTabs() {
+      document.querySelectorAll('[data-finance-mode]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          financeMode = btn.getAttribute('data-finance-mode');
+          loadPaymentActivity();
+        });
+      });
+    }
+
+    // Only shown in the combined "All" stream, where both kinds are interleaved.
+    function financeKindChip(kind) {
+      if (financeMode !== 'all') return '';
+      const label = { submission: 'SUBMIT', verification: 'VERIFY' }[kind] || kind;
+      return `<span class="kind-chip ${kind === 'submission' ? 'prep' : 'edit'}">${label}</span>`;
+    }
+
+    function loadPaymentActivity(opts = {}) {
+      const mode = FINANCE_MODES.find(m => m.key === financeMode) || FINANCE_MODES[0];
+      setHeader(mode.title, mode.desc);
+      startAutoRefresh(() => loadPaymentActivity({ silent: true }));
+      if (financeMode === 'submission') return loadPaymentSubmission(opts);
+      if (financeMode === 'verification') return loadPaymentVerification(opts);
+      return loadFinanceAll(opts);
+    }
+
+    function financeStatusPill(value) {
+      const v = String(value || '').toLowerCase();
+      const cls = v === 'verified' || v === 'success' || v === 'sent' ? 'approved'
+        : v === 'pending' ? 'pending'
+        : v === 'deleted' || v === 'failed' ? 'danger' : '';
+      return `<span class="status-pill ${cls}">${escapeHtml(value)}</span>`;
+    }
+
+    /**
+     * Collection cycle for the invoice this payment belongs to (not just this
+     * one payment): days from the invoice's 1st payment to cumulative
+     * recorded payments crossing the collection-milestone ratio (~60%
+     * deposit), and from there to full payment. Both use the `payment` table,
+     * so a submission still `pending` verification shows the invoice's cycle
+     * as measured by money actually recorded, not by this claim itself.
+     * Rendered as two boxes, not inline text, so it reads as a distinct metric.
+     */
+    function collectionCycleHtml(row) {
+      if (row.daysFirstTo59 === null && row.days59ToFull === null) return '';
+      const box = (label, days) => `
+        <div class="cycle-box${days === null ? ' muted' : ''}">
+          <div class="cycle-box-label">${label}</div>
+          <div class="cycle-box-value">${days === null
+            ? 'pending'
+            : `${Number.isInteger(days) ? days : days.toFixed(1)}<small>d</small>`}</div>
+        </div>
+      `;
+      return `
+        <div class="cycle-box-row">
+          ${box('Deposit to 60%', row.daysFirstTo59)}
+          ${box('60% to full paid', row.days59ToFull)}
+        </div>
+      `;
+    }
+
+    /**
+     * How long this specific payment claim took to resolve — from the
+     * `submitted_payment:insert` this row IS, to the `payment:verify` (or
+     * `:delete`) that closed it out. Different from `collectionCycleHtml`,
+     * which tracks the invoice's total money collected, not one claim's
+     * processing time. Empirically: median ~17.5h, avg ~32.5h, p90 ~70.6h.
+     */
+    function fmtElapsed(ms) {
+      if (ms === null) return null;
+      const mins = ms / 60000;
+      if (mins < 60) return `${Math.round(mins)}m`;
+      const hours = mins / 60;
+      // Past a day, days reads more naturally than a big hour count — matches
+      // the deposit-cycle boxes, which are always in days.
+      if (hours < 24) return `${hours < 10 ? hours.toFixed(1) : Math.round(hours)}h`;
+      return `${(hours / 24).toFixed(1)}d`;
+    }
+
+    function submitToVerifyHtml(row) {
+      const ms = row.resolvedAt ? (new Date(row.resolvedAt) - new Date(row.occurredAt)) : null;
+      const label = row.status === 'deleted' ? 'Submit → Deleted' : 'Submit → Verified';
+      return `
+        <div class="cycle-box-row">
+          <div class="cycle-box${ms === null ? ' muted' : ''}">
+            <div class="cycle-box-label">${label}</div>
+            <div class="cycle-box-value">${ms === null ? 'still pending' : fmtElapsed(ms)}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ---------- FINANCE › card builders ----------
+       Kept separate from the loaders so the combined "All" stream can mix
+       both kinds in one timeline, same split as prepCardHtml / editCardHtml. */
+
+    async function submissionCardHtml(row) {
+      const icon = await renderActorIcon(row.actorUserId, row.actorName, '💳');
+      return `
+        <div class="activity-item">
+          <div class="activity-row">
+            ${icon}
+            <div class="activity-body">
+              <div class="activity-title">
+                ${financeKindChip('submission')}
+                ${escapeHtml(row.invoiceNumber || 'Invoice')}
+                ${row.customerName ? ' · ' + escapeHtml(row.customerName) : ''}
+                ${financeStatusPill(row.status)}
+              </div>
+              <div class="activity-desc">
+                ${row.amount !== null ? money(row.amount) : 'No amount'}
+                ${row.method ? ' · ' + escapeHtml(row.method) : ''}
+                ${row.paymentDate ? ' · ' + escapeHtml(row.paymentDate) : ''}
+              </div>
+              ${row.amountMismatch ? `
+                <div class="tag-row">
+                  <span class="tag danger">⚠ verified as ${money(row.verifiedAmount)} — mismatch</span>
+                </div>
+              ` : ''}
+              ${submitToVerifyHtml(row)}
+              ${collectionCycleHtml(row)}
+              <div class="activity-meta">
+                <span>⏱ ${formatTime(row.occurredAt)}</span>
+                ${row.actorName ? `<span>👤 ${escapeHtml(row.actorName)}</span>` : ''}
+                ${row.sourceApp ? `<span>📱 ${escapeHtml(row.sourceApp)}</span>` : ''}
+                ${row.resolvedAt ? `<span>✅ resolved ${formatTime(row.resolvedAt)}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function verificationActionLabel(action) {
+      return { verify: '✅ Verified', update: '✏️ Corrected', delete: '🗑 Deleted' }[action] || action;
+    }
+
+    // Boxed "how long since this payment was submitted", shown on verification
+    // cards. Labeled by what this row actually is: the verify row gets "Time
+    // to Verify" (the real answer to "submit → verified, how long"); a
+    // correction or deletion in between gets a more honest "since submission".
+    function verifyElapsedHtml(row) {
+      if (!row.submittedAt) return '';
+      const ms = new Date(row.occurredAt) - new Date(row.submittedAt);
+      const label = row.action === 'verify' ? 'Time to Verify'
+        : row.action === 'delete' ? 'Time to Delete'
+        : 'Time since Submission';
+      return `
+        <div class="cycle-box-row">
+          <div class="cycle-box">
+            <div class="cycle-box-label">${label}</div>
+            <div class="cycle-box-value">${fmtElapsed(ms)}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function verificationCardHtml(row) {
+      const emoji = row.action === 'delete' ? '🗑' : row.action === 'update' ? '✏️' : '✅';
+      const icon = row.actorName
+        ? await renderActorIcon(row.actorUserId, row.actorName, emoji)
+        : `<div class="activity-icon"><span class="activity-icon-initials">${emoji}</span></div>`;
+
+      return `
+        <div class="activity-item ${row.action === 'delete' ? 'visitor' : ''}">
+          <div class="activity-row">
+            ${icon}
+            <div class="activity-body">
+              <div class="activity-title">
+                ${financeKindChip('verification')}
+                ${escapeHtml(row.invoiceNumber || 'Invoice')}
+                ${row.customerName ? ' · ' + escapeHtml(row.customerName) : ''}
+              </div>
+              <div class="activity-desc">
+                ${verificationActionLabel(row.action)}
+                ${row.legacy ? '<span class="tag">legacy flow</span>' : ''}
+              </div>
+              ${verifyElapsedHtml(row)}
+              <div class="diff-list">
+                ${row.changes.map(c => `
+                  <div class="diff-line">
+                    <span class="diff-field">${escapeHtml(c.field)}</span>
+                    ${c.before !== null ? `<span class="diff-before">${escapeHtml(formatValue(c.before))}</span><span class="diff-arrow">→</span>` : ''}
+                    <span class="diff-after">${escapeHtml(formatValue(c.after))}</span>
+                  </div>
+                `).join('')}
+              </div>
+              <div class="activity-meta">
+                <span>⏱ ${formatTime(row.occurredAt)}</span>
+                <span>👤 ${escapeHtml(row.actorName || (row.action === 'verify' ? 'Verifier (system)' : 'Unknown'))}</span>
+                ${row.sourceApp ? `<span>📱 ${escapeHtml(row.sourceApp)}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /**
+     * Last-30-days summary bar shown above every Payment Activity mode: avg
+     * submit→verify turnaround, total RM verified, and a daily bar chart of
+     * verified totals. Fetched independently of the paginated feed below
+     * (that one is limit-cut; this is a fixed date window) and rendered into
+     * its own persistent container so it survives feed re-renders/silent
+     * refreshes without re-fetching every time.
+     */
+    function financeStatsHtml(stats) {
+      const avg = stats.avgResolutionMs !== null ? fmtElapsed(stats.avgResolutionMs) : '—';
+      const maxDaily = Math.max(1, ...stats.daily.map(d => d.total));
+      const bars = stats.daily.map(d => {
+        const pct = d.total > 0 ? Math.max((d.total / maxDaily) * 100, 3) : 1;
+        return `<div class="verify-chart-bar${d.total === 0 ? ' empty' : ''}" style="height:${pct}%"
+                     title="${d.date} · ${money(d.total)} · ${d.count} verified"></div>`;
+      }).join('');
+
+      return `
+        <div class="stat-strip">
+          <div class="stat-tile">
+            <div class="stat-label">Submit → Verify <span class="stat-derived">last ${stats.windowDays}d</span></div>
+            <div class="stat-value">${avg}</div>
+            <div class="stat-sub">${stats.resolvedCount} verified payment${stats.resolvedCount === 1 ? '' : 's'} with a known submit time</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-label">Verified total <span class="stat-derived">last ${stats.windowDays}d</span></div>
+            <div class="stat-value">${money(stats.verifiedTotal)}</div>
+            <div class="stat-sub">${stats.verifiedCount} payment${stats.verifiedCount === 1 ? '' : 's'} verified</div>
+          </div>
+        </div>
+        <div class="verify-chart">
+          <div class="verify-chart-title">Verified total per day <span class="stat-derived">last ${stats.windowDays}d</span></div>
+          <div class="verify-chart-bars">${bars}</div>
+        </div>
+      `;
+    }
+
+    async function loadFinanceStats() {
+      const el = document.getElementById('finance-stats');
+      if (!el) return;
+      try {
+        const res = await fetch(`/api/activity-log/finance/stats?days=30`);
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error);
+        el.innerHTML = financeStatsHtml(data.stats);
+      } catch (err) {
+        // Non-critical panel — leave whatever was there (or empty) rather
+        // than disrupting the main feed over a stats-only failure.
+      }
+    }
+
+    /* ---------- FINANCE › Payment Activity › All ---------- */
+
+    async function loadFinanceAll(opts = {}) {
+      document.getElementById('filters').innerHTML = financeTabsHtml();
+      bindFinanceTabs();
+      loadFinanceStats();
+      const feed = opts.silent
+        ? document.getElementById('feed')
+        : setLoading('Loading payment activity...');
+
+      try {
+        if (!window.userProfileCache.initialized) await window.userProfileCache.init();
+
+        const res = await fetch(`/api/activity-log/finance/all?limit=80`);
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error);
+
+        if (data.rows.length === 0) {
+          renderEmpty(feed, '📋', 'No payment activity found', 'Nothing has happened yet');
+          return;
+        }
+
+        feed.className = 'timeline';
+        const cards = await Promise.all(data.rows.map(row =>
+          row.kind === 'verification' ? verificationCardHtml(row) : submissionCardHtml(row)
+        ));
+
+        // Ids collide across sources (each table numbers its own rows), so the
+        // dedupe key has to include the kind.
+        const isNew = markNewRows('financeAll', data.rows, r => `${r.kind}:${r.id}`);
+
+        feed.innerHTML = newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
+          occurredAt: row.occurredAt,
+          html: cards[i],
+          isNew: isNew[i]
+        })));
+      } catch (err) {
+        if (!opts.silent) renderError(feed, err);
+      }
+    }
+
+    /* ---------- FINANCE › Payment Submission ---------- */
+
+    async function loadPaymentSubmission(opts = {}) {
+      document.getElementById('filters').innerHTML = financeTabsHtml();
+      bindFinanceTabs();
+      loadFinanceStats();
+      const feed = opts.silent
+        ? document.getElementById('feed')
+        : setLoading('Loading payment submissions...');
+
+      try {
+        if (!window.userProfileCache.initialized) await window.userProfileCache.init();
+
+        const res = await fetch(`/api/activity-log/finance/submission?limit=80`);
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error);
+
+        if (data.rows.length === 0) {
+          renderEmpty(feed, '💳', 'No payment submissions found', 'Nothing has been claimed yet');
+          return;
+        }
+
+        feed.className = 'timeline';
+        const cards = await Promise.all(data.rows.map(row => submissionCardHtml(row)));
+
+        const isNew = markNewRows('submission', data.rows, r => r.id);
+        feed.innerHTML = newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
+          occurredAt: row.occurredAt,
+          html: cards[i],
+          isNew: isNew[i]
+        })));
+      } catch (err) {
+        if (!opts.silent) renderError(feed, err);
+      }
+    }
+
+    /* ---------- FINANCE › Payment Verification ---------- */
+
+    async function loadPaymentVerification(opts = {}) {
+      document.getElementById('filters').innerHTML = financeTabsHtml();
+      bindFinanceTabs();
+      loadFinanceStats();
+      const feed = opts.silent
+        ? document.getElementById('feed')
+        : setLoading('Loading payment verifications...');
+
+      try {
+        if (!window.userProfileCache.initialized) await window.userProfileCache.init();
+
+        const res = await fetch(`/api/activity-log/finance/verification?limit=80`);
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error);
+
+        if (data.rows.length === 0) {
+          renderEmpty(feed, '✅', 'No payment verifications found', 'Nothing has been verified yet');
+          return;
+        }
+
+        feed.className = 'timeline';
+        const cards = await Promise.all(data.rows.map(row => verificationCardHtml(row)));
+
+        const isNew = markNewRows('verification', data.rows, r => r.id);
+        feed.innerHTML = newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
+          occurredAt: row.occurredAt,
+          html: cards[i],
+          isNew: isNew[i]
+        })));
+      } catch (err) {
+        if (!opts.silent) renderError(feed, err);
+      }
+    }
+
+    /* ---------- FINANCE › Official Receipt ---------- */
+
+    async function loadPaymentReceiptLog(opts = {}) {
+      startAutoRefresh(() => loadPaymentReceiptLog({ silent: true }));
+      clearFilters();
+      const feed = opts.silent
+        ? document.getElementById('feed')
+        : setLoading('Loading receipt sends...');
+
+      try {
+        if (!window.userProfileCache.initialized) await window.userProfileCache.init();
+
+        const res = await fetch(`/api/activity-log/finance/receipt?limit=80`);
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error);
+
+        if (data.rows.length === 0) {
+          renderEmpty(feed, '🧾', 'No receipt sends found', 'Nothing has been sent yet');
+          return;
+        }
+
+        // The activity_log side has carried delivery status only since
+        // 2026-07-28 — surface the failure rate over that window since it's
+        // the one real signal this feed adds over the audit log.
+        const logRows = data.rows.filter(r => r.source === 'log');
+        const failed = logRows.filter(r => r.status === 'failed').length;
+
+        feed.className = 'timeline';
+        const cards = await Promise.all(data.rows.map(async row => {
+          const emoji = row.status === 'failed' ? '⚠️' : '🧾';
+          const icon = row.actorName
+            ? await renderActorIcon(null, row.actorName, emoji)
+            : `<div class="activity-icon"><span class="activity-icon-initials">${emoji}</span></div>`;
+
+          return `
+            <div class="activity-item ${row.status === 'failed' ? 'visitor' : ''}">
+              <div class="activity-row">
+                ${icon}
+                <div class="activity-body">
+                  <div class="activity-title">
+                    ${escapeHtml(row.invoiceNumber || 'Invoice')}
+                    ${row.customerName ? ' · ' + escapeHtml(row.customerName) : ''}
+                    ${financeStatusPill(row.status)}
+                    ${row.source === 'audit' ? '<span class="tag">audit log</span>' : '<span class="tag">delivery log</span>'}
+                  </div>
+                  <div class="activity-desc">
+                    ${row.sentBy ? 'Sent by ' + escapeHtml(row.sentBy) : 'Receipt sent'}
+                  </div>
+                  ${row.errorMessage ? `
+                    <div class="tag-row"><span class="tag danger">${escapeHtml(row.errorMessage)}</span></div>
+                  ` : ''}
+                  <div class="activity-meta">
+                    <span>⏱ ${formatTime(row.occurredAt)}</span>
+                    ${row.sourceApp ? `<span>📱 ${escapeHtml(row.sourceApp)}</span>` : ''}
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }));
+
+        const strip = logRows.length ? `
+          <div class="stat-strip">
+            <div class="stat-tile ${failed ? 'thin' : ''}" title="WhatsApp delivery status has only been recorded since 2026-07-28">
+              <div class="stat-label">Receipt delivery <span class="stat-derived">since 28 Jul</span></div>
+              <div class="stat-value">${failed} <small>/ ${logRows.length} failed</small></div>
+              <div class="stat-sub">${logRows.length - failed} sent ok · rest of history has no delivery status</div>
+            </div>
+          </div>
+        ` : '';
+
+        const isNew = markNewRows('receipt', data.rows, r => r.id);
+        feed.innerHTML = strip + newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
+          occurredAt: row.occurredAt,
+          html: cards[i],
+          isNew: isNew[i]
+        })));
+      } catch (err) {
+        if (!opts.silent) renderError(feed, err);
+      }
+    }
+
+    async function renderActorIcon(actorUserId, actorName, emoji = '🧮') {
+      const profilePic = await window.userProfileCache.getProfilePicture(actorUserId, actorName);
+
+      if (profilePic) {
+        return `
+          <div class="activity-icon with-emoji" data-emoji="${emoji}">
+            <img src="${profilePic}" alt="${actorName || 'User'}" loading="lazy">
+          </div>
+        `;
+      }
+
+      // Fallback to initials
+      const initials = window.userProfileCache.getInitials(actorName || 'Unknown');
+      return `
+        <div class="activity-icon">
+          <div class="activity-icon-initials">${initials}</div>
+        </div>
+      `;
+    }
+
+    function showPlaceholder(route) {
+      const feed = document.getElementById('feed');
+      feed.className = 'empty-state';
+      feed.innerHTML = `
+        <div class="empty-state-icon">🚧</div>
+        <h3>Page not implemented yet</h3>
+        <p>The "${route}" page is coming soon</p>
+      `;
+    }
+
+    function formatTime(iso) {
+      const date = new Date(iso);
+      const now = new Date();
+      const diff = now - date;
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+
+      if (minutes < 1) return 'just now';
+      if (minutes < 60) return `${minutes}m ago`;
+      if (hours < 24) return `${hours}h ago`;
+      if (days < 7) return `${days}d ago`;
+      return date.toLocaleDateString();
+    }
+
+    function reload() {
+      const active = document.querySelector('.submenu-item.active');
+      if (active) {
+        loadRoute(active.getAttribute('data-route'));
+      }
+    }
+
+    // Initial load
+    loadCalculatorActivity();
+  </script>
 </body>
 </html>

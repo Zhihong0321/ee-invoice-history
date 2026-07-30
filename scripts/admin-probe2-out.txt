@@ -1,0 +1,1265 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+
+=============== C1 fields[] per entity+action ===============
+[
+ {
+  "entity_type": "customer",
+  "action": "update",
+  "field": "notes",
+  "n": "13"
+ },
+ {
+  "entity_type": "customer",
+  "action": "update",
+  "field": "postcode",
+  "n": "13"
+ },
+ {
+  "entity_type": "customer",
+  "action": "update",
+  "field": "city",
+  "n": "13"
+ },
+ {
+  "entity_type": "customer",
+  "action": "update",
+  "field": "address",
+  "n": "13"
+ },
+ {
+  "entity_type": "customer",
+  "action": "update",
+  "field": "email",
+  "n": "13"
+ },
+ {
+  "entity_type": "customer",
+  "action": "update",
+  "field": "name",
+  "n": "13"
+ },
+ {
+  "entity_type": "customer",
+  "action": "update",
+  "field": "phone",
+  "n": "13"
+ },
+ {
+  "entity_type": "customer",
+  "action": "update",
+  "field": "state",
+  "n": "13"
+ },
+ {
+  "entity_type": "invoice",
+  "action": "update",
+  "field": "linked_agent",
+  "n": "1"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action": "update",
+  "field": "description",
+  "n": "25"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action": "update",
+  "field": "unit_price",
+  "n": "25"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action": "update",
+  "field": "qty",
+  "n": "18"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action": "update",
+  "field": "linked_package",
+  "n": "7"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action": "update",
+  "field": "amount",
+  "n": "7"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action": "update",
+  "field": "payment_method",
+  "n": "26"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action": "update",
+  "field": "epp_month",
+  "n": "26"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action": "update",
+  "field": "payment_date",
+  "n": "26"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action": "update",
+  "field": "epp_type",
+  "n": "26"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action": "update",
+  "field": "amount",
+  "n": "26"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action": "update",
+  "field": "issuer_bank",
+  "n": "26"
+ },
+ {
+  "entity_type": "user",
+  "action": "update",
+  "field": "access_level",
+  "n": "1"
+ },
+ {
+  "entity_type": "user",
+  "action": "update",
+  "field": "email",
+  "n": "1"
+ },
+ {
+  "entity_type": "user",
+  "action": "update",
+  "field": "address",
+  "n": "1"
+ },
+ {
+  "entity_type": "user",
+  "action": "update",
+  "field": "contact",
+  "n": "1"
+ },
+ {
+  "entity_type": "user",
+  "action": "update",
+  "field": "name",
+  "n": "1"
+ },
+ {
+  "entity_type": "user",
+  "action": "update",
+  "field": "bankin_account",
+  "n": "1"
+ },
+ {
+  "entity_type": "user",
+  "action": "update",
+  "field": "banker",
+  "n": "1"
+ }
+]
+
+
+=============== C2 metadata keys per entity+action (ee-admin) ===============
+[
+ {
+  "entity_type": "attachment",
+  "action": "upload",
+  "meta_key": "surface",
+  "n": "14"
+ },
+ {
+  "entity_type": "attachment",
+  "action": "upload",
+  "meta_key": "upload_type",
+  "n": "14"
+ },
+ {
+  "entity_type": "invoice",
+  "action": "print",
+  "meta_key": "version",
+  "n": "25"
+ },
+ {
+  "entity_type": "invoice",
+  "action": "print",
+  "meta_key": "surface",
+  "n": "22"
+ },
+ {
+  "entity_type": "invoice",
+  "action": "print",
+  "meta_key": "pdfId",
+  "n": "3"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action": "create",
+  "meta_key": "invoice_id",
+  "n": "19"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action": "create",
+  "meta_key": "invoice_number",
+  "n": "19"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action": "delete",
+  "meta_key": "invoice_number",
+  "n": "3"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action": "delete",
+  "meta_key": "invoice_id",
+  "n": "3"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action": "update",
+  "meta_key": "invoice_number",
+  "n": "25"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action": "update",
+  "meta_key": "invoice_id",
+  "n": "25"
+ },
+ {
+  "entity_type": "payment",
+  "action": "verify",
+  "meta_key": "payment_method",
+  "n": "36"
+ },
+ {
+  "entity_type": "payment",
+  "action": "verify",
+  "meta_key": "amount",
+  "n": "36"
+ },
+ {
+  "entity_type": "payment",
+  "action": "verify",
+  "meta_key": "linked_invoice",
+  "n": "36"
+ },
+ {
+  "entity_type": "receipt",
+  "action": "send",
+  "meta_key": "channel",
+  "n": "35"
+ },
+ {
+  "entity_type": "receipt",
+  "action": "send",
+  "meta_key": "trigger",
+  "n": "35"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action": "update",
+  "meta_key": "linked_invoice",
+  "n": "26"
+ }
+]
+
+
+=============== C3 metadata keys per entity+action (agent-os) ===============
+[
+ {
+  "entity_type": "commercial_roi_lookup",
+  "action": "calculate",
+  "meta_key": "usageKwh",
+  "n": "24"
+ },
+ {
+  "entity_type": "commercial_roi_lookup",
+  "action": "calculate",
+  "meta_key": "matched",
+  "n": "24"
+ },
+ {
+  "entity_type": "invoice",
+  "action": "visit",
+  "meta_key": "deviceHash",
+  "n": "294"
+ },
+ {
+  "entity_type": "invoice",
+  "action": "visit",
+  "meta_key": "pageType",
+  "n": "294"
+ },
+ {
+  "entity_type": "residential_roi_calculation",
+  "action": "calculate",
+  "meta_key": "sunPeakHour",
+  "n": "279"
+ },
+ {
+  "entity_type": "residential_roi_calculation",
+  "action": "calculate",
+  "meta_key": "monthlySavings",
+  "n": "279"
+ },
+ {
+  "entity_type": "residential_roi_calculation",
+  "action": "calculate",
+  "meta_key": "batterySize",
+  "n": "279"
+ },
+ {
+  "entity_type": "residential_roi_calculation",
+  "action": "calculate",
+  "meta_key": "billAmount",
+  "n": "279"
+ }
+]
+
+
+=============== C4 ee-admin sample rows (one per entity+action) ===============
+[
+ {
+  "entity_type": "attachment",
+  "action": "upload",
+  "status": "success",
+  "error_message": null,
+  "actor_name": "Nur 'Ain Atiqah binti Mohd Yasin",
+  "actor_role": "user",
+  "actor_user_id": 104,
+  "actor_ref": "0104138239",
+  "entity_id": "4142904f-1755-4870-abfb-7373f2a86d1a",
+  "entity_label": "Screenshot 2026-07-30 143129.png",
+  "description": "pv attachment \"Screenshot 2026-07-30 143129.png\" uploaded to invoice 4142904f-1755-4870-abfb-7373f2a86d1a",
+  "fields": null,
+  "source_url": "https://admin.atap.solar/engineering-v2",
+  "metadata": {
+   "surface": "engineering-v2",
+   "upload_type": "pv"
+  },
+  "occurred_at": "2026-07-30T06:31:42.241Z"
+ },
+ {
+  "entity_type": "customer",
+  "action": "update",
+  "status": "success",
+  "error_message": null,
+  "actor_name": "ADMIN",
+  "actor_role": "user",
+  "actor_user_id": 3,
+  "actor_ref": "01168780422",
+  "entity_id": "3959",
+  "entity_label": "Tay Chan Kor (ATAP)",
+  "description": "ADMIN updated customer Tay Chan Kor (ATAP) (name, email, phone, address, city, state, postcode, notes)",
+  "fields": [
+   "name",
+   "email",
+   "phone",
+   "address",
+   "city",
+   "state",
+   "postcode",
+   "notes"
+  ],
+  "source_url": "https://admin.atap.solar/customers",
+  "metadata": {},
+  "occurred_at": "2026-07-30T06:39:52.151Z"
+ },
+ {
+  "entity_type": "invoice",
+  "action": "print",
+  "status": "success",
+  "error_message": null,
+  "actor_name": "ADMIN",
+  "actor_role": "user",
+  "actor_user_id": 3,
+  "actor_ref": "01168780422",
+  "entity_id": "166226",
+  "entity_label": "INV-1010914",
+  "description": "ADMIN printed invoice INV-1010914",
+  "fields": null,
+  "source_url": "/invoices/166226/print",
+  "metadata": {
+   "surface": "print_page",
+   "version": "v2"
+  },
+  "occurred_at": "2026-07-30T03:11:58.779Z"
+ },
+ {
+  "entity_type": "invoice",
+  "action": "update",
+  "status": "success",
+  "error_message": null,
+  "actor_name": "ADMIN",
+  "actor_role": "user",
+  "actor_user_id": 3,
+  "actor_ref": "01168780422",
+  "entity_id": "166217",
+  "entity_label": "INV-1010905",
+  "description": "Agent changed from — to ZUL on invoice INV-1010905",
+  "fields": [
+   "linked_agent"
+  ],
+  "source_url": "https://admin.atap.solar/invoices",
+  "metadata": {},
+  "occurred_at": "2026-07-28T06:36:59.389Z"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action": "create",
+  "status": "success",
+  "error_message": null,
+  "actor_name": "ADMIN",
+  "actor_role": "user",
+  "actor_user_id": 3,
+  "actor_ref": "01168780422",
+  "entity_id": "34309",
+  "entity_label": "1X [1P] SAJ R5 7KW String Inverter\nChange to \n1X [3P] SAJ R5 8KW String Inverter",
+  "description": "ADMIN created invoice_item 1X [1P] SAJ R5 7KW String Inverter\nChange to \n1X [3P] SAJ R5 8KW String Inverter",
+  "fields": null,
+  "source_url": "https://admin.atap.solar/invoices",
+  "metadata": {
+   "invoice_id": 8493,
+   "invoice_number": "1008287"
+  },
+  "occurred_at": "2026-07-30T06:31:04.456Z"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action": "delete",
+  "status": "success",
+  "error_message": null,
+  "actor_name": "ADMIN",
+  "actor_role": "user",
+  "actor_user_id": 3,
+  "actor_ref": "01168780422",
+  "entity_id": "30685",
+  "entity_label": "Discount (6% RM2059.80)\nCEO Discount (RM670.20)",
+  "description": "ADMIN deleted invoice_item Discount (6% RM2059.80)\nCEO Discount (RM670.20)",
+  "fields": null,
+  "source_url": "https://admin.atap.solar/invoices",
+  "metadata": {
+   "invoice_id": 165349,
+   "invoice_number": "INV-1010043"
+  },
+  "occurred_at": "2026-07-29T08:39:23.170Z"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action": "update",
+  "status": "success",
+  "error_message": null,
+  "actor_name": "ADMIN",
+  "actor_role": "user",
+  "actor_user_id": 3,
+  "actor_ref": "01168780422",
+  "entity_id": "34244",
+  "entity_label": "EPP Interest (RM8855.66 x 6%) 36 Months PBB = RM531.32\nEPP Interest (RM15,179.32 x 6%) 36 Months PBB = RM910.76",
+  "description": "ADMIN updated invoice_item EPP Interest (RM8855.66 x 6%) 36 Months PBB = RM531.32\nEPP Interest (RM15,179.32 x 6%) 36 Months PBB = RM910.76 (description, qty, unit_price)",
+  "fields": [
+   "description",
+   "qty",
+   "unit_price"
+  ],
+  "source_url": "https://admin.atap.solar/invoices",
+  "metadata": {
+   "invoice_id": 8493,
+   "invoice_number": "1008287"
+  },
+  "occurred_at": "2026-07-30T06:35:16.092Z"
+ },
+ {
+  "entity_type": "payment",
+  "action": "verify",
+  "status": "success",
+  "error_message": null,
+  "actor_name": "Ms Teoh",
+  "actor_role": "user",
+  "actor_user_id": 67,
+  "actor_ref": "6590097334",
+  "entity_id": "1288",
+  "entity_label": "pay_f2196b082059f7cf",
+  "description": "Ms Teoh verify payment pay_f2196b082059f7cf",
+  "fields": null,
+  "source_url": "https://admin.atap.solar/payments",
+  "metadata": {
+   "amount": "10000",
+   "linked_invoice": "1759983140560x990407384878284800",
+   "payment_method": "CREDIT CARD"
+  },
+  "occurred_at": "2026-07-30T04:59:30.571Z"
+ },
+ {
+  "entity_type": "receipt",
+  "action": "send",
+  "status": "failed",
+  "error_message": "WhatsApp API error: {\"error\":\"Request failed with status code 404\"}",
+  "actor_name": "Ms Teoh",
+  "actor_role": "user",
+  "actor_user_id": 67,
+  "actor_ref": "6590097334",
+  "entity_id": "1288",
+  "entity_label": null,
+  "description": "Ms Teoh sent receipt 1288 — FAILED",
+  "fields": null,
+  "source_url": "https://admin.atap.solar/payments",
+  "metadata": {
+   "channel": "whatsapp",
+   "trigger": "auto_on_verify"
+  },
+  "occurred_at": "2026-07-30T04:59:30.559Z"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action": "update",
+  "status": "success",
+  "error_message": null,
+  "actor_name": "Ms Teoh",
+  "actor_role": "user",
+  "actor_user_id": 67,
+  "actor_ref": "6590097334",
+  "entity_id": "1314",
+  "entity_label": "pay_5f4e0b01fd5f1d50",
+  "description": "System Admin updated submitted payment pay_5f4e0b01fd5f1d50 (1 change)",
+  "fields": [
+   "amount",
+   "payment_method",
+   "payment_date",
+   "epp_type",
+   "epp_month",
+   "issuer_bank"
+  ],
+  "source_url": "https://admin.atap.solar/payments",
+  "metadata": {
+   "linked_invoice": "1764947566669x218650283375591420"
+  },
+  "occurred_at": "2026-07-30T04:51:49.264Z"
+ },
+ {
+  "entity_type": "user",
+  "action": "update",
+  "status": "success",
+  "error_message": null,
+  "actor_name": "ADMIN",
+  "actor_role": "user",
+  "actor_user_id": 3,
+  "actor_ref": "01168780422",
+  "entity_id": "134",
+  "entity_label": "OLIVIER KOH CHONG LEE",
+  "description": "ADMIN updated user OLIVIER KOH CHONG LEE (name, email, contact, address, banker, bankin_account, access_level)",
+  "fields": [
+   "name",
+   "email",
+   "contact",
+   "address",
+   "banker",
+   "bankin_account",
+   "access_level"
+  ],
+  "source_url": "https://admin.atap.solar/users",
+  "metadata": {},
+  "occurred_at": "2026-07-30T04:32:15.969Z"
+ }
+]
+
+
+=============== C5 failed rows detail ===============
+[
+ {
+  "entity_type": "receipt",
+  "action": "send",
+  "err": "WhatsApp API error: {\"error\":\"Request failed with status code 404\"}",
+  "n": "35",
+  "first_seen": "2026-07-28T22:55:04.218Z",
+  "last_seen": "2026-07-30T04:59:30.559Z"
+ }
+]
+
+
+=============== C6 ee-admin actors ===============
+[
+ {
+  "actor_user_id": 67,
+  "actor_name": "Ms Teoh",
+  "actor_role": "user",
+  "actor_ref": "6590097334",
+  "n": "100"
+ },
+ {
+  "actor_user_id": 3,
+  "actor_name": "ADMIN",
+  "actor_role": "user",
+  "actor_ref": "01168780422",
+  "n": "78"
+ },
+ {
+  "actor_user_id": 104,
+  "actor_name": "Nur 'Ain Atiqah binti Mohd Yasin",
+  "actor_role": "user",
+  "actor_ref": "0104138239",
+  "n": "14"
+ },
+ {
+  "actor_user_id": 7182,
+  "actor_name": "Michelle",
+  "actor_role": "user",
+  "actor_ref": "0124445867",
+  "n": "5"
+ },
+ {
+  "actor_user_id": 17,
+  "actor_name": "GAN LAI HOCK",
+  "actor_role": "user",
+  "actor_ref": "0167203396",
+  "n": "1"
+ }
+]
+
+
+=============== C7 agent-os actors top ===============
+[
+ {
+  "actor_name": "(null)",
+  "actor_kind": "user",
+  "n": "201",
+  "with_id": "0"
+ },
+ {
+  "actor_name": "ALIAH NABIHAH BINTI HAIRUL NIZAM",
+  "actor_kind": "user",
+  "n": "48",
+  "with_id": "0"
+ },
+ {
+  "actor_name": "Koh Yi Jay",
+  "actor_kind": "user",
+  "n": "41",
+  "with_id": "23"
+ },
+ {
+  "actor_name": "Anonymous viewer",
+  "actor_kind": "user",
+  "n": "40",
+  "with_id": "0"
+ },
+ {
+  "actor_name": "Nur 'Ain Atiqah binti Mohd Yasin",
+  "actor_kind": "user",
+  "n": "32",
+  "with_id": "0"
+ },
+ {
+  "actor_name": "Ms Teoh",
+  "actor_kind": "user",
+  "n": "28",
+  "with_id": "0"
+ },
+ {
+  "actor_name": "LING LIANG KANG",
+  "actor_kind": "user",
+  "n": "28",
+  "with_id": "17"
+ },
+ {
+  "actor_name": "CHAN JIA WEI",
+  "actor_kind": "user",
+  "n": "22",
+  "with_id": "12"
+ },
+ {
+  "actor_name": "ANNIE",
+  "actor_kind": "user",
+  "n": "20",
+  "with_id": "0"
+ },
+ {
+  "actor_name": "CHAN WING ON",
+  "actor_kind": "user",
+  "n": "20",
+  "with_id": "16"
+ },
+ {
+  "actor_name": "Ng Zhan Yi",
+  "actor_kind": "user",
+  "n": "18",
+  "with_id": "15"
+ },
+ {
+  "actor_name": "CHING ZHE HANG",
+  "actor_kind": "user",
+  "n": "13",
+  "with_id": "3"
+ },
+ {
+  "actor_name": "Sunny Tan",
+  "actor_kind": "user",
+  "n": "12",
+  "with_id": "7"
+ },
+ {
+  "actor_name": "GUI KIAN WEE",
+  "actor_kind": "user",
+  "n": "11",
+  "with_id": "11"
+ },
+ {
+  "actor_name": "Michelle",
+  "actor_kind": "user",
+  "n": "11",
+  "with_id": "0"
+ }
+]
+
+
+=============== C8 source_url shapes ===============
+[
+ {
+  "app": "agent-os",
+  "source_url": "/api/invoice-view-activity",
+  "n": "291"
+ },
+ {
+  "app": "ee-admin",
+  "source_url": "https://admin.atap.solar/payments",
+  "n": "97"
+ },
+ {
+  "app": "ee-admin",
+  "source_url": "https://admin.atap.solar/invoices",
+  "n": "51"
+ },
+ {
+  "app": "ee-admin",
+  "source_url": "https://admin.atap.solar/engineering-v2",
+  "n": "14"
+ },
+ {
+  "app": "agent-os",
+  "source_url": "/api/v1/invoices/on-the-fly",
+  "n": "14"
+ },
+ {
+  "app": "ee-admin",
+  "source_url": "https://admin.atap.solar/customers",
+  "n": "13"
+ },
+ {
+  "app": "ee-admin",
+  "source_url": "/invoices/164929/print",
+  "n": "5"
+ },
+ {
+  "app": "agent-os",
+  "source_url": "/api/solar-calculation?amount=600&sunPeakHour=3.4&morningUsage=30&panelType=650&smpPrice=0.2703&afaRate=0&historicalAfaRate=0.0259&percentDiscount=0&fixedDiscount=3000&systemPhase=3&inverterType=string&batterySize=0&batteryLossPercent=0&batteryDodPercent=5&overridePanels=20",
+  "n": "4"
+ },
+ {
+  "app": "agent-os",
+  "source_url": "/api/solar-calculation?amount=500&sunPeakHour=3.4&morningUsage=30&panelType=650&smpPrice=0.2703&afaRate=0&historicalAfaRate=-0.0047&percentDiscount=0&fixedDiscount=0&systemPhase=3&inverterType=string&batterySize=0&batteryLossPercent=0&batteryDodPercent=5",
+  "n": "4"
+ },
+ {
+  "app": "agent-os",
+  "source_url": "/api/commercial/lookup-by-usage?usage=1472.2513312499998",
+  "n": "3"
+ },
+ {
+  "app": "ee-admin",
+  "source_url": "/invoices/165350/print",
+  "n": "3"
+ },
+ {
+  "app": "ee-admin",
+  "source_url": "/invoices/166178/print",
+  "n": "3"
+ },
+ {
+  "app": "agent-os",
+  "source_url": "/api/commercial/lookup-by-usage?usage=1425.3617612500002",
+  "n": "3"
+ },
+ {
+  "app": "agent-os",
+  "source_url": "/api/solar-calculation?amount=1000&sunPeakHour=3.4&morningUsage=30&panelType=650&smpPrice=0.2703&afaRate=0&historicalAfaRate=0.0359&percentDiscount=0&fixedDiscount=3000&systemPhase=3&inverterType=hybrid&batterySize=0&batteryLossPercent=0&batteryDodPercent=5",
+  "n": "3"
+ },
+ {
+  "app": "agent-os",
+  "source_url": "/api/solar-calculation?amount=1000&sunPeakHour=3.4&morningUsage=30&panelType=650&smpPrice=0.2703&afaRate=0&historicalAfaRate=0.0359&percentDiscount=0&fixedDiscount=0&systemPhase=3&inverterType=string&batterySize=0&batteryLossPercent=0&batteryDodPercent=5",
+  "n": "3"
+ },
+ {
+  "app": "agent-os",
+  "source_url": "/api/solar-calculation?amount=500&sunPeakHour=3.4&morningUsage=30&panelType=650&smpPrice=0.2703&afaRate=0&historicalAfaRate=-0.0047&percentDiscount=0&fixedDiscount=0&systemPhase=1&inverterType=hybrid&batterySize=0&batteryLossPercent=0&batteryDodPercent=5&overridePanels=14",
+  "n": "2"
+ },
+ {
+  "app": "agent-os",
+  "source_url": "/api/solar-calculation?amount=650&sunPeakHour=3.4&morningUsage=30&panelType=650&smpPrice=0.2703&afaRate=0&historicalAfaRate=-0.0047&percentDiscount=0&fixedDiscount=3000&systemPhase=1&inverterType=string&batterySize=0&batteryLossPercent=0&batteryDodPercent=5&overridePanels=20",
+  "n": "2"
+ },
+ {
+  "app": "agent-os",
+  "source_url": "/api/solar-calculation?amount=500&sunPeakHour=3.4&morningUsage=30&panelType=650&smpPrice=0.2703&afaRate=0&historicalAfaRate=-0.0047&percentDiscount=0&fixedDiscount=3000&systemPhase=1&inverterType=string&batterySize=0&batteryLossPercent=0&batteryDodPercent=5&overridePanels=14",
+  "n": "2"
+ },
+ {
+  "app": "agent-os",
+  "source_url": "/api/solar-calculation?amount=600&sunPeakHour=3.4&morningUsage=30&panelType=650&smpPrice=0.2703&afaRate=0&historicalAfaRate=0.0259&percentDiscount=0&fixedDiscount=0&systemPhase=3&inverterType=string&batterySize=0&batteryLossPercent=0&batteryDodPercent=5",
+  "n": "2"
+ },
+ {
+  "app": "agent-os",
+  "source_url": "/api/solar-calculation?amount=600&sunPeakHour=3.4&morningUsage=35&panelType=650&smpPrice=0.2703&afaRate=0&historicalAfaRate=0.0259&percentDiscount=0&fixedDiscount=3000&systemPhase=3&inverterType=string&batterySize=0&batteryLossPercent=0&batteryDodPercent=5&overridePanels=20",
+  "n": "2"
+ }
+]
+
+
+=============== C9 hourly volume last 3 days ===============
+[
+ {
+  "hr": "07-30 14:00",
+  "app": "agent-os",
+  "n": "20"
+ },
+ {
+  "hr": "07-30 14:00",
+  "app": "ee-admin",
+  "n": "5"
+ },
+ {
+  "hr": "07-30 13:00",
+  "app": "agent-os",
+  "n": "30"
+ },
+ {
+  "hr": "07-30 13:00",
+  "app": "ee-admin",
+  "n": "2"
+ },
+ {
+  "hr": "07-30 12:00",
+  "app": "agent-os",
+  "n": "40"
+ },
+ {
+  "hr": "07-30 12:00",
+  "app": "ee-admin",
+  "n": "26"
+ },
+ {
+  "hr": "07-30 11:00",
+  "app": "agent-os",
+  "n": "89"
+ },
+ {
+  "hr": "07-30 11:00",
+  "app": "ee-admin",
+  "n": "29"
+ },
+ {
+  "hr": "07-30 10:00",
+  "app": "agent-os",
+  "n": "15"
+ },
+ {
+  "hr": "07-30 10:00",
+  "app": "ee-admin",
+  "n": "5"
+ },
+ {
+  "hr": "07-30 06:00",
+  "app": "agent-os",
+  "n": "3"
+ },
+ {
+  "hr": "07-30 00:00",
+  "app": "agent-os",
+  "n": "1"
+ },
+ {
+  "hr": "07-29 23:00",
+  "app": "agent-os",
+  "n": "2"
+ },
+ {
+  "hr": "07-29 22:00",
+  "app": "agent-os",
+  "n": "18"
+ },
+ {
+  "hr": "07-29 21:00",
+  "app": "agent-os",
+  "n": "20"
+ },
+ {
+  "hr": "07-29 20:00",
+  "app": "agent-os",
+  "n": "8"
+ },
+ {
+  "hr": "07-29 19:00",
+  "app": "agent-os",
+  "n": "4"
+ },
+ {
+  "hr": "07-29 18:00",
+  "app": "agent-os",
+  "n": "6"
+ },
+ {
+  "hr": "07-29 17:00",
+  "app": "agent-os",
+  "n": "33"
+ },
+ {
+  "hr": "07-29 17:00",
+  "app": "ee-admin",
+  "n": "4"
+ },
+ {
+  "hr": "07-29 16:00",
+  "app": "agent-os",
+  "n": "61"
+ },
+ {
+  "hr": "07-29 16:00",
+  "app": "ee-admin",
+  "n": "25"
+ },
+ {
+  "hr": "07-29 15:00",
+  "app": "agent-os",
+  "n": "56"
+ },
+ {
+  "hr": "07-29 14:00",
+  "app": "agent-os",
+  "n": "28"
+ },
+ {
+  "hr": "07-29 14:00",
+  "app": "ee-admin",
+  "n": "4"
+ },
+ {
+  "hr": "07-29 13:00",
+  "app": "agent-os",
+  "n": "62"
+ },
+ {
+  "hr": "07-29 13:00",
+  "app": "ee-admin",
+  "n": "3"
+ },
+ {
+  "hr": "07-29 12:00",
+  "app": "agent-os",
+  "n": "53"
+ },
+ {
+  "hr": "07-29 12:00",
+  "app": "ee-admin",
+  "n": "4"
+ },
+ {
+  "hr": "07-29 11:00",
+  "app": "agent-os",
+  "n": "41"
+ },
+ {
+  "hr": "07-29 11:00",
+  "app": "ee-admin",
+  "n": "11"
+ },
+ {
+  "hr": "07-29 10:00",
+  "app": "agent-os",
+  "n": "40"
+ },
+ {
+  "hr": "07-29 10:00",
+  "app": "ee-admin",
+  "n": "3"
+ },
+ {
+  "hr": "07-29 09:00",
+  "app": "agent-os",
+  "n": "1"
+ },
+ {
+  "hr": "07-29 09:00",
+  "app": "ee-admin",
+  "n": "15"
+ },
+ {
+  "hr": "07-29 08:00",
+  "app": "ee-admin",
+  "n": "22"
+ },
+ {
+  "hr": "07-29 07:00",
+  "app": "ee-admin",
+  "n": "9"
+ },
+ {
+  "hr": "07-29 06:00",
+  "app": "ee-admin",
+  "n": "3"
+ },
+ {
+  "hr": "07-28 18:00",
+  "app": "ee-admin",
+  "n": "3"
+ },
+ {
+  "hr": "07-28 17:00",
+  "app": "ee-admin",
+  "n": "12"
+ }
+]
+
+
+=============== C10 entity_label / entity_id fill rate ===============
+[
+ {
+  "app": "agent-os",
+  "entity_type": "invoice",
+  "n": "328",
+  "with_entity_id": "328",
+  "with_label": "317",
+  "with_desc": "328",
+  "with_ip": "0",
+  "with_ua": "0",
+  "with_req": "0"
+ },
+ {
+  "app": "agent-os",
+  "entity_type": "residential_roi_calculation",
+  "n": "279",
+  "with_entity_id": "0",
+  "with_label": "0",
+  "with_desc": "279",
+  "with_ip": "0",
+  "with_ua": "0",
+  "with_req": "0"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "invoice_item",
+  "n": "47",
+  "with_entity_id": "47",
+  "with_label": "47",
+  "with_desc": "47",
+  "with_ip": "47",
+  "with_ua": "47",
+  "with_req": "0"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "payment",
+  "n": "36",
+  "with_entity_id": "36",
+  "with_label": "36",
+  "with_desc": "36",
+  "with_ip": "36",
+  "with_ua": "36",
+  "with_req": "0"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "receipt",
+  "n": "35",
+  "with_entity_id": "35",
+  "with_label": "0",
+  "with_desc": "35",
+  "with_ip": "35",
+  "with_ua": "35",
+  "with_req": "0"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "invoice",
+  "n": "26",
+  "with_entity_id": "26",
+  "with_label": "26",
+  "with_desc": "26",
+  "with_ip": "26",
+  "with_ua": "26",
+  "with_req": "0"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "submitted_payment",
+  "n": "26",
+  "with_entity_id": "26",
+  "with_label": "26",
+  "with_desc": "26",
+  "with_ip": "26",
+  "with_ua": "26",
+  "with_req": "0"
+ },
+ {
+  "app": "agent-os",
+  "entity_type": "commercial_roi_lookup",
+  "n": "24",
+  "with_entity_id": "0",
+  "with_label": "0",
+  "with_desc": "24",
+  "with_ip": "0",
+  "with_ua": "0",
+  "with_req": "0"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "attachment",
+  "n": "14",
+  "with_entity_id": "14",
+  "with_label": "14",
+  "with_desc": "14",
+  "with_ip": "14",
+  "with_ua": "14",
+  "with_req": "0"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "customer",
+  "n": "13",
+  "with_entity_id": "13",
+  "with_label": "13",
+  "with_desc": "13",
+  "with_ip": "13",
+  "with_ua": "13",
+  "with_req": "0"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "user",
+  "n": "1",
+  "with_entity_id": "1",
+  "with_label": "1",
+  "with_desc": "1",
+  "with_ip": "1",
+  "with_ua": "1",
+  "with_req": "0"
+ }
+]
+
+
+=============== C11 agent-os sample rows ===============
+[
+ {
+  "entity_type": "commercial_roi_lookup",
+  "action": "calculate",
+  "actor_name": "Koh Yi Jay",
+  "actor_ref": "user_c9980acd8d628c46",
+  "actor_user_id": 7172,
+  "entity_id": null,
+  "entity_label": null,
+  "description": "Koh Yi Jay ran a commercial bill lookup (usage 1519.1409012499998 kWh)",
+  "fields": null,
+  "metadata": {
+   "matched": true,
+   "usageKwh": 1519.1409012499998
+  },
+  "occurred_at": "2026-07-30T03:34:31.764Z"
+ },
+ {
+  "entity_type": "invoice",
+  "action": "create",
+  "actor_name": "Ng Zhan Yi",
+  "actor_ref": "1752217735838x805157760526423700",
+  "actor_user_id": 123,
+  "entity_id": "ae49fd3c-1218-41a6-bb88-7d96f68f8542",
+  "entity_label": "INV-1010833",
+  "description": "Ng Zhan Yi generated a new version of quotation INV-1010833",
+  "fields": null,
+  "metadata": {},
+  "occurred_at": "2026-07-30T04:20:40.390Z"
+ },
+ {
+  "entity_type": "invoice",
+  "action": "delete",
+  "actor_name": "Koh Yi Jay",
+  "actor_ref": "user_c9980acd8d628c46",
+  "actor_user_id": 7172,
+  "entity_id": "935a948e-2680-4ab5-a66b-d7f99b48843c",
+  "entity_label": null,
+  "description": "Koh Yi Jay deleted invoice",
+  "fields": null,
+  "metadata": {},
+  "occurred_at": "2026-07-30T03:40:09.574Z"
+ },
+ {
+  "entity_type": "invoice",
+  "action": "visit",
+  "actor_name": "ADMIN",
+  "actor_ref": null,
+  "actor_user_id": null,
+  "entity_id": "1767344782029x503549742313635800",
+  "entity_label": "1767344782029x503549742313635800",
+  "description": "ADMIN visited invoice 1767344782029x503549742313635800",
+  "fields": null,
+  "metadata": {
+   "pageType": "invoice",
+   "deviceHash": "870fcc19406694edeb497994ddc16a1722c2d61efe4fb7b963490bab3cec2b08"
+  },
+  "occurred_at": "2026-07-30T06:39:27.551Z"
+ },
+ {
+  "entity_type": "residential_roi_calculation",
+  "action": "calculate",
+  "actor_name": "Sunny Tan",
+  "actor_ref": "1720599258686x746550333093413100",
+  "actor_user_id": 49,
+  "entity_id": null,
+  "entity_label": null,
+  "description": "Sunny Tan generated a residential solar ROI calculation",
+  "fields": null,
+  "metadata": {
+   "billAmount": "550",
+   "batterySize": "0",
+   "sunPeakHour": "3.4",
+   "monthlySavings": "357.47"
+  },
+  "occurred_at": "2026-07-30T06:43:45.307Z"
+ }
+]
+
+
+=============== C12 ai_activity_log volume ===============
+[
+ {
+  "app": "ee-saj-api",
+  "agent": "claude-sonnet-5",
+  "agent_kind": "main_loop",
+  "model": "claude-sonnet-5",
+  "action": "implement_feature",
+  "n": "1",
+  "first_seen": "2026-07-28T08:14:02.827Z",
+  "last_seen": "2026-07-28T08:14:02.827Z"
+ }
+]
+
+
+=============== C13 user table for admin-os user events ===============
+[
+ {
+  "users": "216",
+  "with_pic": "137",
+  "with_dept": "82",
+  "with_code": "11"
+ }
+]

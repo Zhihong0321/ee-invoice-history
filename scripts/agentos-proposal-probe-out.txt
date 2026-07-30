@@ -1,0 +1,52 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+=== P0 agent-os presence ===
+[
+  {
+    "app_env": "dev",
+    "entity_type": "invoice",
+    "actor_kind": "user",
+    "n": "367",
+    "first_seen": "2026-07-29T01:57:11.710Z",
+    "last_seen": "2026-07-30T08:50:26.302Z"
+  },
+  {
+    "app_env": "dev",
+    "entity_type": "residential_roi_calculation",
+    "actor_kind": "user",
+    "n": "326",
+    "first_seen": "2026-07-29T02:08:30.955Z",
+    "last_seen": "2026-07-30T08:12:10.627Z"
+  },
+  {
+    "app_env": "dev",
+    "entity_type": "commercial_roi_lookup",
+    "actor_kind": "user",
+    "n": "27",
+    "first_seen": "2026-07-29T05:52:01.843Z",
+    "last_seen": "2026-07-30T07:17:32.418Z"
+  },
+  {
+    "app_env": "dev",
+    "entity_type": "attachment",
+    "actor_kind": "user",
+    "n": "13",
+    "first_seen": "2026-07-30T08:49:40.117Z",
+    "last_seen": "2026-07-30T08:54:17.728Z"
+  }
+]
+
+=== P1 exact match count ===
+[
+  {
+    "n": "0",
+    "first_seen": null,
+    "last_seen": null
+  }
+]
+
+=== P2 sample rows ===
+[]
+
+=== P3 all apps with entity_type=proposal ===
+[]

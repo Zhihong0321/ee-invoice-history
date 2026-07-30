@@ -1,0 +1,43 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+=== distinct source_app values (invoice_audit_log) (5 rows) ===
+[
+  {
+    "source_app": "public-view-tracker",
+    "n": "35256"
+  },
+  {
+    "source_app": "agent-os",
+    "n": "31005"
+  },
+  {
+    "source_app": "(null)",
+    "n": "14606"
+  },
+  {
+    "source_app": "ee-admin",
+    "n": "4477"
+  },
+  {
+    "source_app": "external-seda-api",
+    "n": "48"
+  }
+]
+
+=== distinct app values (activity_log) (2 rows) ===
+[
+  {
+    "app": "agent-os",
+    "n": "671"
+  },
+  {
+    "app": "ee-admin",
+    "n": "200"
+  }
+]
+
+=== ee-main rows in invoice_audit_log (0 rows) ===
+[]
+
+=== ee-main rows in activity_log (0 rows) ===
+[]

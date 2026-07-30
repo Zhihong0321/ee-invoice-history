@@ -1,0 +1,1510 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+
+=============== A1 audit: entity/action matrix ===============
+[
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "2071",
+  "first_seen": "2026-05-08T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z",
+  "invoices": "358",
+  "actors": "44"
+ },
+ {
+  "entity_type": "seda",
+  "action_type": "update",
+  "n": "1610",
+  "first_seen": "2025-07-01T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z",
+  "invoices": "1544",
+  "actors": "0"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "925",
+  "first_seen": "2026-05-08T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z",
+  "invoices": "404",
+  "actors": "47"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "n": "237",
+  "first_seen": "2026-05-10T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z",
+  "invoices": "103",
+  "actors": "32"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "n": "111",
+  "first_seen": "2026-07-21T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z",
+  "invoices": "111",
+  "actors": "0"
+ }
+]
+
+
+=============== A2 audit: change fields used per entity ===============
+[
+ {
+  "entity_type": "seda",
+  "action_type": "update",
+  "field": "seda_status",
+  "n": "1567"
+ },
+ {
+  "entity_type": "seda",
+  "action_type": "update",
+  "field": "mapper_status",
+  "n": "43"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "field": "Admin Status",
+  "n": "111"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "field": "Assigned Agent",
+  "n": "111"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "field": "Linked Customer",
+  "n": "111"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "field": "SEDA Registration",
+  "n": "111"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "field": "Registration Status",
+  "n": "111"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "Phase Type",
+  "n": "384"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "IC Number",
+  "n": "266"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "Applicant Email",
+  "n": "261"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "Installation Address",
+  "n": "257"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "Emergency Contact Name",
+  "n": "254"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "Emergency Contact MyKad",
+  "n": "248"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "Emergency Contact Phone",
+  "n": "246"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "Emergency Contact Email",
+  "n": "246"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "Emergency Contact Relationship",
+  "n": "244"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "TNB Account No",
+  "n": "238"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "State",
+  "n": "225"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "Postcode",
+  "n": "220"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "City",
+  "n": "217"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "TIN",
+  "n": "201"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "Applicant Name",
+  "n": "105"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "Applicant Phone",
+  "n": "104"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "Linked Customer",
+  "n": "31"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "field": "Assigned Agent",
+  "n": "2"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "field": "TNB Bill Month 1",
+  "n": "306"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "field": "Property Ownership Proof",
+  "n": "282"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "field": "TNB Bill Month 2",
+  "n": "272"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "field": "TNB Meter Image",
+  "n": "268"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "field": "TNB Bill Month 3",
+  "n": "258"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "field": "MyKad Front",
+  "n": "181"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "field": "Tax Document",
+  "n": "181"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "field": "MyKad Back",
+  "n": "170"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "field": "MyKad PDF",
+  "n": "104"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "field": "SSM Registration",
+  "n": "35"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "field": "SSM Form 49",
+  "n": "5"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "field": "Company Stamp",
+  "n": "4"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "field": "SSM Form 9",
+  "n": "3"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "field": "TNB Bills Up to 12 Months",
+  "n": "2"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "field": "TNB Bill Month 1",
+  "n": "56"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "field": "TNB Bill Month 3",
+  "n": "43"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "field": "TNB Bill Month 2",
+  "n": "42"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "field": "Property Ownership Proof",
+  "n": "30"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "field": "MyKad Front",
+  "n": "15"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "field": "TNB Meter Image",
+  "n": "15"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "field": "Tax Document",
+  "n": "14"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "field": "MyKad Back",
+  "n": "9"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "field": "MyKad PDF",
+  "n": "7"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "field": "SSM Registration",
+  "n": "2"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "field": "SSM Form 49",
+  "n": "2"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "field": "TNB Bills Up to 12 Months",
+  "n": "1"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "field": "Company Stamp",
+  "n": "1"
+ }
+]
+
+
+=============== A3 audit: seda_status transitions ===============
+[
+ {
+  "before": null,
+  "after": "Pending",
+  "n": "1343"
+ },
+ {
+  "before": null,
+  "after": "Submitted",
+  "n": "118"
+ },
+ {
+  "before": "Pending",
+  "after": "Submitted",
+  "n": "47"
+ },
+ {
+  "before": "Pending",
+  "after": "Approved",
+  "n": "30"
+ },
+ {
+  "before": "Submitted",
+  "after": "Approved",
+  "n": "23"
+ },
+ {
+  "before": null,
+  "after": "Approved",
+  "n": "4"
+ },
+ {
+  "before": null,
+  "after": "APPROVED BY SEDA",
+  "n": "1"
+ },
+ {
+  "before": "Approved",
+  "after": "Submitted",
+  "n": "1"
+ }
+]
+
+
+=============== A4 audit: actors ===============
+[
+ {
+  "entity_type": "seda",
+  "actor": "(null)",
+  "role": "-",
+  "app": "ee-admin",
+  "n": "1465"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "jiawei0908@outlook.com",
+  "role": "sales",
+  "app": "agent-os",
+  "n": "170"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "louisng0705@gmail.com",
+  "role": "sales, team-kluang, report",
+  "app": "agent-os",
+  "n": "162"
+ },
+ {
+  "entity_type": "seda_registration",
+  "actor": "(null)",
+  "role": "-",
+  "app": "agent-os",
+  "n": "144"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "lingliangkang2402@gmail.com",
+  "role": "admin, sales",
+  "app": "agent-os",
+  "n": "128"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "siochui4613@gmail.com",
+  "role": "sales",
+  "app": "agent-os",
+  "n": "118"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "yeeling_pua@hotmail.com",
+  "role": "sales, team-kluang, report, admin",
+  "app": "agent-os",
+  "n": "115"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "zhehaang.ching@gmail.com",
+  "role": "hr, sales, team-seremban, report",
+  "app": "agent-os",
+  "n": "103"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "dean.leongyee@gmail.com",
+  "role": "sales",
+  "app": "agent-os",
+  "n": "102"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "mutu_chan1221@hotmail.com",
+  "role": "sales",
+  "app": "agent-os",
+  "n": "101"
+ },
+ {
+  "entity_type": "seda",
+  "actor": "(null)",
+  "role": "user",
+  "app": "ee-admin",
+  "n": "97"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "mail2olivier@gmail.com",
+  "role": "sales",
+  "app": "agent-os",
+  "n": "85"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "cjloo0912@gmail.com",
+  "role": "sales",
+  "app": "agent-os",
+  "n": "70"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "denise.ng.eternalgy@gmail.com",
+  "role": "team-jb, sales, report",
+  "app": "agent-os",
+  "n": "61"
+ },
+ {
+  "entity_type": "seda_registration",
+  "actor": "louisng0705@gmail.com",
+  "role": "sales, team-kluang, report",
+  "app": "agent-os",
+  "n": "61"
+ },
+ {
+  "entity_type": "seda_registration",
+  "actor": "lingliangkang2402@gmail.com",
+  "role": "admin, sales",
+  "app": "agent-os",
+  "n": "58"
+ },
+ {
+  "entity_type": "seda_registration",
+  "actor": "zhehaang.ching@gmail.com",
+  "role": "hr, sales, team-seremban, report",
+  "app": "agent-os",
+  "n": "52"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "limgang60@gmail.com",
+  "role": "sales",
+  "app": "agent-os",
+  "n": "52"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "aaeternalgy@gmil.com",
+  "role": "admin, seda",
+  "app": "agent-os",
+  "n": "51"
+ },
+ {
+  "entity_type": "seda_registration",
+  "actor": "yeeling_pua@hotmail.com",
+  "role": "sales, team-kluang, report, admin",
+  "app": "agent-os",
+  "n": "49"
+ },
+ {
+  "entity_type": "seda",
+  "actor": "(null)",
+  "role": "-",
+  "app": "external-seda-api",
+  "n": "48"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "mzulkarnain618@gmail.com",
+  "role": "team-jb, report, sales",
+  "app": "agent-os",
+  "n": "48"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "yehongchoong2015@gmail.com",
+  "role": "sales",
+  "app": "agent-os",
+  "n": "47"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "tiranajwaaa01@gmail.com",
+  "role": "sales, team-seremban",
+  "app": "agent-os",
+  "n": "44"
+ },
+ {
+  "entity_type": "seda_registration",
+  "actor": "ihpa1030@gmail.com",
+  "role": "admin, seda",
+  "app": "agent-os",
+  "n": "43"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "vincentwenxi@hotmail.com",
+  "role": "report, team-jb, sales",
+  "app": "agent-os",
+  "n": "40"
+ },
+ {
+  "entity_type": "seda_registration",
+  "actor": "siochui4613@gmail.com",
+  "role": "sales",
+  "app": "agent-os",
+  "n": "39"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "thm0708@gmail.com",
+  "role": "sales, team-jb, report",
+  "app": "agent-os",
+  "n": "39"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "ihpa1030@gmail.com",
+  "role": "admin, seda",
+  "app": "agent-os",
+  "n": "39"
+ },
+ {
+  "entity_type": "seda_upload",
+  "actor": "moyichido@gmail.com",
+  "role": "sales, team-seremban, report, project, admin",
+  "app": "agent-os",
+  "n": "38"
+ }
+]
+
+
+=============== A5 audit: recent 25 raw rows ===============
+[
+ {
+  "id": 85202,
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "invoice_id": 166142,
+  "invoice_number": "INV-1010833",
+  "actor_name": null,
+  "actor_role": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T04:20:40.362Z",
+  "changes": "[{\"after\": \"cust_31a276a4\", \"field\": \"Linked Customer\", \"before\": \"cust_9a48998f\"}]"
+ },
+ {
+  "id": 85187,
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "invoice_id": 166142,
+  "invoice_number": "INV-1010833",
+  "actor_name": null,
+  "actor_role": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T04:19:45.195Z",
+  "changes": "[{\"after\": \"cust_9a48998f\", \"field\": \"Linked Customer\", \"before\": \"cust_51a6939d\"}]"
+ },
+ {
+  "id": 85175,
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "invoice_id": 165270,
+  "invoice_number": "INV-1009964",
+  "actor_name": "1989kkteng@gmail.com",
+  "actor_role": "seda, admin, report, team-kluang, internal, sales team manager, sales senior",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T04:04:02.376Z",
+  "changes": "[{\"after\": \"IG4066580011\", \"field\": \"TIN\", \"before\": \"4066580011\"}]"
+ },
+ {
+  "id": 85168,
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "invoice_id": 165270,
+  "invoice_number": "INV-1009964",
+  "actor_name": "1989kkteng@gmail.com",
+  "actor_role": "seda, admin, report, team-kluang, internal, sales team manager, sales senior",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:57:11.700Z",
+  "changes": "[{\"after\": \"4066580011\", \"field\": \"TIN\", \"before\": \"\"}]"
+ },
+ {
+  "id": 85115,
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "invoice_id": 166068,
+  "invoice_number": "INV-1010759",
+  "actor_name": "lingliangkang2402@gmail.com",
+  "actor_role": "admin, sales, outsource unit manager (oum), team-jb, lk",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:41:19.401Z",
+  "changes": "[{\"after\": \"https://pub-31ab1252a5544ca19749b476315d9b01.r2.dev/seda_registration/tnb_bill_1_seda_18957fd5c995b3d9_1785382879089_bd063e58.pdf\", \"field\": \"TNB Bill Month 1\"}]"
+ },
+ {
+  "id": 85114,
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "invoice_id": 166068,
+  "invoice_number": "INV-1010759",
+  "actor_name": "lingliangkang2402@gmail.com",
+  "actor_role": "admin, sales, outsource unit manager (oum), team-jb, lk",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:41:12.222Z",
+  "changes": "[{\"field\": \"TNB Bill Month 1\", \"before\": \"https://admin.atap.solar/api/files/seda/tnb_bills/321099_tnb_bill_1_seda_18957fd5c995b3_1785382611449.jpeg\"}]"
+ },
+ {
+  "id": 85101,
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "invoice_id": 166302,
+  "invoice_number": "INV-1010990",
+  "actor_name": null,
+  "actor_role": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:37:02.178Z",
+  "changes": "[{\"after\": \"seda_cf98fe3eb2ad9995\", \"field\": \"SEDA Registration\"}, {\"after\": \"cust_0eb2a8a9\", \"field\": \"Linked Customer\"}, {\"after\": \"user_c9980acd8d628c46\", \"field\": \"Assigned Agent\"}, {\"after\": \"Draft\", \"field\": \"Registration Status\"}, {\"after\": \"Pending\", \"field\": \"Admin Status\"}]"
+ },
+ {
+  "id": 85095,
+  "entity_type": "seda",
+  "action_type": "update",
+  "invoice_id": 166068,
+  "invoice_number": "INV-1010759",
+  "actor_name": null,
+  "actor_role": "user",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T03:36:49.865Z",
+  "changes": "[{\"after\": \"not ready\", \"field\": \"mapper_status\", \"before\": \"ready in mapper\"}]"
+ },
+ {
+  "id": 85084,
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "invoice_id": 166301,
+  "invoice_number": "INV-1010989",
+  "actor_name": null,
+  "actor_role": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:36:09.263Z",
+  "changes": "[{\"after\": \"seda_45eb590040a255f9\", \"field\": \"SEDA Registration\"}, {\"after\": \"cust_c74e493d\", \"field\": \"Linked Customer\"}, {\"after\": \"user_c9980acd8d628c46\", \"field\": \"Assigned Agent\"}, {\"after\": \"Draft\", \"field\": \"Registration Status\"}, {\"after\": \"Pending\", \"field\": \"Admin Status\"}]"
+ },
+ {
+  "id": 85065,
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "invoice_id": 166300,
+  "invoice_number": "INV-1010988",
+  "actor_name": null,
+  "actor_role": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:31:26.200Z",
+  "changes": "[{\"after\": \"seda_7edc282d13edadb5\", \"field\": \"SEDA Registration\"}, {\"after\": \"cust_d69e3ceb\", \"field\": \"Linked Customer\"}, {\"after\": \"user_c9980acd8d628c46\", \"field\": \"Assigned Agent\"}, {\"after\": \"Draft\", \"field\": \"Registration Status\"}, {\"after\": \"Pending\", \"field\": \"Admin Status\"}]"
+ },
+ {
+  "id": 85057,
+  "entity_type": "seda",
+  "action_type": "update",
+  "invoice_id": 166068,
+  "invoice_number": "INV-1010759",
+  "actor_name": null,
+  "actor_role": "user",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T03:30:29.841Z",
+  "changes": "[{\"after\": \"ready in mapper\", \"field\": \"mapper_status\", \"before\": \"Draft\"}]"
+ },
+ {
+  "id": 85040,
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "invoice_id": 166299,
+  "invoice_number": "INV-1010987",
+  "actor_name": null,
+  "actor_role": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:28:32.555Z",
+  "changes": "[{\"after\": \"seda_7ce6f77699a322d1\", \"field\": \"SEDA Registration\"}, {\"after\": \"cust_0b8b2bff\", \"field\": \"Linked Customer\"}, {\"after\": \"user_c9980acd8d628c46\", \"field\": \"Assigned Agent\"}, {\"after\": \"Draft\", \"field\": \"Registration Status\"}, {\"after\": \"Pending\", \"field\": \"Admin Status\"}]"
+ },
+ {
+  "id": 85031,
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "invoice_id": 166298,
+  "invoice_number": "INV-1010986",
+  "actor_name": null,
+  "actor_role": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:28:08.527Z",
+  "changes": "[{\"after\": \"seda_130f37caf2de2ea2\", \"field\": \"SEDA Registration\"}, {\"after\": \"cust_97ddb638\", \"field\": \"Linked Customer\"}, {\"after\": \"user_c9980acd8d628c46\", \"field\": \"Assigned Agent\"}, {\"after\": \"Draft\", \"field\": \"Registration Status\"}, {\"after\": \"Pending\", \"field\": \"Admin Status\"}]"
+ },
+ {
+  "id": 85023,
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "invoice_id": 166297,
+  "invoice_number": "INV-1010985",
+  "actor_name": null,
+  "actor_role": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:27:55.775Z",
+  "changes": "[{\"after\": \"seda_554aaf34a3143fb5\", \"field\": \"SEDA Registration\"}, {\"after\": \"cust_781a3976\", \"field\": \"Linked Customer\"}, {\"after\": \"user_c9980acd8d628c46\", \"field\": \"Assigned Agent\"}, {\"after\": \"Draft\", \"field\": \"Registration Status\"}, {\"after\": \"Pending\", \"field\": \"Admin Status\"}]"
+ },
+ {
+  "id": 85017,
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "invoice_id": 166296,
+  "invoice_number": "INV-1010984",
+  "actor_name": null,
+  "actor_role": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:27:38.357Z",
+  "changes": "[{\"after\": \"seda_c78f5ce938147da9\", \"field\": \"SEDA Registration\"}, {\"after\": \"cust_9b771f8c\", \"field\": \"Linked Customer\"}, {\"after\": \"user_c9980acd8d628c46\", \"field\": \"Assigned Agent\"}, {\"after\": \"Draft\", \"field\": \"Registration Status\"}, {\"after\": \"Pending\", \"field\": \"Admin Status\"}]"
+ },
+ {
+  "id": 84968,
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "invoice_id": 166256,
+  "invoice_number": "INV-1010944",
+  "actor_name": "lingliangkang2402@gmail.com",
+  "actor_role": "admin, sales, outsource unit manager (oum), team-jb, lk",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:07:18.205Z",
+  "changes": "[{\"after\": \"951002-10-5943\", \"field\": \"IC Number\", \"before\": \"\"}]"
+ },
+ {
+  "id": 84964,
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "invoice_id": 166256,
+  "invoice_number": "INV-1010944",
+  "actor_name": "lingliangkang2402@gmail.com",
+  "actor_role": "admin, sales, outsource unit manager (oum), team-jb, lk",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:06:35.711Z",
+  "changes": "[{\"after\": \"Lee Boon Leong\", \"field\": \"Emergency Contact Name\", \"before\": \"\"}, {\"after\": \"Parents\", \"field\": \"Emergency Contact Relationship\", \"before\": \"\"}, {\"after\": \"0167896556\", \"field\": \"Emergency Contact Phone\", \"before\": \"\"}, {\"after\": \"boonleong6505@gmail.com\", \"field\": \"Emergency Contact Email\", \"before\": \"\"}, {\"after\": \"650505-10-7239\", \"field\": \"Emergency Contact MyKad\", \"before\": \"\"}]"
+ },
+ {
+  "id": 84963,
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "invoice_id": 166256,
+  "invoice_number": "INV-1010944",
+  "actor_name": "lingliangkang2402@gmail.com",
+  "actor_role": "admin, sales, outsource unit manager (oum), team-jb, lk",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:05:26.051Z",
+  "changes": "[{\"after\": \"210336612004\", \"field\": \"TNB Account No\", \"before\": \"\"}]"
+ },
+ {
+  "id": 84962,
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "invoice_id": 166256,
+  "invoice_number": "INV-1010944",
+  "actor_name": "lingliangkang2402@gmail.com",
+  "actor_role": "admin, sales, outsource unit manager (oum), team-jb, lk",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:04:11.883Z",
+  "changes": "[{\"after\": \"3\", \"field\": \"Phase Type\", \"before\": \"1\"}]"
+ },
+ {
+  "id": 84960,
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "invoice_id": 166256,
+  "invoice_number": "INV-1010944",
+  "actor_name": "lingliangkang2402@gmail.com",
+  "actor_role": "admin, sales, outsource unit manager (oum), team-jb, lk",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:04:03.046Z",
+  "changes": "[{\"after\": \"https://pub-31ab1252a5544ca19749b476315d9b01.r2.dev/seda_registration/mykad_back_seda_800c7f8beaf05346_1785380642757_348ae4f2.jpeg\", \"field\": \"MyKad Back\"}]"
+ },
+ {
+  "id": 84958,
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "invoice_id": 166256,
+  "invoice_number": "INV-1010944",
+  "actor_name": "lingliangkang2402@gmail.com",
+  "actor_role": "admin, sales, outsource unit manager (oum), team-jb, lk",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:03:57.680Z",
+  "changes": "[{\"after\": \"https://pub-31ab1252a5544ca19749b476315d9b01.r2.dev/seda_registration/mykad_front_seda_800c7f8beaf05346_1785380637395_af0047e7.jpeg\", \"field\": \"MyKad Front\"}]"
+ },
+ {
+  "id": 84952,
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "invoice_id": 166142,
+  "invoice_number": "INV-1010833",
+  "actor_name": "louisng0705@gmail.com",
+  "actor_role": "team-kluang, report, internal, sales executive",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T02:57:50.774Z",
+  "changes": "[{\"after\": \"17, Jalan Setia Jaya 9,\\nTaman Setia Jaya\\n83000, Batu Pahat, Johor.\", \"field\": \"Installation Address\", \"before\": null}, {\"after\": \"Batu Pahat\", \"field\": \"City\", \"before\": null}, {\"after\": \"Johor\", \"field\": \"State\", \"before\": null}, {\"after\": \"83000\", \"field\": \"Postcode\", \"before\": null}, {\"after\": \"1\", \"field\": \"Phase Type\", \"before\": null}]"
+ },
+ {
+  "id": 84951,
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "invoice_id": 15221,
+  "invoice_number": "1008557",
+  "actor_name": "admin@eternalgy.com",
+  "actor_role": "cameraman, admin, sales, project, hr",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T02:57:28.906Z",
+  "changes": "[{\"after\": \"0124755598\", \"field\": \"Applicant Phone\", \"before\": \"\"}, {\"after\": \"IG 5584225090\", \"field\": \"TIN\", \"before\": \"\"}]"
+ },
+ {
+  "id": 84950,
+  "entity_type": "seda",
+  "action_type": "update",
+  "invoice_id": 166227,
+  "invoice_number": "INV-1010915",
+  "actor_name": null,
+  "actor_role": "user",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T02:56:33.771Z",
+  "changes": "[{\"after\": \"not ready\", \"field\": \"mapper_status\", \"before\": \"ready in mapper\"}]"
+ },
+ {
+  "id": 84949,
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "invoice_id": 15221,
+  "invoice_number": "1008557",
+  "actor_name": "admin@eternalgy.com",
+  "actor_role": "cameraman, admin, sales, project, hr",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T02:56:09.780Z",
+  "changes": "[{\"after\": \"3, JALAN PONDEROSA 1/7, TAMAN PONDEROSA, 81100 JOHOR BAHRU, JOHOR\", \"field\": \"Installation Address\", \"before\": \"3, Jalan Ponderosa 1/7, Taman Ponderosa, 81100 JB\"}]"
+ }
+]
+
+
+=============== A6 audit: monthly volume ===============
+[
+ {
+  "mon": "2026-07",
+  "entity_type": "seda_upload",
+  "n": "825"
+ },
+ {
+  "mon": "2026-07",
+  "entity_type": "seda_registration",
+  "n": "462"
+ },
+ {
+  "mon": "2026-07",
+  "entity_type": "seda",
+  "n": "144"
+ },
+ {
+  "mon": "2026-06",
+  "entity_type": "seda_upload",
+  "n": "946"
+ },
+ {
+  "mon": "2026-06",
+  "entity_type": "seda_registration",
+  "n": "352"
+ },
+ {
+  "mon": "2026-06",
+  "entity_type": "seda",
+  "n": "1"
+ },
+ {
+  "mon": "2026-05",
+  "entity_type": "seda_upload",
+  "n": "537"
+ },
+ {
+  "mon": "2026-05",
+  "entity_type": "seda_registration",
+  "n": "222"
+ },
+ {
+  "mon": "2026-05",
+  "entity_type": "seda",
+  "n": "91"
+ },
+ {
+  "mon": "2026-04",
+  "entity_type": "seda",
+  "n": "1338"
+ },
+ {
+  "mon": "2026-03",
+  "entity_type": "seda",
+  "n": "1"
+ },
+ {
+  "mon": "2026-02",
+  "entity_type": "seda",
+  "n": "8"
+ },
+ {
+  "mon": "2026-01",
+  "entity_type": "seda",
+  "n": "26"
+ },
+ {
+  "mon": "2025-07",
+  "entity_type": "seda",
+  "n": "1"
+ }
+]
+
+
+=============== B1 activity_log: seda-ish rows ===============
+[]
+
+
+=============== B2 activity_log: recent seda samples ===============
+[]
+
+
+=============== C1 seda_registration table columns ===============
+[
+ {
+  "column_name": "id",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "bubble_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "last_synced_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "created_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "updated_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "mapper_status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "created_by",
+  "data_type": "text"
+ },
+ {
+  "column_name": "drawing_system_submitted",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "modified_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "state",
+  "data_type": "text"
+ },
+ {
+  "column_name": "redex_status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "roof_images",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "sunpeak_hours",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "system_size_in_form_kwp",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "created_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "agent",
+  "data_type": "text"
+ },
+ {
+  "column_name": "project_price",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "system_size",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "city",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_customer",
+  "data_type": "text"
+ },
+ {
+  "column_name": "inverter_kwac",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "slug",
+  "data_type": "text"
+ },
+ {
+  "column_name": "estimated_monthly_saving",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "average_tnb",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "price_category",
+  "data_type": "text"
+ },
+ {
+  "column_name": "g_electric_folder_link",
+  "data_type": "text"
+ },
+ {
+  "column_name": "g_roof_folder_link",
+  "data_type": "text"
+ },
+ {
+  "column_name": "installation_address",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_invoice",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "customer_signature",
+  "data_type": "text"
+ },
+ {
+  "column_name": "email",
+  "data_type": "text"
+ },
+ {
+  "column_name": "ic_copy_back",
+  "data_type": "text"
+ },
+ {
+  "column_name": "ic_copy_front",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tnb_bill_3",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tnb_bill_1",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tnb_meter",
+  "data_type": "text"
+ },
+ {
+  "column_name": "e_contact_no",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tnb_bill_2",
+  "data_type": "text"
+ },
+ {
+  "column_name": "drawing_pdf_system",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "e_contact_name",
+  "data_type": "text"
+ },
+ {
+  "column_name": "seda_status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "version",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "nem_application_no",
+  "data_type": "text"
+ },
+ {
+  "column_name": "e_contact_relationship",
+  "data_type": "text"
+ },
+ {
+  "column_name": "ic_no",
+  "data_type": "text"
+ },
+ {
+  "column_name": "request_drawing_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "phase_type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "special_remark",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tnb_account_no",
+  "data_type": "text"
+ },
+ {
+  "column_name": "nem_cert",
+  "data_type": "text"
+ },
+ {
+  "column_name": "property_ownership_prove",
+  "data_type": "text"
+ },
+ {
+  "column_name": "inverter_serial_no",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tnb_meter_install_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "tnb_meter_status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "first_completion_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "e_contact_mykad",
+  "data_type": "text"
+ },
+ {
+  "column_name": "mykad_pdf",
+  "data_type": "text"
+ },
+ {
+  "column_name": "nem_type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "e_email",
+  "data_type": "text"
+ },
+ {
+  "column_name": "redex_remark",
+  "data_type": "text"
+ },
+ {
+  "column_name": "site_images",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "company_registration_no",
+  "data_type": "text"
+ },
+ {
+  "column_name": "drawing_system_actual",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "check_tnb_bill_and_meter_image",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "check_mykad",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "check_ownership",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "check_fill_in_detail",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "drawing_engineering_seda_pdf",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "postcode",
+  "data_type": "text"
+ },
+ {
+  "column_name": "share_token",
+  "data_type": "character varying"
+ },
+ {
+  "column_name": "share_enabled",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "share_expires_at",
+  "data_type": "timestamp without time zone"
+ },
+ {
+  "column_name": "1st_generation",
+  "data_type": "text"
+ },
+ {
+  "column_name": "creation_date",
+  "data_type": "text"
+ },
+ {
+  "column_name": "creator",
+  "data_type": "text"
+ },
+ {
+  "column_name": "drawing_engineer_seda_done",
+  "data_type": "text"
+ },
+ {
+  "column_name": "epcc",
+  "data_type": "text"
+ },
+ {
+  "column_name": "epcc_remark",
+  "data_type": "text"
+ },
+ {
+  "column_name": "g_folder_seda_doc",
+  "data_type": "text"
+ },
+ {
+  "column_name": "house_ownership_doc_type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "house_ownership_image",
+  "data_type": "text"
+ },
+ {
+  "column_name": "if_counter_date",
+  "data_type": "text"
+ },
+ {
+  "column_name": "installation_appointment",
+  "data_type": "text"
+ },
+ {
+  "column_name": "installment_tenure",
+  "data_type": "text"
+ },
+ {
+  "column_name": "inverter",
+  "data_type": "text"
+ },
+ {
+  "column_name": "link_appointment",
+  "data_type": "text"
+ },
+ {
+  "column_name": "overwrite_redex_date",
+  "data_type": "text"
+ },
+ {
+  "column_name": "seda_application_fee",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tnb_status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "chat_deleted",
+  "data_type": "text"
+ },
+ {
+  "column_name": "unique_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "seda_profile_status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "seda_profile_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "seda_profile_checked_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "installation_address_1",
+  "data_type": "text"
+ },
+ {
+  "column_name": "installation_address_2",
+  "data_type": "text"
+ },
+ {
+  "column_name": "latitude",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "longitude",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "applicant_name",
+  "data_type": "text"
+ },
+ {
+  "column_name": "applicant_ic",
+  "data_type": "text"
+ },
+ {
+  "column_name": "applicant_phone",
+  "data_type": "text"
+ },
+ {
+  "column_name": "applicant_email",
+  "data_type": "text"
+ },
+ {
+  "column_name": "applicant_tin",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tax_document",
+  "data_type": "character varying"
+ },
+ {
+  "column_name": "application_type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tnb_bills_12_months",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "tnb_bills_12_months_requested_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "tnb_bills_12_months_note",
+  "data_type": "text"
+ },
+ {
+  "column_name": "ssm_form_9",
+  "data_type": "text"
+ },
+ {
+  "column_name": "ssm_form_49",
+  "data_type": "text"
+ },
+ {
+  "column_name": "director_ic_front",
+  "data_type": "text"
+ },
+ {
+  "column_name": "director_ic_back",
+  "data_type": "text"
+ },
+ {
+  "column_name": "commercial_docs_completed",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "ssm_registration",
+  "data_type": "text"
+ },
+ {
+  "column_name": "company_stamp",
+  "data_type": "text"
+ }
+]
+
+
+=============== C2 seda_registration status spread ===============
+[
+ {
+  "seda_status": "(null)",
+  "n": "8606"
+ },
+ {
+  "seda_status": "Pending",
+  "n": "2690"
+ },
+ {
+  "seda_status": "Submitted",
+  "n": "195"
+ },
+ {
+  "seda_status": "Approved",
+  "n": "62"
+ },
+ {
+  "seda_status": "DEMO",
+  "n": "9"
+ },
+ {
+  "seda_status": "APPROVED BY SEDA",
+  "n": "4"
+ }
+]

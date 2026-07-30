@@ -1,0 +1,297 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+
+=============== B0 columns ===============
+[
+ {
+  "column_name": "id",
+  "data_type": "bigint"
+ },
+ {
+  "column_name": "app",
+  "data_type": "text"
+ },
+ {
+  "column_name": "app_env",
+  "data_type": "text"
+ },
+ {
+  "column_name": "source_url",
+  "data_type": "text"
+ },
+ {
+  "column_name": "actor_kind",
+  "data_type": "text"
+ },
+ {
+  "column_name": "actor_user_id",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "actor_ref",
+  "data_type": "text"
+ },
+ {
+  "column_name": "actor_name",
+  "data_type": "text"
+ },
+ {
+  "column_name": "actor_role",
+  "data_type": "text"
+ },
+ {
+  "column_name": "action",
+  "data_type": "text"
+ },
+ {
+  "column_name": "entity_type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "entity_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "entity_label",
+  "data_type": "text"
+ },
+ {
+  "column_name": "description",
+  "data_type": "text"
+ },
+ {
+  "column_name": "fields",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "error_message",
+  "data_type": "text"
+ },
+ {
+  "column_name": "request_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "ip",
+  "data_type": "text"
+ },
+ {
+  "column_name": "user_agent",
+  "data_type": "text"
+ },
+ {
+  "column_name": "metadata",
+  "data_type": "jsonb"
+ },
+ {
+  "column_name": "occurred_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "retain_until",
+  "data_type": "timestamp with time zone"
+ }
+]
+
+
+=============== B1 apps ===============
+[
+ {
+  "app": "agent-os",
+  "env": "dev",
+  "n": "629",
+  "first_seen": "2026-07-29T01:57:11.710Z",
+  "last_seen": "2026-07-30T06:39:27.551Z"
+ },
+ {
+  "app": "ee-admin",
+  "env": "production",
+  "n": "198",
+  "first_seen": "2026-07-28T06:36:59.389Z",
+  "last_seen": "2026-07-30T06:39:52.151Z"
+ }
+]
+
+
+=============== B2 app x entity x action matrix ===============
+[
+ {
+  "app": "agent-os",
+  "entity_type": "invoice",
+  "action": "visit",
+  "n": "294",
+  "first_seen": "2026-07-29T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "agent-os",
+  "entity_type": "residential_roi_calculation",
+  "action": "calculate",
+  "n": "277",
+  "first_seen": "2026-07-29T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "agent-os",
+  "entity_type": "commercial_roi_lookup",
+  "action": "calculate",
+  "n": "24",
+  "first_seen": "2026-07-29T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "agent-os",
+  "entity_type": "invoice",
+  "action": "create",
+  "n": "23",
+  "first_seen": "2026-07-29T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "agent-os",
+  "entity_type": "invoice",
+  "action": "delete",
+  "n": "11",
+  "first_seen": "2026-07-29T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "payment",
+  "action": "verify",
+  "n": "36",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "receipt",
+  "action": "send",
+  "n": "35",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "submitted_payment",
+  "action": "update",
+  "n": "26",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "invoice",
+  "action": "print",
+  "n": "25",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "invoice_item",
+  "action": "update",
+  "n": "25",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "invoice_item",
+  "action": "create",
+  "n": "19",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "attachment",
+  "action": "upload",
+  "n": "14",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "customer",
+  "action": "update",
+  "n": "13",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "invoice_item",
+  "action": "delete",
+  "n": "3",
+  "first_seen": "2026-07-29T00:00:00.000Z",
+  "last_seen": "2026-07-29T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "invoice",
+  "action": "update",
+  "n": "1",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-28T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "user",
+  "action": "update",
+  "n": "1",
+  "first_seen": "2026-07-30T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ }
+]
+
+
+=============== B3 actor shape ===============
+[
+ {
+  "app": "agent-os",
+  "actor_kind": "user",
+  "n": "629",
+  "with_user_id": "134",
+  "with_name": "428",
+  "with_role": "0",
+  "with_ref": "134"
+ },
+ {
+  "app": "ee-admin",
+  "actor_kind": "user",
+  "n": "198",
+  "with_user_id": "198",
+  "with_name": "198",
+  "with_role": "198",
+  "with_ref": "198"
+ }
+]
+
+
+=============== B4 status / errors ===============
+[
+ {
+  "app": "agent-os",
+  "status": "success",
+  "n": "629"
+ },
+ {
+  "app": "ee-admin",
+  "status": "success",
+  "n": "163"
+ },
+ {
+  "app": "ee-admin",
+  "status": "failed",
+  "n": "35"
+ }
+]
+
+
+=============== B5 fields jsonb keys used ===============
+ERROR: function jsonb_typeof(text[]) does not exist

@@ -1,0 +1,691 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+
+=============== B0 audit table columns ===============
+[
+ {
+  "column_name": "id",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "invoice_id",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "invoice_number",
+  "data_type": "text"
+ },
+ {
+  "column_name": "entity_type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "entity_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "action_type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "changes",
+  "data_type": "jsonb"
+ },
+ {
+  "column_name": "row_old",
+  "data_type": "jsonb"
+ },
+ {
+  "column_name": "row_new",
+  "data_type": "jsonb"
+ },
+ {
+  "column_name": "actor_user_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "actor_phone",
+  "data_type": "text"
+ },
+ {
+  "column_name": "actor_name",
+  "data_type": "text"
+ },
+ {
+  "column_name": "actor_role",
+  "data_type": "text"
+ },
+ {
+  "column_name": "source_app",
+  "data_type": "text"
+ },
+ {
+  "column_name": "db_user",
+  "data_type": "text"
+ },
+ {
+  "column_name": "application_name",
+  "data_type": "text"
+ },
+ {
+  "column_name": "client_addr",
+  "data_type": "text"
+ },
+ {
+  "column_name": "txid",
+  "data_type": "text"
+ },
+ {
+  "column_name": "edited_at",
+  "data_type": "timestamp with time zone"
+ }
+]
+
+
+=============== B1 raw: submitted_payment insert (8) ===============
+ERROR: column "bubble_id" does not exist
+
+
+=============== B2 raw: payment verify (8) ===============
+ERROR: column "bubble_id" does not exist
+
+
+=============== B3 raw: payment update (8) ===============
+ERROR: column "bubble_id" does not exist
+
+
+=============== B4 raw: deletes (payment + submitted_payment) ===============
+ERROR: column "bubble_id" does not exist
+
+
+=============== B5 raw: verified_payment insert (5, legacy) ===============
+ERROR: column "bubble_id" does not exist
+
+
+=============== B6 raw: receipt_sent_manual (2) ===============
+ERROR: column "bubble_id" does not exist
+
+
+=============== B7 pairing: entity_id/bubble_id populated? ===============
+ERROR: column "bubble_id" does not exist
+
+
+=============== B8 pairing: does a submitted entity_id ever reappear as payment verify? ===============
+[
+ {
+  "submitted_ids": "1131",
+  "verify_ids": "419",
+  "shared_ids": "419"
+ }
+]
+
+
+=============== B9 method spread (all payment entities) ===============
+[
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "CASH BANK IN",
+  "n": "1322"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "CASH",
+  "n": "661"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "Cash Bank In",
+  "n": "503"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "CREDIT CARD LOCAL",
+  "n": "340"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "verify",
+  "field": "payment_method",
+  "val": "CASH",
+  "n": "336"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "Online Transfer",
+  "n": "289"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "EPP",
+  "n": "232"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "Online Transfer",
+  "n": "229"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "update",
+  "field": "method",
+  "val": "Online Transfer",
+  "n": "201"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "Credit Card",
+  "n": "135"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "CREDIT CARD",
+  "n": "132"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "EPP",
+  "n": "72"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "verify",
+  "field": "payment_method",
+  "val": "CREDIT CARD",
+  "n": "53"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "CASH",
+  "n": "48"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "CREDIT CARD",
+  "n": "47"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "update",
+  "field": "method",
+  "val": "E-Wallet",
+  "n": "41"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "update",
+  "field": "method",
+  "val": "Credit Card",
+  "n": "35"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": null,
+  "n": "34"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "verify",
+  "field": "payment_method",
+  "val": "EPP",
+  "n": "30"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "update",
+  "field": "method",
+  "val": "Cheque",
+  "n": "21"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "Credit Card",
+  "n": "18"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "Cheque",
+  "n": "14"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "Cheque",
+  "n": "13"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "CREDIT CARD OVERSEA",
+  "n": "13"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "field": "method",
+  "val": "CASH",
+  "n": "7"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "MAYBANK DIRECT",
+  "n": "4"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "Cash",
+  "n": "4"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "Cash",
+  "n": "4"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "method",
+  "val": "MAYBANK TERMINAL",
+  "n": "3"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "field": "method",
+  "val": "CREDIT CARD",
+  "n": "2"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "update",
+  "field": "method",
+  "val": "Cash",
+  "n": "2"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "field": "method",
+  "val": "EPP",
+  "n": "2"
+ }
+]
+
+
+=============== B10 status values seen ===============
+[
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "status": "verified",
+  "n": "2987"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "status": "pending",
+  "n": "759"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "verify",
+  "status": "verified",
+  "n": "419"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "status": "deleted",
+  "n": "371"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "delete",
+  "status": "deleted",
+  "n": "38"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "delete",
+  "status": "deleted",
+  "n": "12"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "status": "pending",
+  "n": "11"
+ }
+]
+
+
+=============== B11 amount stats (verify vs submitted) ===============
+[
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "2987",
+  "min_amt": "0.00",
+  "avg_amt": "7877.52",
+  "max_amt": "164400.00",
+  "sum_amt": "23530140.12"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "n": "1130",
+  "min_amt": "0.00",
+  "avg_amt": "8279.41",
+  "max_amt": "228000.00",
+  "sum_amt": "9355738.82"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "verify",
+  "n": "419",
+  "min_amt": "5.00",
+  "avg_amt": "8089.50",
+  "max_amt": "56520.00",
+  "sum_amt": "3389500.67"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "update",
+  "n": "13",
+  "min_amt": "0.00",
+  "avg_amt": "4722.62",
+  "max_amt": "22800.00",
+  "sum_amt": "61394.00"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "n": "11",
+  "min_amt": "1010.00",
+  "avg_amt": "8181.74",
+  "max_amt": "17400.00",
+  "sum_amt": "89999.10"
+ }
+]
+
+
+=============== B12 EPP fields sample ===============
+[
+ {
+  "id": 85003,
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "invoice_number": "INV-1010605",
+  "edited_at": "2026-07-30T03:23:10.982Z",
+  "changes": "[{\"after\": 21972.5, \"field\": \"Amount\"}, {\"after\": \"EPP\", \"field\": \"Method\"}, {\"after\": \"2026-07-30\", \"field\": \"Date\"}, {\"after\": \"pending\", \"field\": \"Status\"}, {\"after\": \"Public Bank\", \"field\": \"EPP Bank\"}, {\"after\": \"60\", \"field\": \"EPP Tenure\"}]"
+ },
+ {
+  "id": 84955,
+  "entity_type": "payment",
+  "action_type": "verify",
+  "invoice_number": "INV-1009341",
+  "edited_at": "2026-07-30T03:02:48.341Z",
+  "changes": "[{\"after\": \"verified\", \"field\": \"status\", \"before\": \"pending\"}, {\"after\": \"2277\", \"field\": \"amount\", \"before\": null}, {\"after\": \"EPP\", \"field\": \"payment_method\", \"before\": null}]"
+ },
+ {
+  "id": 84926,
+  "entity_type": "payment",
+  "action_type": "verify",
+  "invoice_number": "INV-1009919",
+  "edited_at": "2026-07-30T02:49:15.106Z",
+  "changes": "[{\"after\": \"verified\", \"field\": \"status\", \"before\": \"pending\"}, {\"after\": \"10812\", \"field\": \"amount\", \"before\": null}, {\"after\": \"EPP\", \"field\": \"payment_method\", \"before\": null}]"
+ },
+ {
+  "id": 84487,
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "invoice_number": "INV-1009919",
+  "edited_at": "2026-07-29T06:29:07.034Z",
+  "changes": "[{\"after\": 10812, \"field\": \"Amount\"}, {\"after\": \"EPP\", \"field\": \"Method\"}, {\"after\": \"2026-07-20\", \"field\": \"Date\"}, {\"after\": \"pending\", \"field\": \"Status\"}, {\"after\": \"Maybank\", \"field\": \"EPP Bank\"}, {\"after\": \"36\", \"field\": \"EPP Tenure\"}]"
+ },
+ {
+  "id": 84096,
+  "entity_type": "payment",
+  "action_type": "verify",
+  "invoice_number": "1008287",
+  "edited_at": "2026-07-28T23:18:38.804Z",
+  "changes": "[{\"after\": \"verified\", \"field\": \"status\", \"before\": \"pending\"}, {\"after\": \"9387\", \"field\": \"amount\", \"before\": null}, {\"after\": \"EPP\", \"field\": \"payment_method\", \"before\": null}]"
+ },
+ {
+  "id": 83425,
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "invoice_number": "1008287",
+  "edited_at": "2026-07-28T07:30:18.898Z",
+  "changes": "[{\"after\": 9387, \"field\": \"Amount\"}, {\"after\": \"EPP\", \"field\": \"Method\"}, {\"after\": \"2026-07-25\", \"field\": \"Date\"}, {\"after\": \"pending\", \"field\": \"Status\"}, {\"after\": \"Public Bank\", \"field\": \"EPP Bank\"}, {\"after\": \"36\", \"field\": \"EPP Tenure\"}]"
+ }
+]
+
+
+=============== B13 same-invoice payment journey (busiest recent invoice) ===============
+[
+ {
+  "id": 35126,
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "invoice_number": "INV-1010021",
+  "actor_name": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-05-31T12:09:47.056Z",
+  "changes": "[{\"after\": 940, \"field\": \"Amount\"}, {\"after\": \"CASH\", \"field\": \"Method\"}, {\"after\": \"2026-05-31\", \"field\": \"Date\"}, {\"after\": \"pending\", \"field\": \"Status\"}]"
+ },
+ {
+  "id": 67624,
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "invoice_number": "INV-1010021",
+  "actor_name": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-16T00:50:58.317Z",
+  "changes": "[{\"after\": 5000, \"field\": \"Amount\"}, {\"after\": \"CASH\", \"field\": \"Method\"}, {\"after\": \"2026-07-16\", \"field\": \"Date\"}, {\"after\": \"pending\", \"field\": \"Status\"}]"
+ },
+ {
+  "id": 68267,
+  "entity_type": "payment",
+  "action_type": "update",
+  "invoice_number": "INV-1010021",
+  "actor_name": "System Admin",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-16T06:06:16.493Z",
+  "changes": "[{\"after\": \"Online Transfer\", \"field\": \"Method\", \"before\": \"CASH\"}]"
+ },
+ {
+  "id": 68271,
+  "entity_type": "payment",
+  "action_type": "verify",
+  "invoice_number": "INV-1010021",
+  "actor_name": null,
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-16T06:06:23.142Z",
+  "changes": "[{\"after\": \"verified\", \"field\": \"status\", \"before\": \"pending\"}, {\"after\": \"5000\", \"field\": \"amount\", \"before\": null}, {\"after\": \"CASH\", \"field\": \"payment_method\", \"before\": null}]"
+ },
+ {
+  "id": 68818,
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "invoice_number": "INV-1010021",
+  "actor_name": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-17T01:37:23.595Z",
+  "changes": "[{\"after\": 5000, \"field\": \"Amount\"}, {\"after\": \"CASH\", \"field\": \"Method\"}, {\"after\": \"2026-07-17\", \"field\": \"Date\"}, {\"after\": \"pending\", \"field\": \"Status\"}]"
+ },
+ {
+  "id": 68974,
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "invoice_number": "INV-1010021",
+  "actor_name": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-17T06:01:56.749Z",
+  "changes": "[{\"after\": 1280, \"field\": \"Amount\"}, {\"after\": \"CASH\", \"field\": \"Method\"}, {\"after\": \"2026-07-17\", \"field\": \"Date\"}, {\"after\": \"pending\", \"field\": \"Status\"}]"
+ },
+ {
+  "id": 69866,
+  "entity_type": "payment",
+  "action_type": "update",
+  "invoice_number": "INV-1010021",
+  "actor_name": "System Admin",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-20T00:19:41.096Z",
+  "changes": "[{\"after\": \"Online Transfer\", \"field\": \"Method\", \"before\": \"CASH\"}]"
+ },
+ {
+  "id": 69867,
+  "entity_type": "payment",
+  "action_type": "verify",
+  "invoice_number": "INV-1010021",
+  "actor_name": null,
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-20T00:19:48.872Z",
+  "changes": "[{\"after\": \"verified\", \"field\": \"status\", \"before\": \"pending\"}, {\"after\": \"5000\", \"field\": \"amount\", \"before\": null}, {\"after\": \"CASH\", \"field\": \"payment_method\", \"before\": null}]"
+ },
+ {
+  "id": 69868,
+  "entity_type": "payment",
+  "action_type": "update",
+  "invoice_number": "INV-1010021",
+  "actor_name": "System Admin",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-20T00:22:20.999Z",
+  "changes": "[{\"after\": \"E-Wallet\", \"field\": \"Method\", \"before\": \"CASH\"}]"
+ },
+ {
+  "id": 69869,
+  "entity_type": "payment",
+  "action_type": "verify",
+  "invoice_number": "INV-1010021",
+  "actor_name": null,
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-20T00:22:28.469Z",
+  "changes": "[{\"after\": \"verified\", \"field\": \"status\", \"before\": \"pending\"}, {\"after\": \"1280\", \"field\": \"amount\", \"before\": null}, {\"after\": \"CASH\", \"field\": \"payment_method\", \"before\": null}]"
+ },
+ {
+  "id": 82513,
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "invoice_number": "INV-1010021",
+  "actor_name": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-28T06:30:11.231Z",
+  "changes": "[{\"after\": 5000, \"field\": \"Amount\"}, {\"after\": \"CASH\", \"field\": \"Method\"}, {\"after\": \"2026-07-28\", \"field\": \"Date\"}, {\"after\": \"pending\", \"field\": \"Status\"}]"
+ },
+ {
+  "id": 82514,
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "invoice_number": "INV-1010021",
+  "actor_name": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-28T06:31:19.504Z",
+  "changes": "[{\"after\": 1580, \"field\": \"Amount\"}, {\"after\": \"CASH\", \"field\": \"Method\"}, {\"after\": \"2026-07-28\", \"field\": \"Date\"}, {\"after\": \"pending\", \"field\": \"Status\"}]"
+ },
+ {
+  "id": 84125,
+  "entity_type": "payment",
+  "action_type": "update",
+  "invoice_number": "INV-1010021",
+  "actor_name": "System Admin",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-29T00:45:09.667Z",
+  "changes": "[{\"after\": \"Online Transfer\", \"field\": \"Method\", \"before\": \"CASH\"}]"
+ },
+ {
+  "id": 84126,
+  "entity_type": "payment",
+  "action_type": "update",
+  "invoice_number": "INV-1010021",
+  "actor_name": "System Admin",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-29T00:45:23.249Z",
+  "changes": "[{\"after\": \"Online Transfer\", \"field\": \"Method\", \"before\": \"CASH\"}]"
+ },
+ {
+  "id": 84127,
+  "entity_type": "payment",
+  "action_type": "verify",
+  "invoice_number": "INV-1010021",
+  "actor_name": null,
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-29T00:45:28.804Z",
+  "changes": "[{\"after\": \"verified\", \"field\": \"status\", \"before\": \"pending\"}, {\"after\": \"5000\", \"field\": \"amount\", \"before\": null}, {\"after\": \"CASH\", \"field\": \"payment_method\", \"before\": null}]"
+ },
+ {
+  "id": 84128,
+  "entity_type": "payment",
+  "action_type": "verify",
+  "invoice_number": "INV-1010021",
+  "actor_name": null,
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-29T00:45:39.488Z",
+  "changes": "[{\"after\": \"verified\", \"field\": \"status\", \"before\": \"pending\"}, {\"after\": \"1580\", \"field\": \"amount\", \"before\": null}, {\"after\": \"CASH\", \"field\": \"payment_method\", \"before\": null}]"
+ }
+]
+
+
+=============== B14 verify latency: submitted -> verified per invoice (recent) ===============
+[
+ {
+  "n": "304",
+  "avg_hours": "885.8",
+  "median_hours": "691.2"
+ }
+]
+
+
+=============== B15 payment table exists? columns ===============
+[
+ {
+  "table_name": "invoice_payment_planning"
+ },
+ {
+  "table_name": "payment"
+ },
+ {
+  "table_name": "submit_payment"
+ },
+ {
+  "table_name": "submitted_payment"
+ }
+]

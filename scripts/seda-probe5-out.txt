@@ -1,0 +1,602 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+=============== J1 audit: distinct "Registration Status" after-values ===============
+[
+ {
+  "before": null,
+  "after": "Draft",
+  "n": "111"
+ }
+]
+
+=============== J2 seda_registration table columns ===============
+[
+ {
+  "column_name": "id",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "bubble_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "last_synced_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "created_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "updated_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "mapper_status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "created_by",
+  "data_type": "text"
+ },
+ {
+  "column_name": "drawing_system_submitted",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "modified_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "state",
+  "data_type": "text"
+ },
+ {
+  "column_name": "redex_status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "roof_images",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "sunpeak_hours",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "system_size_in_form_kwp",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "created_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "agent",
+  "data_type": "text"
+ },
+ {
+  "column_name": "project_price",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "system_size",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "city",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_customer",
+  "data_type": "text"
+ },
+ {
+  "column_name": "inverter_kwac",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "slug",
+  "data_type": "text"
+ },
+ {
+  "column_name": "estimated_monthly_saving",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "average_tnb",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "price_category",
+  "data_type": "text"
+ },
+ {
+  "column_name": "g_electric_folder_link",
+  "data_type": "text"
+ },
+ {
+  "column_name": "g_roof_folder_link",
+  "data_type": "text"
+ },
+ {
+  "column_name": "installation_address",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_invoice",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "customer_signature",
+  "data_type": "text"
+ },
+ {
+  "column_name": "email",
+  "data_type": "text"
+ },
+ {
+  "column_name": "ic_copy_back",
+  "data_type": "text"
+ },
+ {
+  "column_name": "ic_copy_front",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tnb_bill_3",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tnb_bill_1",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tnb_meter",
+  "data_type": "text"
+ },
+ {
+  "column_name": "e_contact_no",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tnb_bill_2",
+  "data_type": "text"
+ },
+ {
+  "column_name": "drawing_pdf_system",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "e_contact_name",
+  "data_type": "text"
+ },
+ {
+  "column_name": "seda_status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "version",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "nem_application_no",
+  "data_type": "text"
+ },
+ {
+  "column_name": "e_contact_relationship",
+  "data_type": "text"
+ },
+ {
+  "column_name": "ic_no",
+  "data_type": "text"
+ },
+ {
+  "column_name": "request_drawing_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "phase_type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "special_remark",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tnb_account_no",
+  "data_type": "text"
+ },
+ {
+  "column_name": "nem_cert",
+  "data_type": "text"
+ },
+ {
+  "column_name": "property_ownership_prove",
+  "data_type": "text"
+ },
+ {
+  "column_name": "inverter_serial_no",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tnb_meter_install_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "tnb_meter_status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "first_completion_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "e_contact_mykad",
+  "data_type": "text"
+ },
+ {
+  "column_name": "mykad_pdf",
+  "data_type": "text"
+ },
+ {
+  "column_name": "nem_type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "e_email",
+  "data_type": "text"
+ },
+ {
+  "column_name": "redex_remark",
+  "data_type": "text"
+ },
+ {
+  "column_name": "site_images",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "company_registration_no",
+  "data_type": "text"
+ },
+ {
+  "column_name": "drawing_system_actual",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "check_tnb_bill_and_meter_image",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "check_mykad",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "check_ownership",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "check_fill_in_detail",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "drawing_engineering_seda_pdf",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "postcode",
+  "data_type": "text"
+ },
+ {
+  "column_name": "share_token",
+  "data_type": "character varying"
+ },
+ {
+  "column_name": "share_enabled",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "share_expires_at",
+  "data_type": "timestamp without time zone"
+ },
+ {
+  "column_name": "1st_generation",
+  "data_type": "text"
+ },
+ {
+  "column_name": "creation_date",
+  "data_type": "text"
+ },
+ {
+  "column_name": "creator",
+  "data_type": "text"
+ },
+ {
+  "column_name": "drawing_engineer_seda_done",
+  "data_type": "text"
+ },
+ {
+  "column_name": "epcc",
+  "data_type": "text"
+ },
+ {
+  "column_name": "epcc_remark",
+  "data_type": "text"
+ },
+ {
+  "column_name": "g_folder_seda_doc",
+  "data_type": "text"
+ },
+ {
+  "column_name": "house_ownership_doc_type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "house_ownership_image",
+  "data_type": "text"
+ },
+ {
+  "column_name": "if_counter_date",
+  "data_type": "text"
+ },
+ {
+  "column_name": "installation_appointment",
+  "data_type": "text"
+ },
+ {
+  "column_name": "installment_tenure",
+  "data_type": "text"
+ },
+ {
+  "column_name": "inverter",
+  "data_type": "text"
+ },
+ {
+  "column_name": "link_appointment",
+  "data_type": "text"
+ },
+ {
+  "column_name": "overwrite_redex_date",
+  "data_type": "text"
+ },
+ {
+  "column_name": "seda_application_fee",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tnb_status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "chat_deleted",
+  "data_type": "text"
+ },
+ {
+  "column_name": "unique_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "seda_profile_status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "seda_profile_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "seda_profile_checked_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "installation_address_1",
+  "data_type": "text"
+ },
+ {
+  "column_name": "installation_address_2",
+  "data_type": "text"
+ },
+ {
+  "column_name": "latitude",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "longitude",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "applicant_name",
+  "data_type": "text"
+ },
+ {
+  "column_name": "applicant_ic",
+  "data_type": "text"
+ },
+ {
+  "column_name": "applicant_phone",
+  "data_type": "text"
+ },
+ {
+  "column_name": "applicant_email",
+  "data_type": "text"
+ },
+ {
+  "column_name": "applicant_tin",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tax_document",
+  "data_type": "character varying"
+ },
+ {
+  "column_name": "application_type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "tnb_bills_12_months",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "tnb_bills_12_months_requested_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "tnb_bills_12_months_note",
+  "data_type": "text"
+ },
+ {
+  "column_name": "ssm_form_9",
+  "data_type": "text"
+ },
+ {
+  "column_name": "ssm_form_49",
+  "data_type": "text"
+ },
+ {
+  "column_name": "director_ic_front",
+  "data_type": "text"
+ },
+ {
+  "column_name": "director_ic_back",
+  "data_type": "text"
+ },
+ {
+  "column_name": "commercial_docs_completed",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "ssm_registration",
+  "data_type": "text"
+ },
+ {
+  "column_name": "company_stamp",
+  "data_type": "text"
+ }
+]
+
+=============== J3 registration_status spread in seda_registration ===============
+ERROR: column "registration_status" does not exist
+
+=============== J4 any audit field name mentioning complete/submit ===============
+[]
+
+=============== J5 any audit value mentioning complete ===============
+[
+ {
+  "entity_type": "invoice",
+  "field": "eligible_amount_description",
+  "after": "Stamped Package Cash Price : RM43121\\nMarkup : \\nDiscount/Adjustment : \\nDISCOUNT, (RM-2156)\\nNo TV swap discount , (RM-1000)\\nThe RM900 rebate is limited to customers who sign their solar package with 19 panels or more between 01/11/2025 and 30/11/2025. , (RM-900)\\nSwap Tng RM400 to rebate, (RM-400)\\nThe RM3,000 rebate is limited to customers who sign their solar package with 19 panels or more between 01/11/2025 and 30/11/2025. The rebate will be issued after installation is completed and full payment has been received., (RM-3000)\\nVoucher Deductible :\\n\\nAdmin Adjustment :\\n-----------------------\\nFinal Eligible Amount : RM35665.00\\nlast Update : Nov 21, 2025 2:50 pm",
+  "n": "1"
+ },
+ {
+  "entity_type": "invoice_item",
+  "field": "description",
+  "after": "a. Initial payment\\n(RM68,000.00 x 30% = RM20,400.00)\\nb. Upon Material Purchase \\n(RM68,000.00 x 50% = RM34,000.00)\\nc. Upon completion of installation works\\n(RM68,000.00 x 20% = RM13,600.00)",
+  "n": "1"
+ },
+ {
+  "entity_type": "invoice_item",
+  "field": "description",
+  "after": "Discount\n\nInitial Payment (1st Payment) 25%\nAfter Seda Approval (2nd Payment) 25%\nComplete Installation & ST Application (3rd Payment) 25%\nTesting & Commissioning (Pull Payment) 25%",
+  "n": "1"
+ },
+ {
+  "entity_type": "invoice_item",
+  "field": "description",
+  "after": "Discount\\n\\nInitial Payment (1st Payment) 25%\\nAfter Seda Approval (2nd Payment) 25%\\nComplete Installation & ST Application (3rd Payment) 25%\\nTesting & Commissioning (Pull Payment) 25%",
+  "n": "1"
+ },
+ {
+  "entity_type": "invoice_item",
+  "field": "description",
+  "after": "Payment Terms\\nRM1050 via CASH/CREDIT\\nRM13860 via 60M EPP\\nRM7350 via CASH/CREDIT\\n\\n\\n( minimum 5% before registration, minimum 65% before installation and 100% upon installation complete )0",
+  "n": "1"
+ },
+ {
+  "entity_type": "invoice_item",
+  "field": "description",
+  "after": "Payment Terms\\nRM1050 via CASH/CREDIT\\nRM13860 via 60M EPP (RM1260)\\nRM7350 via CASH/CREDIT\\n\\n\\n( minimum 5% before registration, minimum 65% before installation and 100% upon installation complete )0",
+  "n": "1"
+ },
+ {
+  "entity_type": "invoice_item",
+  "field": "item",
+  "after": "a. Initial payment\n(RM68,000.00 x 30% = RM20,400.00)\nb. Upon Material Purchase \n(RM68,000.00 x 50% = RM34,000.00)\nc. Upon completion of installation works\n(RM68,000.00 x 20% = RM13,600.00)",
+  "n": "1"
+ }
+]
+
+=============== J6 seda_status field values in audit (entity_type=seda) ===============
+[
+ {
+  "field": "seda_status",
+  "before": null,
+  "after": "Pending",
+  "n": "1343"
+ },
+ {
+  "field": "seda_status",
+  "before": null,
+  "after": "Submitted",
+  "n": "118"
+ },
+ {
+  "field": "seda_status",
+  "before": "Pending",
+  "after": "Submitted",
+  "n": "47"
+ },
+ {
+  "field": "seda_status",
+  "before": "Pending",
+  "after": "Approved",
+  "n": "30"
+ },
+ {
+  "field": "mapper_status",
+  "before": "Draft",
+  "after": "ready in mapper",
+  "n": "25"
+ },
+ {
+  "field": "mapper_status",
+  "before": "ready in mapper",
+  "after": "not ready",
+  "n": "24"
+ },
+ {
+  "field": "seda_status",
+  "before": "Submitted",
+  "after": "Approved",
+  "n": "23"
+ },
+ {
+  "field": "seda_status",
+  "before": null,
+  "after": "Approved",
+  "n": "4"
+ },
+ {
+  "field": "seda_status",
+  "before": null,
+  "after": "APPROVED BY SEDA",
+  "n": "1"
+ },
+ {
+  "field": "seda_status",
+  "before": "Approved",
+  "after": "Submitted",
+  "n": "1"
+ }
+]
+
+=============== J7 seda table columns (status source of truth) ===============
+[
+ {
+  "table_name": "seda_registration",
+  "column_name": "seda_status"
+ },
+ {
+  "table_name": "seda_registration",
+  "column_name": "seda_profile_status"
+ }
+]

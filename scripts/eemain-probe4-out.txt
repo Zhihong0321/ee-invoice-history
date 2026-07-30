@@ -1,0 +1,14 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+Total candidate columns: 1173
+HITS: [
+  {
+    "table_name": "received_emails",
+    "column_name": "html_content",
+    "n": 1
+  },
+  {
+    "table_name": "received_emails",
+    "column_name": "text_content",
+    "n": 4
+  }
+]

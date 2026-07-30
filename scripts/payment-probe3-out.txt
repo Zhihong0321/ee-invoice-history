@@ -1,0 +1,920 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+
+=============== C1 raw: submitted_payment insert (6) ===============
+[
+ {
+  "id": 85171,
+  "entity_id": "pay_1553c2d78a773208",
+  "invoice_id": 165115,
+  "invoice_number": "INV-1009809",
+  "actor_user_id": "1705557637059x292766633570082050",
+  "actor_name": null,
+  "actor_role": "user",
+  "actor_phone": "0107187786",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T04:00:06.035Z",
+  "changes": "[{\"after\": 8685, \"field\": \"Amount\"}, {\"after\": \"CASH\", \"field\": \"Method\"}, {\"after\": \"2026-07-28\", \"field\": \"Date\"}, {\"after\": \"pending\", \"field\": \"Status\"}]"
+ },
+ {
+  "id": 85170,
+  "entity_id": "pay_fbe4e95366205e10",
+  "invoice_id": 165392,
+  "invoice_number": "INV-1010086",
+  "actor_user_id": "1705557637059x292766633570082050",
+  "actor_name": null,
+  "actor_role": "user",
+  "actor_phone": "0107187786",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:58:31.498Z",
+  "changes": "[{\"after\": 4800, \"field\": \"Amount\"}, {\"after\": \"CASH\", \"field\": \"Method\"}, {\"after\": \"2026-07-30\", \"field\": \"Date\"}, {\"after\": \"pending\", \"field\": \"Status\"}]"
+ },
+ {
+  "id": 85169,
+  "entity_id": "pay_e214f19855193816",
+  "invoice_id": 165392,
+  "invoice_number": "INV-1010086",
+  "actor_user_id": "1705557637059x292766633570082050",
+  "actor_name": null,
+  "actor_role": "user",
+  "actor_phone": "0107187786",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:57:41.071Z",
+  "changes": "[{\"after\": 5000, \"field\": \"Amount\"}, {\"after\": \"CASH\", \"field\": \"Method\"}, {\"after\": \"2026-07-29\", \"field\": \"Date\"}, {\"after\": \"pending\", \"field\": \"Status\"}]"
+ },
+ {
+  "id": 85003,
+  "entity_id": "pay_94d4d80489b3ccb7",
+  "invoice_id": 165914,
+  "invoice_number": "INV-1010605",
+  "actor_user_id": "1714374534098x995573147101614700",
+  "actor_name": null,
+  "actor_role": "user",
+  "actor_phone": "0132427568",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:23:10.982Z",
+  "changes": "[{\"after\": 21972.5, \"field\": \"Amount\"}, {\"after\": \"EPP\", \"field\": \"Method\"}, {\"after\": \"2026-07-30\", \"field\": \"Date\"}, {\"after\": \"pending\", \"field\": \"Status\"}, {\"after\": \"Public Bank\", \"field\": \"EPP Bank\"}, {\"after\": \"60\", \"field\": \"EPP Tenure\"}]"
+ },
+ {
+  "id": 84985,
+  "entity_id": "pay_38fea329af1f3d1c",
+  "invoice_id": 166294,
+  "invoice_number": "INV-1010982",
+  "actor_user_id": "1739418117208x118266442255307250",
+  "actor_name": null,
+  "actor_role": "user",
+  "actor_phone": "0197075599",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:13:16.034Z",
+  "changes": "[{\"after\": 2505, \"field\": \"Amount\"}, {\"after\": \"CASH\", \"field\": \"Method\"}, {\"after\": \"2026-07-29\", \"field\": \"Date\"}, {\"after\": \"pending\", \"field\": \"Status\"}]"
+ },
+ {
+  "id": 84956,
+  "entity_id": "pay_73c91f85a977ac68",
+  "invoice_id": 165157,
+  "invoice_number": "INV-1009851",
+  "actor_user_id": "1714374534098x995573147101614700",
+  "actor_name": null,
+  "actor_role": "user",
+  "actor_phone": "0132427568",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:03:27.779Z",
+  "changes": "[{\"after\": 12600, \"field\": \"Amount\"}, {\"after\": \"CREDIT CARD\", \"field\": \"Method\"}, {\"after\": \"2026-07-30\", \"field\": \"Date\"}, {\"after\": \"pending\", \"field\": \"Status\"}]"
+ }
+]
+
+
+=============== C2 raw: payment verify (6) ===============
+[
+ {
+  "id": 85248,
+  "entity_id": "pay_f2196b082059f7cf",
+  "invoice_id": 4033,
+  "invoice_number": "1007651",
+  "actor_user_id": "67",
+  "actor_name": null,
+  "actor_role": "user",
+  "actor_phone": "6590097334",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T04:59:28.307Z",
+  "changes": "[{\"after\": \"verified\", \"field\": \"status\", \"before\": \"pending\"}, {\"after\": \"10000\", \"field\": \"amount\", \"before\": null}, {\"after\": \"CREDIT CARD\", \"field\": \"payment_method\", \"before\": null}]"
+ },
+ {
+  "id": 85243,
+  "entity_id": "pay_5f4e0b01fd5f1d50",
+  "invoice_id": 8349,
+  "invoice_number": "1008143",
+  "actor_user_id": "67",
+  "actor_name": null,
+  "actor_role": "user",
+  "actor_phone": "6590097334",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T04:51:56.294Z",
+  "changes": "[{\"after\": \"verified\", \"field\": \"status\", \"before\": \"pending\"}, {\"after\": \"9500\", \"field\": \"amount\", \"before\": null}, {\"after\": \"CASH\", \"field\": \"payment_method\", \"before\": null}]"
+ },
+ {
+  "id": 85239,
+  "entity_id": "pay_fbe4e95366205e10",
+  "invoice_id": 165392,
+  "invoice_number": "INV-1010086",
+  "actor_user_id": "67",
+  "actor_name": null,
+  "actor_role": "user",
+  "actor_phone": "6590097334",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T04:47:23.748Z",
+  "changes": "[{\"after\": \"verified\", \"field\": \"status\", \"before\": \"pending\"}, {\"after\": \"4800\", \"field\": \"amount\", \"before\": null}, {\"after\": \"CASH\", \"field\": \"payment_method\", \"before\": null}]"
+ },
+ {
+  "id": 85238,
+  "entity_id": "pay_e214f19855193816",
+  "invoice_id": 165392,
+  "invoice_number": "INV-1010086",
+  "actor_user_id": "67",
+  "actor_name": null,
+  "actor_role": "user",
+  "actor_phone": "6590097334",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T04:47:17.452Z",
+  "changes": "[{\"after\": \"verified\", \"field\": \"status\", \"before\": \"pending\"}, {\"after\": \"5000\", \"field\": \"amount\", \"before\": null}, {\"after\": \"CASH\", \"field\": \"payment_method\", \"before\": null}]"
+ },
+ {
+  "id": 85233,
+  "entity_id": "pay_38fea329af1f3d1c",
+  "invoice_id": 166294,
+  "invoice_number": "INV-1010982",
+  "actor_user_id": "67",
+  "actor_name": null,
+  "actor_role": "user",
+  "actor_phone": "6590097334",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T04:39:07.262Z",
+  "changes": "[{\"after\": \"verified\", \"field\": \"status\", \"before\": \"pending\"}, {\"after\": \"2505\", \"field\": \"amount\", \"before\": null}, {\"after\": \"CASH\", \"field\": \"payment_method\", \"before\": null}]"
+ },
+ {
+  "id": 85229,
+  "entity_id": "pay_f5e7437ca2fd8adb",
+  "invoice_id": 164728,
+  "invoice_number": "INV-1009422",
+  "actor_user_id": "67",
+  "actor_name": null,
+  "actor_role": "user",
+  "actor_phone": "6590097334",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T04:35:32.130Z",
+  "changes": "[{\"after\": \"verified\", \"field\": \"status\", \"before\": \"pending\"}, {\"after\": \"18360\", \"field\": \"amount\", \"before\": null}, {\"after\": \"CASH\", \"field\": \"payment_method\", \"before\": null}]"
+ }
+]
+
+
+=============== C3 raw: payment update (6) ===============
+[
+ {
+  "id": 85242,
+  "entity_id": "pay_5f4e0b01fd5f1d50",
+  "invoice_number": "1008143",
+  "actor_user_id": null,
+  "actor_name": "System Admin",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T04:51:49.246Z",
+  "changes": "[{\"after\": \"Online Transfer\", \"field\": \"Method\", \"before\": \"CASH\"}]"
+ },
+ {
+  "id": 85237,
+  "entity_id": "pay_e214f19855193816",
+  "invoice_number": "INV-1010086",
+  "actor_user_id": null,
+  "actor_name": "System Admin",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T04:47:11.604Z",
+  "changes": "[{\"after\": \"Online Transfer\", \"field\": \"Method\", \"before\": \"CASH\"}]"
+ },
+ {
+  "id": 85236,
+  "entity_id": "pay_fbe4e95366205e10",
+  "invoice_number": "INV-1010086",
+  "actor_user_id": null,
+  "actor_name": "System Admin",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T04:47:04.831Z",
+  "changes": "[{\"after\": \"Online Transfer\", \"field\": \"Method\", \"before\": \"CASH\"}]"
+ },
+ {
+  "id": 85232,
+  "entity_id": "pay_38fea329af1f3d1c",
+  "invoice_number": "INV-1010982",
+  "actor_user_id": null,
+  "actor_name": "System Admin",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T04:39:01.603Z",
+  "changes": "[{\"after\": \"Online Transfer\", \"field\": \"Method\", \"before\": \"CASH\"}]"
+ },
+ {
+  "id": 85228,
+  "entity_id": "pay_f5e7437ca2fd8adb",
+  "invoice_number": "INV-1009422",
+  "actor_user_id": null,
+  "actor_name": "System Admin",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T04:35:23.891Z",
+  "changes": "[{\"after\": \"Online Transfer\", \"field\": \"Method\", \"before\": \"CASH\"}]"
+ },
+ {
+  "id": 85224,
+  "entity_id": "pay_1553c2d78a773208",
+  "invoice_number": "INV-1009809",
+  "actor_user_id": null,
+  "actor_name": "System Admin",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T04:32:40.503Z",
+  "changes": "[{\"after\": \"Online Transfer\", \"field\": \"Method\", \"before\": \"CASH\"}]"
+ }
+]
+
+
+=============== C4 raw: deletes (6) ===============
+[
+ {
+  "id": 84722,
+  "entity_type": "submitted_payment",
+  "entity_id": "pay_d7f308f6ccba4c4d",
+  "invoice_number": "INV-1010644",
+  "actor_user_id": "1705565102864x194490451512955300",
+  "actor_name": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-29T09:15:58.962Z",
+  "changes": "[{\"after\": \"deleted\", \"field\": \"Status\", \"before\": \"pending\"}]",
+  "row_old": null
+ },
+ {
+  "id": 83611,
+  "entity_type": "submitted_payment",
+  "entity_id": "pay_b06e21863a2fd66c",
+  "invoice_number": "INV-1010617",
+  "actor_user_id": "1765089291766x153267325151855700",
+  "actor_name": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-28T10:42:53.731Z",
+  "changes": "[{\"after\": \"deleted\", \"field\": \"Status\", \"before\": \"pending\"}]",
+  "row_old": null
+ },
+ {
+  "id": 81871,
+  "entity_type": "submitted_payment",
+  "entity_id": "pay_ce7146b12bd82bcd",
+  "invoice_number": "1008558",
+  "actor_user_id": "1765089291766x153267325151855700",
+  "actor_name": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-27T07:32:25.518Z",
+  "changes": "[{\"after\": \"deleted\", \"field\": \"Status\", \"before\": \"pending\"}]",
+  "row_old": null
+ },
+ {
+  "id": 67289,
+  "entity_type": "submitted_payment",
+  "entity_id": "pay_4fc75d70a272f96c",
+  "invoice_number": "INV-1010721",
+  "actor_user_id": "user_6b9d70c65766101a",
+  "actor_name": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-15T08:00:00.899Z",
+  "changes": "[{\"after\": \"deleted\", \"field\": \"Status\", \"before\": \"deleted\"}]",
+  "row_old": null
+ },
+ {
+  "id": 64926,
+  "entity_type": "submitted_payment",
+  "entity_id": "pay_92d2114f6a8b2e3b",
+  "invoice_number": "INV-1010679",
+  "actor_user_id": "user_6b9d70c65766101a",
+  "actor_name": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-10T09:21:33.886Z",
+  "changes": "[{\"after\": \"deleted\", \"field\": \"Status\", \"before\": \"pending\"}]",
+  "row_old": null
+ },
+ {
+  "id": 64915,
+  "entity_type": "submitted_payment",
+  "entity_id": "pay_f79ff2f4217b64d3",
+  "invoice_number": "INV-1008754",
+  "actor_user_id": "1752217735838x805157760526423700",
+  "actor_name": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-10T09:13:36.818Z",
+  "changes": "[{\"after\": \"deleted\", \"field\": \"Status\", \"before\": \"pending\"}]",
+  "row_old": null
+ }
+]
+
+
+=============== C5 raw: receipt_sent_manual (2) ===============
+[
+ {
+  "id": 68821,
+  "entity_id": "pay_e68f5a10505db3fd",
+  "invoice_number": "INV-1009358",
+  "actor_user_id": "7165",
+  "actor_name": "System",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-17T01:46:44.579Z",
+  "changes": "[{\"after\": \"Agent: 60162147294\", \"field\": \"whatsapp_receipt\", \"before\": null}]"
+ },
+ {
+  "id": 58194,
+  "entity_id": "pay_fe66a997b74e51e3",
+  "invoice_number": "INV-1008803",
+  "actor_user_id": "1",
+  "actor_name": "System",
+  "source_app": "ee-admin",
+  "edited_at": "2026-06-30T06:18:52.940Z",
+  "changes": "[{\"after\": \"Agent: 60162147294\", \"field\": \"whatsapp_receipt\", \"before\": null}]"
+ }
+]
+
+
+=============== C6 raw: verified_payment legacy (4) ===============
+[
+ {
+  "id": 12338,
+  "entity_id": "pay_4790d4448dfa4b45",
+  "invoice_number": "INV-1008554",
+  "actor_user_id": null,
+  "actor_name": "Verifier (unknown)",
+  "source_app": "agent-os",
+  "edited_at": "2026-05-05T23:49:44.680Z",
+  "changes": "[{\"after\": \"11830\", \"field\": \"Amount\"}, {\"after\": \"Online Transfer\", \"field\": \"Method\"}, {\"after\": \"2026-05-05T00:00:00.000Z\", \"field\": \"Date\"}, {\"after\": \"verified\", \"field\": \"Status\"}, {\"after\": \"alliance bank\", \"field\": \"Issuer Bank\"}]"
+ },
+ {
+  "id": 12337,
+  "entity_id": "pay_bbedb35cbb16ad22",
+  "invoice_number": "1008542",
+  "actor_user_id": null,
+  "actor_name": "Verifier (unknown)",
+  "source_app": "agent-os",
+  "edited_at": "2026-05-05T23:36:31.939Z",
+  "changes": "[{\"after\": \"20400\", \"field\": \"Amount\"}, {\"after\": \"Online Transfer\", \"field\": \"Method\"}, {\"after\": \"2026-05-05T00:00:00.000Z\", \"field\": \"Date\"}, {\"after\": \"verified\", \"field\": \"Status\"}, {\"after\": \"Alliance Bank\", \"field\": \"Issuer Bank\"}]"
+ },
+ {
+  "id": 12336,
+  "entity_id": "pay_ae92fa3c2ed01aee",
+  "invoice_number": "INV-1009477",
+  "actor_user_id": null,
+  "actor_name": "Verifier (unknown)",
+  "source_app": "agent-os",
+  "edited_at": "2026-05-05T23:34:30.509Z",
+  "changes": "[{\"after\": \"500\", \"field\": \"Amount\"}, {\"after\": \"Online Transfer\", \"field\": \"Method\"}, {\"after\": \"2026-05-05T00:00:00.000Z\", \"field\": \"Date\"}, {\"after\": \"verified\", \"field\": \"Status\"}, {\"after\": \"MAYBANK\", \"field\": \"Issuer Bank\"}]"
+ },
+ {
+  "id": 12335,
+  "entity_id": "pay_2e86c08566904698",
+  "invoice_number": "INV-1008371",
+  "actor_user_id": null,
+  "actor_name": "Verifier (unknown)",
+  "source_app": "agent-os",
+  "edited_at": "2026-05-05T23:25:43.951Z",
+  "changes": "[{\"after\": \"20318.6\", \"field\": \"Amount\"}, {\"after\": \"Online Transfer\", \"field\": \"Method\"}, {\"after\": \"2026-04-14T00:00:00.000Z\", \"field\": \"Date\"}, {\"after\": \"verified\", \"field\": \"Status\"}, {\"after\": \"Public Bank\", \"field\": \"Issuer Bank\"}]"
+ }
+]
+
+
+=============== C7 actor coverage per entity/action ===============
+[
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "2987",
+  "has_user_id": "2533",
+  "has_name": "2987",
+  "has_phone": "2533",
+  "has_entity_id": "2987"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "n": "1130",
+  "has_user_id": "1130",
+  "has_name": "374",
+  "has_phone": "1128",
+  "has_entity_id": "1130"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "verify",
+  "n": "419",
+  "has_user_id": "419",
+  "has_name": "0",
+  "has_phone": "419",
+  "has_entity_id": "419"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "update",
+  "n": "322",
+  "has_user_id": "0",
+  "has_name": "322",
+  "has_phone": "0",
+  "has_entity_id": "322"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "delete",
+  "n": "38",
+  "has_user_id": "38",
+  "has_name": "0",
+  "has_phone": "38",
+  "has_entity_id": "38"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "delete",
+  "n": "12",
+  "has_user_id": "0",
+  "has_name": "12",
+  "has_phone": "0",
+  "has_entity_id": "12"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "n": "11",
+  "has_user_id": "11",
+  "has_name": "0",
+  "has_phone": "11",
+  "has_entity_id": "11"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "receipt_sent_manual",
+  "n": "2",
+  "has_user_id": "2",
+  "has_name": "2",
+  "has_phone": "2",
+  "has_entity_id": "2"
+ }
+]
+
+
+=============== C8 pairing: submitted -> verify latency BY entity_id ===============
+[
+ {
+  "n": "419",
+  "avg_hours": "32.5",
+  "median_hours": "17.5",
+  "p90_hours": "70.6",
+  "min_hours": "0.11"
+ }
+]
+
+
+=============== C9 pending backlog: submitted with no verify yet ===============
+[
+ {
+  "still_pending": "664",
+  "oldest": "2026-03-09T00:00:00.000Z",
+  "newest": "2026-07-30T00:00:00.000Z",
+  "last_7d": "5"
+ }
+]
+
+
+=============== C10 payment table columns ===============
+[
+ {
+  "column_name": "id",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "bubble_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "last_synced_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "created_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "updated_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "payment_method",
+  "data_type": "text"
+ },
+ {
+  "column_name": "modified_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "amount",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "created_by",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_agent",
+  "data_type": "text"
+ },
+ {
+  "column_name": "created_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "remark",
+  "data_type": "text"
+ },
+ {
+  "column_name": "payment_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "linked_invoice",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_customer",
+  "data_type": "text"
+ },
+ {
+  "column_name": "payment_index",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "attachment",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "verified_by",
+  "data_type": "text"
+ },
+ {
+  "column_name": "edit_history",
+  "data_type": "text"
+ },
+ {
+  "column_name": "issuer_bank",
+  "data_type": "text"
+ },
+ {
+  "column_name": "epp_month",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "payment_method_v2",
+  "data_type": "text"
+ },
+ {
+  "column_name": "terminal",
+  "data_type": "text"
+ },
+ {
+  "column_name": "bank_charges",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "epp_type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "creation_date",
+  "data_type": "text"
+ },
+ {
+  "column_name": "creator",
+  "data_type": "text"
+ },
+ {
+  "column_name": "referrer",
+  "data_type": "text"
+ },
+ {
+  "column_name": "actual_received",
+  "data_type": "text"
+ },
+ {
+  "column_name": "unique_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "log",
+  "data_type": "text"
+ },
+ {
+  "column_name": "epp_cost",
+  "data_type": "numeric"
+ }
+]
+
+
+=============== C11 submitted_payment table columns ===============
+[
+ {
+  "column_name": "id",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "bubble_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "last_synced_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "created_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "updated_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "payment_method",
+  "data_type": "text"
+ },
+ {
+  "column_name": "modified_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "amount",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "created_by",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_agent",
+  "data_type": "text"
+ },
+ {
+  "column_name": "created_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "remark",
+  "data_type": "text"
+ },
+ {
+  "column_name": "payment_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "linked_invoice",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_customer",
+  "data_type": "text"
+ },
+ {
+  "column_name": "payment_index",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "attachment",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "verified_by",
+  "data_type": "text"
+ },
+ {
+  "column_name": "edit_history",
+  "data_type": "text"
+ },
+ {
+  "column_name": "issuer_bank",
+  "data_type": "text"
+ },
+ {
+  "column_name": "epp_month",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "payment_method_v2",
+  "data_type": "text"
+ },
+ {
+  "column_name": "terminal",
+  "data_type": "text"
+ },
+ {
+  "column_name": "bank_charges",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "epp_type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "status",
+  "data_type": "character varying"
+ },
+ {
+  "column_name": "creation_date",
+  "data_type": "text"
+ },
+ {
+  "column_name": "creator",
+  "data_type": "text"
+ },
+ {
+  "column_name": "epp",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_installment",
+  "data_type": "text"
+ },
+ {
+  "column_name": "payment_type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "referrer",
+  "data_type": "text"
+ },
+ {
+  "column_name": "slug",
+  "data_type": "text"
+ },
+ {
+  "column_name": "unique_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "log",
+  "data_type": "text"
+ },
+ {
+  "column_name": "epp_cost",
+  "data_type": "numeric"
+ }
+]
+
+
+=============== C12 who verifies: distinct actors on verify+update rows ===============
+[
+ {
+  "action_type": "verify",
+  "actor": "(null)",
+  "uid": "67",
+  "app": "ee-admin",
+  "n": "419"
+ },
+ {
+  "action_type": "update",
+  "actor": "System Admin",
+  "uid": "(null)",
+  "app": "ee-admin",
+  "n": "322"
+ },
+ {
+  "action_type": "delete",
+  "actor": "System Admin",
+  "uid": "(null)",
+  "app": "ee-admin",
+  "n": "12"
+ },
+ {
+  "action_type": "receipt_sent_manual",
+  "actor": "System",
+  "uid": "1",
+  "app": "ee-admin",
+  "n": "1"
+ },
+ {
+  "action_type": "receipt_sent_manual",
+  "actor": "System",
+  "uid": "7165",
+  "app": "ee-admin",
+  "n": "1"
+ }
+]
+
+
+=============== C13 daily payment volume last 14 days ===============
+[
+ {
+  "d": "2026-07-30T00:00:00.000Z",
+  "submitted": "9",
+  "verified": "20",
+  "edited": "14",
+  "deleted": "0"
+ },
+ {
+  "d": "2026-07-29T00:00:00.000Z",
+  "submitted": "9",
+  "verified": "12",
+  "edited": "10",
+  "deleted": "1"
+ },
+ {
+  "d": "2026-07-28T00:00:00.000Z",
+  "submitted": "18",
+  "verified": "19",
+  "edited": "11",
+  "deleted": "1"
+ },
+ {
+  "d": "2026-07-27T00:00:00.000Z",
+  "submitted": "19",
+  "verified": "10",
+  "edited": "11",
+  "deleted": "1"
+ },
+ {
+  "d": "2026-07-26T00:00:00.000Z",
+  "submitted": "4",
+  "verified": "0",
+  "edited": "0",
+  "deleted": "0"
+ },
+ {
+  "d": "2026-07-25T00:00:00.000Z",
+  "submitted": "4",
+  "verified": "5",
+  "edited": "6",
+  "deleted": "0"
+ },
+ {
+  "d": "2026-07-24T00:00:00.000Z",
+  "submitted": "8",
+  "verified": "0",
+  "edited": "1",
+  "deleted": "0"
+ },
+ {
+  "d": "2026-07-23T00:00:00.000Z",
+  "submitted": "3",
+  "verified": "9",
+  "edited": "5",
+  "deleted": "0"
+ },
+ {
+  "d": "2026-07-22T00:00:00.000Z",
+  "submitted": "4",
+  "verified": "6",
+  "edited": "0",
+  "deleted": "0"
+ },
+ {
+  "d": "2026-07-21T00:00:00.000Z",
+  "submitted": "10",
+  "verified": "12",
+  "edited": "11",
+  "deleted": "0"
+ },
+ {
+  "d": "2026-07-20T00:00:00.000Z",
+  "submitted": "10",
+  "verified": "14",
+  "edited": "16",
+  "deleted": "0"
+ },
+ {
+  "d": "2026-07-19T00:00:00.000Z",
+  "submitted": "5",
+  "verified": "0",
+  "edited": "0",
+  "deleted": "0"
+ },
+ {
+  "d": "2026-07-18T00:00:00.000Z",
+  "submitted": "1",
+  "verified": "0",
+  "edited": "0",
+  "deleted": "0"
+ },
+ {
+  "d": "2026-07-17T00:00:00.000Z",
+  "submitted": "7",
+  "verified": "6",
+  "edited": "2",
+  "deleted": "0"
+ },
+ {
+  "d": "2026-07-16T00:00:00.000Z",
+  "submitted": "13",
+  "verified": "10",
+  "edited": "9",
+  "deleted": "0"
+ }
+]
+
+
+=============== C14 amount mismatch: submitted vs verified per entity_id ===============
+[
+ {
+  "pairs": "419",
+  "mismatched": "6"
+ }
+]

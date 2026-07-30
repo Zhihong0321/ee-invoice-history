@@ -1,0 +1,759 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+
+=============== A1 audit: payment entity/action matrix ===============
+[
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "2987",
+  "first_seen": "2024-04-29T00:00:00.000Z",
+  "last_seen": "2026-05-05T00:00:00.000Z",
+  "invoices": "1129",
+  "actors": "8"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "n": "1130",
+  "first_seen": "2026-03-09T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z",
+  "invoices": "556",
+  "actors": "33"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "verify",
+  "n": "419",
+  "first_seen": "2026-06-11T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z",
+  "invoices": "304",
+  "actors": "0"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "update",
+  "n": "322",
+  "first_seen": "2026-06-11T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z",
+  "invoices": "250",
+  "actors": "1"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "delete",
+  "n": "38",
+  "first_seen": "2026-05-12T00:00:00.000Z",
+  "last_seen": "2026-07-29T00:00:00.000Z",
+  "invoices": "31",
+  "actors": "0"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "delete",
+  "n": "12",
+  "first_seen": "2026-06-18T00:00:00.000Z",
+  "last_seen": "2026-07-03T00:00:00.000Z",
+  "invoices": "9",
+  "actors": "1"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "n": "11",
+  "first_seen": "2026-05-12T00:00:00.000Z",
+  "last_seen": "2026-07-10T00:00:00.000Z",
+  "invoices": "10",
+  "actors": "0"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "receipt_sent_manual",
+  "n": "2",
+  "first_seen": "2026-06-30T00:00:00.000Z",
+  "last_seen": "2026-07-17T00:00:00.000Z",
+  "invoices": "2",
+  "actors": "1"
+ }
+]
+
+
+=============== A2 audit: change fields used per payment entity ===============
+[
+ {
+  "entity_type": "payment",
+  "action_type": "delete",
+  "field": "status",
+  "n": "12"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "receipt_sent_manual",
+  "field": "whatsapp_receipt",
+  "n": "2"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "update",
+  "field": "Method",
+  "n": "300"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "update",
+  "field": "Amount",
+  "n": "13"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "update",
+  "field": "EPP Month",
+  "n": "10"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "update",
+  "field": "Date",
+  "n": "8"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "update",
+  "field": "EPP Type",
+  "n": "8"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "update",
+  "field": "Issuer Bank",
+  "n": "7"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "verify",
+  "field": "amount",
+  "n": "419"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "verify",
+  "field": "payment_method",
+  "n": "419"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "verify",
+  "field": "status",
+  "n": "419"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "delete",
+  "field": "Status",
+  "n": "38"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "field": "Method",
+  "n": "1130"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "field": "Amount",
+  "n": "1130"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "field": "Date",
+  "n": "1130"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "field": "Status",
+  "n": "1130"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "field": "Issuer Bank",
+  "n": "344"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "field": "EPP Tenure",
+  "n": "73"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "field": "EPP Bank",
+  "n": "43"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "field": "EPP Type",
+  "n": "30"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "field": "Date",
+  "n": "11"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "field": "Method",
+  "n": "11"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "field": "Amount",
+  "n": "11"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "field": "Status",
+  "n": "11"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "field": "EPP Tenure",
+  "n": "2"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "field": "EPP Bank",
+  "n": "2"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "Amount",
+  "n": "2987"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "Method",
+  "n": "2987"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "Date",
+  "n": "2987"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "Status",
+  "n": "2987"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "field": "Issuer Bank",
+  "n": "1054"
+ }
+]
+
+
+=============== A3 audit: actors / source apps ===============
+[
+ {
+  "entity_type": "verified_payment",
+  "actor": "Ms Teoh",
+  "role": "admin, finance, superadmin, finance2, seda",
+  "app": "agent-os",
+  "n": "1738"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "(null)",
+  "role": "user",
+  "app": "agent-os",
+  "n": "805"
+ },
+ {
+  "entity_type": "verified_payment",
+  "actor": "LIM SHU YEE",
+  "role": "admin, finance, finance2",
+  "app": "agent-os",
+  "n": "554"
+ },
+ {
+  "entity_type": "verified_payment",
+  "actor": "Verifier (unknown)",
+  "role": "admin",
+  "app": "agent-os",
+  "n": "454"
+ },
+ {
+  "entity_type": "payment",
+  "actor": "(null)",
+  "role": "user",
+  "app": "ee-admin",
+  "n": "419"
+ },
+ {
+  "entity_type": "payment",
+  "actor": "System Admin",
+  "role": "-",
+  "app": "ee-admin",
+  "n": "334"
+ },
+ {
+  "entity_type": "verified_payment",
+  "actor": "Ms Eng",
+  "role": "blocked",
+  "app": "agent-os",
+  "n": "171"
+ },
+ {
+  "entity_type": "verified_payment",
+  "actor": "WONG WEI HAO",
+  "role": "superadmin, admin, finance, ec, inventory, invoice editor",
+  "app": "agent-os",
+  "n": "44"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "Denise Ng Pei sing ",
+  "role": "team-jb, sales, report",
+  "app": "agent-os",
+  "n": "30"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "Teng Kah Kent",
+  "role": "seda, admin, report, team-kluang",
+  "app": "agent-os",
+  "n": "29"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "CHAN JIA WEI",
+  "role": "sales",
+  "app": "agent-os",
+  "n": "25"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "Sunny Tan",
+  "role": "sales, team-jb, report",
+  "app": "agent-os",
+  "n": "24"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "Carol Siow",
+  "role": "sales",
+  "app": "agent-os",
+  "n": "23"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "CHING ZHE HANG",
+  "role": "hr, sales, team-seremban, report",
+  "app": "agent-os",
+  "n": "22"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "MARTIN HING ",
+  "role": "sales, team-jb, report",
+  "app": "agent-os",
+  "n": "21"
+ },
+ {
+  "entity_type": "verified_payment",
+  "actor": "CRYSTAL",
+  "role": "admin, finance, blocked",
+  "app": "agent-os",
+  "n": "20"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "LING LIANG KANG",
+  "role": "admin, sales",
+  "app": "agent-os",
+  "n": "18"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "Vincent Tan",
+  "role": "report, team-jb, sales",
+  "app": "agent-os",
+  "n": "18"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "TAN JIA HAO",
+  "role": "admin, engineer, sales",
+  "app": "agent-os",
+  "n": "18"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "KOH CONG LEE",
+  "role": "sales",
+  "app": "agent-os",
+  "n": "17"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "CHAN WING ON",
+  "role": "sales",
+  "app": "agent-os",
+  "n": "17"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "Ng Zhan Yi",
+  "role": "sales, team-kluang, report",
+  "app": "agent-os",
+  "n": "15"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "ZUL",
+  "role": "team-jb, report, sales",
+  "app": "agent-os",
+  "n": "13"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "Wilson Tan Wei Sheng",
+  "role": "sales, admin, cameraman, superadmin, project",
+  "app": "agent-os",
+  "n": "11"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "wong jia xuan",
+  "role": "sales, team-jb, report",
+  "app": "agent-os",
+  "n": "8"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "DEAN WAI LEONG YEE",
+  "role": "sales",
+  "app": "agent-os",
+  "n": "8"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "CHOONG YE HONG",
+  "role": "sales",
+  "app": "agent-os",
+  "n": "7"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "WOON JIA KEAT",
+  "role": "sales, team-jb, report",
+  "app": "agent-os",
+  "n": "7"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "actor": "Tan Sue Cherk",
+  "role": "-",
+  "app": "agent-os",
+  "n": "6"
+ },
+ {
+  "entity_type": "verified_payment",
+  "actor": "ALLY",
+  "role": "admin, seda, finance, hr, inventory, engineer",
+  "app": "agent-os",
+  "n": "5"
+ }
+]
+
+
+=============== A4 audit: monthly volume by entity ===============
+[
+ {
+  "mon": "2026-07",
+  "entity_type": "payment",
+  "action_type": "verify",
+  "n": "255"
+ },
+ {
+  "mon": "2026-07",
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "n": "254"
+ },
+ {
+  "mon": "2026-07",
+  "entity_type": "payment",
+  "action_type": "update",
+  "n": "194"
+ },
+ {
+  "mon": "2026-07",
+  "entity_type": "submitted_payment",
+  "action_type": "delete",
+  "n": "7"
+ },
+ {
+  "mon": "2026-07",
+  "entity_type": "payment",
+  "action_type": "delete",
+  "n": "4"
+ },
+ {
+  "mon": "2026-07",
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "n": "1"
+ },
+ {
+  "mon": "2026-07",
+  "entity_type": "payment",
+  "action_type": "receipt_sent_manual",
+  "n": "1"
+ },
+ {
+  "mon": "2026-06",
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "n": "283"
+ },
+ {
+  "mon": "2026-06",
+  "entity_type": "payment",
+  "action_type": "verify",
+  "n": "164"
+ },
+ {
+  "mon": "2026-06",
+  "entity_type": "payment",
+  "action_type": "update",
+  "n": "128"
+ },
+ {
+  "mon": "2026-06",
+  "entity_type": "submitted_payment",
+  "action_type": "delete",
+  "n": "16"
+ },
+ {
+  "mon": "2026-06",
+  "entity_type": "payment",
+  "action_type": "delete",
+  "n": "8"
+ },
+ {
+  "mon": "2026-06",
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "n": "5"
+ },
+ {
+  "mon": "2026-06",
+  "entity_type": "payment",
+  "action_type": "receipt_sent_manual",
+  "n": "1"
+ },
+ {
+  "mon": "2026-05",
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "n": "253"
+ },
+ {
+  "mon": "2026-05",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "40"
+ },
+ {
+  "mon": "2026-05",
+  "entity_type": "submitted_payment",
+  "action_type": "delete",
+  "n": "15"
+ },
+ {
+  "mon": "2026-05",
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "n": "5"
+ },
+ {
+  "mon": "2026-04",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "202"
+ },
+ {
+  "mon": "2026-04",
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "n": "196"
+ },
+ {
+  "mon": "2026-03",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "162"
+ },
+ {
+  "mon": "2026-03",
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "n": "144"
+ },
+ {
+  "mon": "2026-02",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "206"
+ },
+ {
+  "mon": "2026-01",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "2094"
+ },
+ {
+  "mon": "2025-12",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "38"
+ },
+ {
+  "mon": "2025-11",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "25"
+ },
+ {
+  "mon": "2025-10",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "24"
+ },
+ {
+  "mon": "2025-09",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "8"
+ },
+ {
+  "mon": "2025-08",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "24"
+ },
+ {
+  "mon": "2025-07",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "21"
+ },
+ {
+  "mon": "2025-06",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "31"
+ },
+ {
+  "mon": "2025-05",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "12"
+ },
+ {
+  "mon": "2025-04",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "16"
+ },
+ {
+  "mon": "2025-03",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "14"
+ },
+ {
+  "mon": "2025-02",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "8"
+ },
+ {
+  "mon": "2025-01",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "7"
+ },
+ {
+  "mon": "2024-12",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "8"
+ },
+ {
+  "mon": "2024-11",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "13"
+ },
+ {
+  "mon": "2024-10",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "11"
+ },
+ {
+  "mon": "2024-09",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "8"
+ },
+ {
+  "mon": "2024-08",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "3"
+ },
+ {
+  "mon": "2024-07",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "1"
+ },
+ {
+  "mon": "2024-06",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "2"
+ },
+ {
+  "mon": "2024-05",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "6"
+ },
+ {
+  "mon": "2024-04",
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "3"
+ }
+]

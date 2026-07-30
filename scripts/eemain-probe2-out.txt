@@ -1,0 +1,280 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+=== activity_log metadata/description (0) ===
+[]
+=== invoice_audit_log changes/actor (0) ===
+[]
+=== tables with column named like app/source (68) ===
+[
+  {
+    "table_name": "_pg_foreign_data_wrappers",
+    "column_name": "foreign_data_wrapper_catalog"
+  },
+  {
+    "table_name": "_pg_foreign_data_wrappers",
+    "column_name": "foreign_data_wrapper_name"
+  },
+  {
+    "table_name": "_pg_foreign_data_wrappers",
+    "column_name": "foreign_data_wrapper_language"
+  },
+  {
+    "table_name": "_pg_foreign_servers",
+    "column_name": "foreign_data_wrapper_catalog"
+  },
+  {
+    "table_name": "_pg_foreign_servers",
+    "column_name": "foreign_data_wrapper_name"
+  },
+  {
+    "table_name": "activity_log",
+    "column_name": "app"
+  },
+  {
+    "table_name": "activity_log",
+    "column_name": "app_env"
+  },
+  {
+    "table_name": "ai_activity_log",
+    "column_name": "app"
+  },
+  {
+    "table_name": "ai_activity_log",
+    "column_name": "app_env"
+  },
+  {
+    "table_name": "ai_contact",
+    "column_name": "whatsapp_no"
+  },
+  {
+    "table_name": "ai_contact",
+    "column_name": "whatsapp_no_"
+  },
+  {
+    "table_name": "api_key",
+    "column_name": "app_domain"
+  },
+  {
+    "table_name": "calendar_appointments",
+    "column_name": "approvedById"
+  },
+  {
+    "table_name": "calendar_appointments",
+    "column_name": "approvedAt"
+  },
+  {
+    "table_name": "calendar_tasks",
+    "column_name": "approvedById"
+  },
+  {
+    "table_name": "calendar_tasks",
+    "column_name": "approvedAt"
+  },
+  {
+    "table_name": "claim_receipt",
+    "column_name": "approved_at"
+  },
+  {
+    "table_name": "claim_receipt",
+    "column_name": "approved_by_email"
+  },
+  {
+    "table_name": "claim_receipt",
+    "column_name": "approved_by_user_id"
+  },
+  {
+    "table_name": "claim_receipt",
+    "column_name": "approved_by"
+  },
+  {
+    "table_name": "customer_profile",
+    "column_name": "whatsapp"
+  },
+  {
+    "table_name": "et_leads",
+    "column_name": "whatsapp_lid"
+  },
+  {
+    "table_name": "et_leads",
+    "column_name": "is_whatsapp_valid"
+  },
+  {
+    "table_name": "foreign_data_wrapper_options",
+    "column_name": "foreign_data_wrapper_name"
+  },
+  {
+    "table_name": "foreign_data_wrapper_options",
+    "column_name": "foreign_data_wrapper_catalog"
+  },
+  {
+    "table_name": "foreign_data_wrappers",
+    "column_name": "foreign_data_wrapper_language"
+  },
+  {
+    "table_name": "foreign_data_wrappers",
+    "column_name": "foreign_data_wrapper_catalog"
+  },
+  {
+    "table_name": "foreign_data_wrappers",
+    "column_name": "foreign_data_wrapper_name"
+  },
+  {
+    "table_name": "foreign_servers",
+    "column_name": "foreign_data_wrapper_name"
+  },
+  {
+    "table_name": "foreign_servers",
+    "column_name": "foreign_data_wrapper_catalog"
+  },
+  {
+    "table_name": "hod_departments",
+    "column_name": "hod_whatsapp_number"
+  },
+  {
+    "table_name": "hybrid_inverter_upgrade_application",
+    "column_name": "applied_by"
+  },
+  {
+    "table_name": "hybrid_inverter_upgrade_application",
+    "column_name": "applied_at"
+  },
+  {
+    "table_name": "invoice",
+    "column_name": "need_approval"
+  },
+  {
+    "table_name": "invoice",
+    "column_name": "approved_toberemove"
+  },
+  {
+    "table_name": "invoice",
+    "column_name": "approval_status"
+  },
+  {
+    "table_name": "invoice_audit_log",
+    "column_name": "application_name"
+  },
+  {
+    "table_name": "invoice_audit_log",
+    "column_name": "source_app"
+  },
+  {
+    "table_name": "invoice_template",
+    "column_name": "apply_sst"
+  },
+  {
+    "table_name": "job_applications",
+    "column_name": "applicant_name"
+  },
+  {
+    "table_name": "job_applications",
+    "column_name": "applicant_email"
+  },
+  {
+    "table_name": "job_applications",
+    "column_name": "whatsapp_number"
+  },
+  {
+    "table_name": "job_applications",
+    "column_name": "applied_position"
+  },
+  {
+    "table_name": "legacy_data_01",
+    "column_name": "whatsapp_formatted"
+  },
+  {
+    "table_name": "legacy_data_01",
+    "column_name": "whatsapp_number"
+  },
+  {
+    "table_name": "legacy_data_01",
+    "column_name": "app_permissions"
+  },
+  {
+    "table_name": "package",
+    "column_name": "need_approval"
+  },
+  {
+    "table_name": "pending_schema_patches",
+    "column_name": "approved_by"
+  },
+  {
+    "table_name": "pending_schema_patches",
+    "column_name": "approved_at"
+  },
+  {
+    "table_name": "pg_file_settings",
+    "column_name": "applied"
+  },
+  {
+    "table_name": "pg_stat_activity",
+    "column_name": "application_name"
+  },
+  {
+    "table_name": "pg_stat_replication",
+    "column_name": "application_name"
+  },
+  {
+    "table_name": "pg_stat_subscription_stats",
+    "column_name": "apply_error_count"
+  },
+  {
+    "table_name": "pipeline_events",
+    "column_name": "application_id"
+  },
+  {
+    "table_name": "schema_migrations",
+    "column_name": "applied_at"
+  },
+  {
+    "table_name": "seda_registration",
+    "column_name": "applicant_phone"
+  },
+  {
+    "table_name": "seda_registration",
+    "column_name": "seda_application_fee"
+  },
+  {
+    "table_name": "seda_registration",
+    "column_name": "link_appointment"
+  },
+  {
+    "table_name": "seda_registration",
+    "column_name": "installation_appointment"
+  },
+  {
+    "table_name": "seda_registration",
+    "column_name": "applicant_ic"
+  },
+  {
+    "table_name": "seda_registration",
+    "column_name": "applicant_email"
+  },
+  {
+    "table_name": "seda_registration",
+    "column_name": "application_type"
+  },
+  {
+    "table_name": "seda_registration",
+    "column_name": "applicant_name"
+  },
+  {
+    "table_name": "seda_registration",
+    "column_name": "applicant_tin"
+  },
+  {
+    "table_name": "seda_registration",
+    "column_name": "nem_application_no"
+  },
+  {
+    "table_name": "seda_registration",
+    "column_name": "mapper_status"
+  },
+  {
+    "table_name": "seda_tasks",
+    "column_name": "application_number"
+  },
+  {
+    "table_name": "system_setting",
+    "column_name": "whatsapp_click"
+  }
+]

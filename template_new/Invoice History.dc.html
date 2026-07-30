@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    ::-webkit-scrollbar{width:0;height:0;display:none;}
+    input::placeholder{color:var(--text3,#90A0B5);}
+    @keyframes ihpulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+  </style>
+</helmet>
+<div style="position:relative; min-height:100vh; max-width:452px; margin:0 auto; padding-bottom:48px; font-family:'IBM Plex Sans',system-ui,-apple-system,sans-serif; -webkit-font-smoothing:antialiased; {{ themeVars }}">
+
+  <!-- TOP CHROME -->
+  <div style="position:sticky; top:0; z-index:30; background:color-mix(in srgb, var(--surface,#fff) 84%, transparent); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-bottom:1px solid var(--border,#E3E8EF); padding:14px 16px 12px;">
+
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+      <div style="display:flex; align-items:center; gap:11px; min-width:0;">
+        <div style="width:36px; height:36px; flex:0 0 36px; border-radius:11px; background:var(--accent,#3B82F6); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2.5px; box-shadow:0 2px 8px color-mix(in srgb, var(--accent,#3B82F6) 40%, transparent);">
+          <span style="width:15px; height:2px; border-radius:2px; background:rgba(255,255,255,.95);"></span>
+          <span style="width:15px; height:2px; border-radius:2px; background:rgba(255,255,255,.6);"></span>
+          <span style="width:9px; height:2px; border-radius:2px; background:rgba(255,255,255,.95);"></span>
+        </div>
+        <div style="min-width:0;">
+          <div style="font-size:16px; font-weight:700; color:var(--text,#0F1B2D); letter-spacing:-.01em; line-height:1.1;">Invoice History</div>
+          <div style="display:flex; align-items:center; gap:6px; margin-top:3px;">
+            <span style="width:6px; height:6px; border-radius:50%; background:#22C55E; animation:ihpulse 2.4s ease-in-out infinite; box-shadow:0 0 0 3px color-mix(in srgb,#22C55E 22%, transparent);"></span>
+            <span style="font-size:11.5px; color:var(--text2,#5A6B82); font-weight:500;">Live · audit &amp; activity log</span>
+          </div>
+        </div>
+      </div>
+
+      <button onClick="{{ toggleTheme }}" aria-label="Toggle theme" style="width:38px; height:38px; flex:0 0 38px; border-radius:11px; border:1px solid var(--border,#E3E8EF); background:var(--surface,#fff); display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text2,#5A6B82);">
+        <sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}">
+          <span style="width:14px; height:14px; border-radius:50%; background:var(--accent,#3B82F6); box-shadow:0 0 0 2px color-mix(in srgb, var(--accent,#3B82F6) 32%, transparent);"></span>
+        </sc-if>
+        <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}">
+          <span style="position:relative; width:16px; height:16px; display:block;">
+            <span style="position:absolute; inset:0; border-radius:50%; background:var(--text2,#5A6B82);"></span>
+            <span style="position:absolute; top:-3px; right:-3px; width:13px; height:13px; border-radius:50%; background:var(--surface,#fff);"></span>
+          </span>
+        </sc-if>
+      </button>
+    </div>
+
+    <!-- SEARCH -->
+    <div style="position:relative; margin-top:13px;">
+      <span style="position:absolute; left:13px; top:50%; transform:translateY(-50%); pointer-events:none; display:flex;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text3,#90A0B5)" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg>
+      </span>
+      <input value="{{ query }}" onInput="{{ onSearch }}" placeholder="Search invoice, person, customer…" style="width:100%; height:42px; border-radius:12px; border:1px solid var(--border,#E3E8EF); background:var(--surface2,#F6F8FB); padding:0 14px 0 38px; font-size:14px; font-family:inherit; color:var(--text,#0F1B2D); outline:none;">
+    </div>
+
+    <!-- FILTER CHIPS -->
+    <div style="display:flex; gap:8px; overflow-x:auto; margin:11px -16px 0; padding:1px 16px 2px;">
+      <sc-for list="{{ filters }}" as="f" hint-placeholder-count="6">
+        <button onClick="{{ f.onClick }}" style="{{ f.style }}">{{ f.label }}<sc-if value="{{ f.showCount }}" hint-placeholder-val="{{ false }}"><span style="{{ f.countStyle }}">{{ f.count }}</span></sc-if></button>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <main style="padding:6px 14px 0;">
+    <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+      <div style="text-align:center; padding:60px 24px; color:var(--text3,#90A0B5);">
+        <div style="font-size:15px; font-weight:600; color:var(--text2,#5A6B82);">No matching events</div>
+        <div style="font-size:13px; margin-top:5px;">Try a different search or filter.</div>
+      </div>
+    </sc-if>
+
+    <sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
+      <div style="margin-top:16px;">
+        <div style="display:flex; align-items:center; gap:10px; margin:0 2px 4px;">
+          <span style="font-size:11.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--text3,#90A0B5);">{{ g.label }}</span>
+          <span style="flex:1; height:1px; background:var(--border,#E3E8EF);"></span>
+          <span style="font-size:11.5px; color:var(--text3,#90A0B5); font-variant-numeric:tabular-nums;">{{ g.count }}</span>
+        </div>
+
+        <sc-for list="{{ g.events }}" as="ev" hint-placeholder-count="3">
+          <div style="display:flex; gap:12px;">
+            <!-- rail -->
+            <div style="position:relative; width:16px; flex:0 0 16px;">
+              <span style="position:absolute; left:7px; top:0; bottom:0; width:2px; background:{{ railColor }};"></span>
+              <span style="position:absolute; left:1px; top:20px; width:14px; height:14px; border-radius:50%; background:{{ ev.color }}; border:3px solid var(--bg,#EEF2F6);"></span>
+            </div>
+            <!-- card -->
+            <div style="flex:1; min-width:0; margin-bottom:12px; background:var(--surface,#fff); border:1px solid var(--border,#E3E8EF); border-radius:15px; box-shadow:var(--shadow); padding:{{ cardPad }};">
+
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                <span style="display:inline-flex; align-items:center; gap:6px; height:23px; padding:0 9px; border-radius:8px; background:{{ ev.chipBg }}; color:{{ ev.color }}; font-size:11.5px; font-weight:600; letter-spacing:.01em;">
+                  <span style="width:6px; height:6px; border-radius:50%; background:{{ ev.color }};"></span>{{ ev.typeLabel }}
+                </span>
+                <span style="display:inline-flex; align-items:center; height:23px; padding:0 9px; border-radius:8px; background:{{ ev.statusBg }}; color:{{ ev.statusColor }}; font-size:11px; font-weight:600; white-space:nowrap;">{{ ev.status }}</span>
+              </div>
+
+              <div style="margin-top:10px; font-size:14.5px; font-weight:600; color:var(--text,#0F1B2D); line-height:1.35; letter-spacing:-.005em;">{{ ev.title }}</div>
+
+              <div style="display:flex; align-items:center; gap:7px; margin-top:4px; font-size:12.5px; color:var(--text2,#5A6B82); min-width:0;">
+                <span style="font-family:'IBM Plex Mono',monospace; color:var(--accent,#3B82F6); font-weight:500;">{{ ev.invoice }}</span>
+                <span style="color:var(--text3,#90A0B5);">·</span>
+                <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ ev.customer }}</span>
+              </div>
+
+              <sc-if value="{{ ev.amountShow }}" hint-placeholder-val="{{ false }}">
+                <div style="display:inline-flex; align-items:baseline; gap:3px; margin-top:11px; padding:7px 13px; border-radius:10px; background:{{ ev.amountBg }}; color:{{ ev.amountColor }}; font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:16px;">
+                  <span style="font-size:13px;">{{ ev.amountSign }}</span>{{ ev.amount }}
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ ev.hasDiff }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:11px; border:1px solid var(--border,#E3E8EF); border-radius:11px; background:var(--surface2,#F6F8FB); overflow:hidden;">
+                  <div style="padding:7px 11px; font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; color:var(--text3,#90A0B5);">Changes</div>
+                  <sc-for list="{{ ev.diff }}" as="d" hint-placeholder-count="2">
+                    <div style="display:flex; align-items:center; gap:8px; padding:8px 11px; border-top:1px solid var(--border,#E3E8EF);">
+                      <span style="width:66px; flex:0 0 66px; font-size:10.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--text3,#90A0B5);">{{ d.field }}</span>
+                      <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--text3,#90A0B5); text-decoration:line-through; white-space:nowrap;">{{ d.before }}</span>
+                      <span style="color:var(--text3,#90A0B5); font-size:12px;">→</span>
+                      <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--text,#0F1B2D); font-weight:600; white-space:nowrap;">{{ d.after }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ ev.hasNote }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:10px; font-size:12.5px; color:var(--text2,#5A6B82); background:var(--surface2,#F6F8FB); border-radius:9px; padding:8px 11px; line-height:1.45;">{{ ev.note }}</div>
+              </sc-if>
+
+              <div style="display:flex; align-items:center; gap:8px; margin-top:12px; padding-top:11px; border-top:1px solid var(--border,#E3E8EF);">
+                <sc-if value="{{ ev.system }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; flex:0 0 25px; border-radius:8px; background:color-mix(in srgb, var(--accent,#3B82F6) 14%, transparent); color:var(--accent,#3B82F6); font-size:8.5px; font-weight:700; font-family:'IBM Plex Mono',monospace;">SYS</span>
+                </sc-if>
+                <sc-if value="{{ ev.isPerson }}" hint-placeholder-val="{{ true }}">
+                  <span style="display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; flex:0 0 25px; border-radius:50%; background:var(--surface2,#F6F8FB); border:1px solid var(--border,#E3E8EF); color:var(--text2,#5A6B82); font-size:10px; font-weight:600;">{{ ev.initials }}</span>
+                </sc-if>
+                <span style="font-size:12.5px; color:var(--text,#0F1B2D); font-weight:500; white-space:nowrap;">{{ ev.actor }}</span>
+                <span style="font-size:12px; color:var(--text3,#90A0B5); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ ev.role }}</span>
+                <span style="flex:1;"></span>
+                <span style="font-size:12px; color:var(--text3,#90A0B5); font-variant-numeric:tabular-nums; white-space:nowrap;">{{ ev.time }}</span>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-for>
+
+    <div style="text-align:center; padding:22px 0 8px; font-size:11.5px; color:var(--text3,#90A0B5); font-family:'IBM Plex Mono',monospace;">— end of log · invoice_audit_log —</div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:402,&quot;height&quot;:880},&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;light&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;tsType&quot;:&quot;string&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#3B82F6&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showRail&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;balanced&quot;,&quot;options&quot;:[&quot;balanced&quot;,&quot;dense&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { theme: null, query: '', filter: 'all' };
+
+  get theme() { return this.state.theme || this.props.defaultTheme || 'light'; }
+
+  baseEvents() {
+    return [
+      { type:'payment', day:'Today', time:'9:42 AM', title:'Payment received', invoice:'#INV-2041', customer:'Acme Robotics', actor:'Stripe', system:true, role:'· webhook', status:'Paid', statusColor:'#059669', amount:'1,450.00', amountSign:'+', note:'Visa •••• 4242 · auth 0Z9KQ · settled instantly' },
+      { type:'viewed', day:'Today', time:'9:05 AM', title:'Invoice opened by recipient', invoice:'#INV-2041', customer:'Acme Robotics', actor:'Acme Robotics', role:'· recipient', status:'Sent', statusColor:'#2563EB' },
+      { type:'updated', day:'Today', time:'8:30 AM', title:'Invoice edited before resend', invoice:'#INV-2041', customer:'Acme Robotics', actor:'Dana Whitfield', role:'· billing lead', status:'Updated', statusColor:'#D97706', diff:[ {field:'Amount', before:'$1,200.00', after:'$1,450.00'}, {field:'Due date', before:'Mar 30', after:'Apr 15'}, {field:'Tax', before:'$0.00', after:'$96.00'} ] },
+      { type:'reminder', day:'Yesterday', time:'4:15 PM', title:'Payment reminder sent', invoice:'#INV-2039', customer:'Northwind Ltd', actor:'System', system:true, role:'· automation', status:'Overdue', statusColor:'#DC2626', note:'Reminder 2 of 3 · payment 6 days overdue' },
+      { type:'sent', day:'Yesterday', time:'2:01 PM', title:'Invoice sent to customer', invoice:'#INV-2041', customer:'Acme Robotics', actor:'Dana Whitfield', role:'· billing lead', status:'Sent', statusColor:'#2563EB', note:'Emailed to billing@acme.co' },
+      { type:'created', day:'Yesterday', time:'1:58 PM', title:'Invoice created', invoice:'#INV-2041', customer:'Acme Robotics', actor:'Dana Whitfield', role:'· billing lead', status:'Draft', statusColor:'#64748B' },
+      { type:'voided', day:'Mar 12', time:'5:20 PM', title:'Invoice voided', invoice:'#INV-2038', customer:'Globex Corp', actor:'Marcus Lee', role:'· finance ops', status:'Void', statusColor:'#DC2626', note:'Reason: duplicate of #INV-2041' },
+      { type:'payment', day:'Mar 12', time:'11:03 AM', title:'Payment received', invoice:'#INV-2035', customer:'Initech', actor:'Stripe', system:true, role:'· webhook', status:'Paid', statusColor:'#059669', amount:'820.00', amountSign:'+' },
+      { type:'refunded', day:'Mar 11', time:'3:48 PM', title:'Partial refund issued', invoice:'#INV-2030', customer:'Hooli', actor:'Priya Nair', role:'· finance ops', status:'Refunded', statusColor:'#EA580C', amount:'300.00', amountSign:'−', note:'Refunded to original payment method' },
+      { type:'created', day:'Mar 10', time:'9:15 AM', title:'Invoice created', invoice:'#INV-2039', customer:'Northwind Ltd', actor:'Marcus Lee', role:'· finance ops', status:'Draft', statusColor:'#64748B' },
+    ];
+  }
+
+  typeMeta(t) {
+    return ({
+      created:{label:'Created', color:'#2563EB'},
+      sent:{label:'Sent', color:'#7C3AED'},
+      viewed:{label:'Viewed', color:'#64748B'},
+      payment:{label:'Payment', color:'#059669'},
+      updated:{label:'Updated', color:'#D97706'},
+      refunded:{label:'Refunded', color:'#EA580C'},
+      voided:{label:'Voided', color:'#DC2626'},
+      reminder:{label:'Reminder', color:'#0891B2'},
+    })[t] || {label:t, color:'#64748B'};
+  }
+
+  initials(name) {
+    return name.split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
+  }
+
+  matchesFilter(ev) {
+    const f = this.state.filter;
+    if (f==='all') return true;
+    if (f==='payment') return ev.type==='payment' || ev.type==='refunded';
+    if (f==='sent') return ev.type==='sent' || ev.type==='reminder';
+    return ev.type===f;
+  }
+  matchesQuery(ev) {
+    const q = this.state.query.trim().toLowerCase();
+    if (!q) return true;
+    return (ev.invoice+' '+ev.actor+' '+ev.customer+' '+ev.title+' '+ev.type).toLowerCase().includes(q);
+  }
+
+  renderVals() {
+    const isDark = this.theme==='dark';
+    const accent = this.props.accent || '#3B82F6';
+    const mix = isDark ? 22 : 13;
+
+    const light = { '--bg':'#EDF1F6', '--surface':'#FFFFFF', '--surface2':'#F5F8FB', '--border':'#E4E9F0', '--text':'#101B2D', '--text2':'#566379', '--text3':'#93A1B5', '--shadow':'0 1px 2px rgba(16,27,45,.05), 0 2px 6px rgba(16,27,45,.04)' };
+    const dark  = { '--bg':'#0A0F1A', '--surface':'#121A2A', '--surface2':'#0E1626', '--border':'#212C40', '--text':'#E7EDF5', '--text2':'#93A4BC', '--text3':'#5E6F88', '--shadow':'0 1px 2px rgba(0,0,0,.4), 0 4px 12px rgba(0,0,0,.3)' };
+    const vars = Object.assign({}, isDark?dark:light, {'--accent':accent});
+    const themeVars = Object.entries(vars).map(([k,v])=>`${k}:${v}`).join(';') + ';background:var(--bg);color:var(--text)';
+
+    const railColor = (this.props.showRail!==false) ? 'var(--border)' : 'transparent';
+    const cardPad = (this.props.density==='dense') ? '11px 12px' : '13px 14px';
+
+    // filters with live counts
+    const all = this.baseEvents();
+    const countFor = (id) => all.filter(e => {
+      if (id==='all') return true;
+      if (id==='payment') return e.type==='payment'||e.type==='refunded';
+      if (id==='sent') return e.type==='sent'||e.type==='reminder';
+      return e.type===id;
+    }).length;
+    const chipBase = 'flex:0 0 auto; display:inline-flex; align-items:center; gap:7px; height:34px; padding:0 14px; border-radius:999px; font-size:13px; font-weight:500; font-family:inherit; white-space:nowrap; cursor:pointer; transition:none;';
+    const filters = [
+      {id:'all',label:'All'},{id:'created',label:'Created'},{id:'sent',label:'Sent'},{id:'viewed',label:'Viewed'},{id:'payment',label:'Payments'},{id:'updated',label:'Edits'},{id:'voided',label:'Voided'}
+    ].map(f => {
+      const active = this.state.filter===f.id;
+      const count = countFor(f.id);
+      return {
+        ...f, active, count, showCount: count>0,
+        onClick: () => this.setState({filter:f.id}),
+        style: chipBase + (active
+          ? 'background:var(--accent); color:#fff; border:1px solid transparent;'
+          : 'background:var(--surface); color:var(--text2); border:1px solid var(--border);'),
+        countStyle: active
+          ? 'font-size:11px; font-weight:600; opacity:.85; font-variant-numeric:tabular-nums;'
+          : 'font-size:11px; font-weight:600; color:var(--text3); font-variant-numeric:tabular-nums;'
+      };
+    });
+
+    // grouped events
+    const filtered = all.filter(e => this.matchesFilter(e) && this.matchesQuery(e));
+    const groups = [];
+    filtered.forEach(e => {
+      let g = groups.find(x => x.label===e.day);
+      if (!g) { g = {label:e.day, events:[], count:0}; groups.push(g); }
+      const meta = this.typeMeta(e.type);
+      const amountColor = e.amountSign==='−' ? '#EA580C' : '#059669';
+      g.events.push({
+        ...e,
+        typeLabel: meta.label,
+        color: meta.color,
+        chipBg: `color-mix(in srgb, ${meta.color} ${mix}%, transparent)`,
+        statusBg: `color-mix(in srgb, ${e.statusColor} ${mix}%, transparent)`,
+        isPerson: !e.system,
+        initials: e.system ? '' : this.initials(e.actor),
+        amountShow: !!e.amount,
+        amountColor,
+        amountBg: `color-mix(in srgb, ${amountColor} ${mix}%, transparent)`,
+        hasDiff: !!(e.diff && e.diff.length),
+        diff: e.diff || [],
+        hasNote: !!e.note,
+        role: e.role || '',
+      });
+      g.count = g.events.length;
+    });
+
+    return {
+      isDark, isLight: !isDark, themeVars, railColor, cardPad,
+      toggleTheme: () => this.setState({theme: isDark ? 'light':'dark'}),
+      query: this.state.query,
+      onSearch: (ev) => this.setState({query: ev.target.value}),
+      filters, groups,
+      empty: groups.length===0,
+    };
+  }
+}
+</script>
+</body>
+</html>

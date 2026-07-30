@@ -1,0 +1,878 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+
+=============== D1 activity_log: full entity/action inventory ===============
+[
+ {
+  "app": "agent-os",
+  "entity_type": "invoice",
+  "action": "visit",
+  "n": "276",
+  "first_seen": "2026-07-29T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "agent-os",
+  "entity_type": "residential_roi_calculation",
+  "action": "calculate",
+  "n": "265",
+  "first_seen": "2026-07-29T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "payment",
+  "action": "verify",
+  "n": "36",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "receipt",
+  "action": "send",
+  "n": "35",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "submitted_payment",
+  "action": "update",
+  "n": "26",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "invoice",
+  "action": "print",
+  "n": "25",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "invoice_item",
+  "action": "update",
+  "n": "24",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-29T00:00:00.000Z"
+ },
+ {
+  "app": "agent-os",
+  "entity_type": "commercial_roi_lookup",
+  "action": "calculate",
+  "n": "24",
+  "first_seen": "2026-07-29T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "agent-os",
+  "entity_type": "invoice",
+  "action": "create",
+  "n": "23",
+  "first_seen": "2026-07-29T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "invoice_item",
+  "action": "create",
+  "n": "18",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "attachment",
+  "action": "upload",
+  "n": "12",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "agent-os",
+  "entity_type": "invoice",
+  "action": "delete",
+  "n": "11",
+  "first_seen": "2026-07-29T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "customer",
+  "action": "update",
+  "n": "11",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "invoice_item",
+  "action": "delete",
+  "n": "3",
+  "first_seen": "2026-07-29T00:00:00.000Z",
+  "last_seen": "2026-07-29T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "invoice",
+  "action": "update",
+  "n": "1",
+  "first_seen": "2026-07-28T00:00:00.000Z",
+  "last_seen": "2026-07-28T00:00:00.000Z"
+ },
+ {
+  "app": "ee-admin",
+  "entity_type": "user",
+  "action": "update",
+  "n": "1",
+  "first_seen": "2026-07-30T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ }
+]
+
+
+=============== D2 activity_log: total + range ===============
+[
+ {
+  "n": "791",
+  "first": "2026-07-28T06:36:59.389Z",
+  "last": "2026-07-30T05:16:22.708Z"
+ }
+]
+
+
+=============== E1 seda entity: mapper_status transitions ===============
+[
+ {
+  "before": "Draft",
+  "after": "ready in mapper",
+  "n": "22"
+ },
+ {
+  "before": "ready in mapper",
+  "after": "not ready",
+  "n": "21"
+ }
+]
+
+
+=============== E2 seda_registration:insert sample changes ===============
+[
+ {
+  "id": 85101,
+  "invoice_id": 166302,
+  "invoice_number": "INV-1010990",
+  "actor_name": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:37:02.178Z",
+  "changes": "[{\"after\": \"seda_cf98fe3eb2ad9995\", \"field\": \"SEDA Registration\"}, {\"after\": \"cust_0eb2a8a9\", \"field\": \"Linked Customer\"}, {\"after\": \"user_c9980acd8d628c46\", \"field\": \"Assigned Agent\"}, {\"after\": \"Draft\", \"field\": \"Registration Status\"}, {\"after\": \"Pending\", \"field\": \"Admin Status\"}]"
+ },
+ {
+  "id": 85084,
+  "invoice_id": 166301,
+  "invoice_number": "INV-1010989",
+  "actor_name": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:36:09.263Z",
+  "changes": "[{\"after\": \"seda_45eb590040a255f9\", \"field\": \"SEDA Registration\"}, {\"after\": \"cust_c74e493d\", \"field\": \"Linked Customer\"}, {\"after\": \"user_c9980acd8d628c46\", \"field\": \"Assigned Agent\"}, {\"after\": \"Draft\", \"field\": \"Registration Status\"}, {\"after\": \"Pending\", \"field\": \"Admin Status\"}]"
+ },
+ {
+  "id": 85065,
+  "invoice_id": 166300,
+  "invoice_number": "INV-1010988",
+  "actor_name": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:31:26.200Z",
+  "changes": "[{\"after\": \"seda_7edc282d13edadb5\", \"field\": \"SEDA Registration\"}, {\"after\": \"cust_d69e3ceb\", \"field\": \"Linked Customer\"}, {\"after\": \"user_c9980acd8d628c46\", \"field\": \"Assigned Agent\"}, {\"after\": \"Draft\", \"field\": \"Registration Status\"}, {\"after\": \"Pending\", \"field\": \"Admin Status\"}]"
+ },
+ {
+  "id": 85040,
+  "invoice_id": 166299,
+  "invoice_number": "INV-1010987",
+  "actor_name": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:28:32.555Z",
+  "changes": "[{\"after\": \"seda_7ce6f77699a322d1\", \"field\": \"SEDA Registration\"}, {\"after\": \"cust_0b8b2bff\", \"field\": \"Linked Customer\"}, {\"after\": \"user_c9980acd8d628c46\", \"field\": \"Assigned Agent\"}, {\"after\": \"Draft\", \"field\": \"Registration Status\"}, {\"after\": \"Pending\", \"field\": \"Admin Status\"}]"
+ },
+ {
+  "id": 85031,
+  "invoice_id": 166298,
+  "invoice_number": "INV-1010986",
+  "actor_name": null,
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:28:08.527Z",
+  "changes": "[{\"after\": \"seda_130f37caf2de2ea2\", \"field\": \"SEDA Registration\"}, {\"after\": \"cust_97ddb638\", \"field\": \"Linked Customer\"}, {\"after\": \"user_c9980acd8d628c46\", \"field\": \"Assigned Agent\"}, {\"after\": \"Draft\", \"field\": \"Registration Status\"}, {\"after\": \"Pending\", \"field\": \"Admin Status\"}]"
+ }
+]
+
+
+=============== E3 seda_registration:updated sample (multi-field) ===============
+[
+ {
+  "id": 84964,
+  "invoice_id": 166256,
+  "invoice_number": "INV-1010944",
+  "actor_name": "lingliangkang2402@gmail.com",
+  "actor_role": "admin, sales, outsource unit manager (oum), team-jb, lk",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T03:06:35.711Z",
+  "changes": "[{\"after\": \"Lee Boon Leong\", \"field\": \"Emergency Contact Name\", \"before\": \"\"}, {\"after\": \"Parents\", \"field\": \"Emergency Contact Relationship\", \"before\": \"\"}, {\"after\": \"0167896556\", \"field\": \"Emergency Contact Phone\", \"before\": \"\"}, {\"after\": \"boonleong6505@gmail.com\", \"field\": \"Emergency Contact Email\", \"before\": \"\"}, {\"after\": \"650505-10-7239\", \"field\": \"Emergency Contact MyKad\", \"before\": \"\"}]"
+ },
+ {
+  "id": 84952,
+  "invoice_id": 166142,
+  "invoice_number": "INV-1010833",
+  "actor_name": "louisng0705@gmail.com",
+  "actor_role": "team-kluang, report, internal, sales executive",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T02:57:50.774Z",
+  "changes": "[{\"after\": \"17, Jalan Setia Jaya 9,\\nTaman Setia Jaya\\n83000, Batu Pahat, Johor.\", \"field\": \"Installation Address\", \"before\": null}, {\"after\": \"Batu Pahat\", \"field\": \"City\", \"before\": null}, {\"after\": \"Johor\", \"field\": \"State\", \"before\": null}, {\"after\": \"83000\", \"field\": \"Postcode\", \"before\": null}, {\"after\": \"1\", \"field\": \"Phase Type\", \"before\": null}]"
+ },
+ {
+  "id": 84931,
+  "invoice_id": 166294,
+  "invoice_number": "INV-1010982",
+  "actor_name": "martinhingsc@gmail.com",
+  "actor_role": "team-jb, report, internal, sales team manager, sales senior",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-30T02:51:29.285Z",
+  "changes": "[{\"after\": \"tan_4lucky@yahoo.com\", \"field\": \"Applicant Email\", \"before\": null}, {\"after\": \"871115-23-5007\", \"field\": \"IC Number\", \"before\": null}, {\"after\": \"IG24434001030\", \"field\": \"TIN\", \"before\": null}, {\"after\": \"Same As Above\", \"field\": \"Installation Address\", \"before\": null}, {\"after\": \"210329846602\", \"field\": \"TNB Account No\", \"before\": null}, {\"after\": \"3\", \"field\": \"Phase Type\", \"before\": null}, {\"after\": \"Tan Siow Gin\", \"field\": \"Emergency Contact Name\", \"before\": null}, {\"after\": \"Spouse\", \"field\": \"Emergency Contact Relationship\", \"before\": null}, {\"after\": \"0123533734\", \"field\": \"Emergency Contact Phone\", \"before\": null}, {\"after\": \"lohhuimin8005@gmail.com\", \"field\": \"Emergency Contact Email\", \"before\": null}, {\"after\": \"880511-01-5852\", \"field\": \"Emergency Contact MyKad\", \"before\": null}]"
+ },
+ {
+  "id": 84804,
+  "invoice_id": 166107,
+  "invoice_number": "INV-1010798",
+  "actor_name": "lingliangkang2402@gmail.com",
+  "actor_role": "admin, sales, outsource unit manager (oum), team-jb, lk",
+  "source_app": "agent-os",
+  "edited_at": "2026-07-29T13:24:05.101Z",
+  "changes": "[{\"after\": \"TAN CHABO\", \"field\": \"Applicant Name\", \"before\": \"NATALIE AUNTIE\"}, {\"after\": \"60122449843\", \"field\": \"Applicant Phone\", \"before\": \"60189844633\"}, {\"after\": \"1888, Jalan Lengkungan 1, Palm Villa 81000 Kulai Johor\", \"field\": \"Installation Address\", \"before\": null}, {\"after\": \"Kulai\", \"field\": \"City\", \"before\": null}, {\"after\": \"Johor\", \"field\": \"State\", \"before\": null}, {\"after\": \"81000\", \"field\": \"Postcode\", \"before\": null}, {\"after\": \"220823439203\", \"field\": \"TNB Account No\", \"before\": null}, {\"after\": \"3\", \"field\": \"Phase Type\", \"before\": null}]"
+ }
+]
+
+
+=============== E4 seda:update sample rows ===============
+[
+ {
+  "id": 85095,
+  "invoice_id": 166068,
+  "invoice_number": "INV-1010759",
+  "actor_name": null,
+  "actor_role": "user",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T03:36:49.865Z",
+  "changes": "[{\"after\": \"not ready\", \"field\": \"mapper_status\", \"before\": \"ready in mapper\"}]"
+ },
+ {
+  "id": 85057,
+  "invoice_id": 166068,
+  "invoice_number": "INV-1010759",
+  "actor_name": null,
+  "actor_role": "user",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T03:30:29.841Z",
+  "changes": "[{\"after\": \"ready in mapper\", \"field\": \"mapper_status\", \"before\": \"Draft\"}]"
+ },
+ {
+  "id": 84950,
+  "invoice_id": 166227,
+  "invoice_number": "INV-1010915",
+  "actor_name": null,
+  "actor_role": "user",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T02:56:33.771Z",
+  "changes": "[{\"after\": \"not ready\", \"field\": \"mapper_status\", \"before\": \"ready in mapper\"}]"
+ },
+ {
+  "id": 84925,
+  "invoice_id": 166227,
+  "invoice_number": "INV-1010915",
+  "actor_name": null,
+  "actor_role": "user",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T02:48:41.492Z",
+  "changes": "[{\"after\": \"ready in mapper\", \"field\": \"mapper_status\", \"before\": \"Draft\"}]"
+ },
+ {
+  "id": 84887,
+  "invoice_id": 166217,
+  "invoice_number": "INV-1010905",
+  "actor_name": null,
+  "actor_role": "user",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T02:37:02.324Z",
+  "changes": "[{\"after\": \"Submitted\", \"field\": \"seda_status\", \"before\": \"Pending\"}]"
+ },
+ {
+  "id": 84881,
+  "invoice_id": 166217,
+  "invoice_number": "INV-1010905",
+  "actor_name": null,
+  "actor_role": "user",
+  "source_app": "ee-admin",
+  "edited_at": "2026-07-30T02:29:40.152Z",
+  "changes": "[{\"after\": \"not ready\", \"field\": \"mapper_status\", \"before\": \"ready in mapper\"}]"
+ }
+]
+
+
+=============== E5 upload: re-upload churn (same invoice+field deleted then added) ===============
+[
+ {
+  "invoice_number": "INV-1009996",
+  "field": "TNB Bill Month 1",
+  "n": "4"
+ },
+ {
+  "invoice_number": "INV-1009741",
+  "field": "MyKad PDF",
+  "n": "3"
+ },
+ {
+  "invoice_number": "INV-1010150",
+  "field": "TNB Meter Image",
+  "n": "3"
+ },
+ {
+  "invoice_number": "INV-1008775",
+  "field": "TNB Bill Month 3",
+  "n": "3"
+ },
+ {
+  "invoice_number": "INV-1009213",
+  "field": "Tax Document",
+  "n": "3"
+ },
+ {
+  "invoice_number": "INV-1010031",
+  "field": "TNB Bill Month 3",
+  "n": "2"
+ },
+ {
+  "invoice_number": "INV-1009711",
+  "field": "TNB Bill Month 1",
+  "n": "2"
+ },
+ {
+  "invoice_number": "INV-1010696",
+  "field": "TNB Bill Month 1",
+  "n": "2"
+ },
+ {
+  "invoice_number": "INV-1009569",
+  "field": "TNB Bill Month 2",
+  "n": "2"
+ },
+ {
+  "invoice_number": "INV-1009792",
+  "field": "TNB Bill Month 3",
+  "n": "2"
+ },
+ {
+  "invoice_number": "INV-1010454",
+  "field": "Property Ownership Proof",
+  "n": "2"
+ },
+ {
+  "invoice_number": "INV-1010640",
+  "field": "TNB Bill Month 3",
+  "n": "2"
+ },
+ {
+  "invoice_number": "INV-1009792",
+  "field": "TNB Bill Month 2",
+  "n": "2"
+ },
+ {
+  "invoice_number": "INV-1009792",
+  "field": "TNB Bill Month 1",
+  "n": "2"
+ },
+ {
+  "invoice_number": "INV-1010150",
+  "field": "MyKad Front",
+  "n": "2"
+ }
+]
+
+
+=============== E6 how many changes per updated row ===============
+[
+ {
+  "fields_changed": 1,
+  "n": "427"
+ },
+ {
+  "fields_changed": 2,
+  "n": "111"
+ },
+ {
+  "fields_changed": 3,
+  "n": "36"
+ },
+ {
+  "fields_changed": 4,
+  "n": "38"
+ },
+ {
+  "fields_changed": 5,
+  "n": "65"
+ },
+ {
+  "fields_changed": 6,
+  "n": "36"
+ },
+ {
+  "fields_changed": 7,
+  "n": "35"
+ },
+ {
+  "fields_changed": 8,
+  "n": "29"
+ },
+ {
+  "fields_changed": 9,
+  "n": "13"
+ },
+ {
+  "fields_changed": 10,
+  "n": "16"
+ },
+ {
+  "fields_changed": 11,
+  "n": "13"
+ },
+ {
+  "fields_changed": 12,
+  "n": "27"
+ },
+ {
+  "fields_changed": 13,
+  "n": "36"
+ },
+ {
+  "fields_changed": 14,
+  "n": "36"
+ },
+ {
+  "fields_changed": 15,
+  "n": "6"
+ },
+ {
+  "fields_changed": 16,
+  "n": "1"
+ }
+]
+
+
+=============== E7 doc-completeness: uploads per invoice (net) ===============
+[
+ {
+  "invoices_with_uploads": "358",
+  "avg_distinct_doc_types": "5.1",
+  "max_doc_types": "11"
+ }
+]
+
+
+=============== E8 registration daily volume last 30d ===============
+[
+ {
+  "d": "2026-07-30T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "13"
+ },
+ {
+  "d": "2026-07-30T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "10"
+ },
+ {
+  "d": "2026-07-30T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "n": "7"
+ },
+ {
+  "d": "2026-07-30T00:00:00.000Z",
+  "entity_type": "seda",
+  "action_type": "update",
+  "n": "6"
+ },
+ {
+  "d": "2026-07-30T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "n": "1"
+ },
+ {
+  "d": "2026-07-29T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "37"
+ },
+ {
+  "d": "2026-07-29T00:00:00.000Z",
+  "entity_type": "seda",
+  "action_type": "update",
+  "n": "21"
+ },
+ {
+  "d": "2026-07-29T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "15"
+ },
+ {
+  "d": "2026-07-29T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "n": "6"
+ },
+ {
+  "d": "2026-07-29T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "n": "6"
+ },
+ {
+  "d": "2026-07-28T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "40"
+ },
+ {
+  "d": "2026-07-28T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "18"
+ },
+ {
+  "d": "2026-07-28T00:00:00.000Z",
+  "entity_type": "seda",
+  "action_type": "update",
+  "n": "11"
+ },
+ {
+  "d": "2026-07-28T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "n": "10"
+ },
+ {
+  "d": "2026-07-28T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "n": "1"
+ },
+ {
+  "d": "2026-07-27T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "n": "19"
+ },
+ {
+  "d": "2026-07-27T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "17"
+ },
+ {
+  "d": "2026-07-27T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "16"
+ },
+ {
+  "d": "2026-07-26T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "n": "18"
+ },
+ {
+  "d": "2026-07-26T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "14"
+ },
+ {
+  "d": "2026-07-26T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "4"
+ },
+ {
+  "d": "2026-07-25T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "n": "18"
+ },
+ {
+  "d": "2026-07-25T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "4"
+ },
+ {
+  "d": "2026-07-25T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "3"
+ },
+ {
+  "d": "2026-07-24T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "12"
+ },
+ {
+  "d": "2026-07-24T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "n": "11"
+ },
+ {
+  "d": "2026-07-24T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "6"
+ },
+ {
+  "d": "2026-07-24T00:00:00.000Z",
+  "entity_type": "seda",
+  "action_type": "update",
+  "n": "1"
+ },
+ {
+  "d": "2026-07-23T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "29"
+ },
+ {
+  "d": "2026-07-23T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "16"
+ },
+ {
+  "d": "2026-07-23T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "n": "8"
+ },
+ {
+  "d": "2026-07-23T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "n": "5"
+ },
+ {
+  "d": "2026-07-23T00:00:00.000Z",
+  "entity_type": "seda",
+  "action_type": "update",
+  "n": "2"
+ },
+ {
+  "d": "2026-07-22T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "15"
+ },
+ {
+  "d": "2026-07-22T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "5"
+ },
+ {
+  "d": "2026-07-22T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "n": "4"
+ },
+ {
+  "d": "2026-07-22T00:00:00.000Z",
+  "entity_type": "seda",
+  "action_type": "update",
+  "n": "2"
+ },
+ {
+  "d": "2026-07-21T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "18"
+ },
+ {
+  "d": "2026-07-21T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "15"
+ },
+ {
+  "d": "2026-07-21T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "n": "13"
+ },
+ {
+  "d": "2026-07-21T00:00:00.000Z",
+  "entity_type": "seda",
+  "action_type": "update",
+  "n": "11"
+ },
+ {
+  "d": "2026-07-21T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "n": "3"
+ },
+ {
+  "d": "2026-07-20T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "24"
+ },
+ {
+  "d": "2026-07-20T00:00:00.000Z",
+  "entity_type": "seda",
+  "action_type": "update",
+  "n": "11"
+ },
+ {
+  "d": "2026-07-20T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "9"
+ },
+ {
+  "d": "2026-07-20T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "n": "1"
+ },
+ {
+  "d": "2026-07-19T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "21"
+ },
+ {
+  "d": "2026-07-19T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "7"
+ },
+ {
+  "d": "2026-07-19T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "n": "1"
+ },
+ {
+  "d": "2026-07-18T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "8"
+ },
+ {
+  "d": "2026-07-18T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "3"
+ },
+ {
+  "d": "2026-07-18T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "n": "1"
+ },
+ {
+  "d": "2026-07-17T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "26"
+ },
+ {
+  "d": "2026-07-17T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "11"
+ },
+ {
+  "d": "2026-07-17T00:00:00.000Z",
+  "entity_type": "seda",
+  "action_type": "update",
+  "n": "2"
+ },
+ {
+  "d": "2026-07-17T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "n": "1"
+ },
+ {
+  "d": "2026-07-16T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "29"
+ },
+ {
+  "d": "2026-07-16T00:00:00.000Z",
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "20"
+ },
+ {
+  "d": "2026-07-16T00:00:00.000Z",
+  "entity_type": "seda",
+  "action_type": "update",
+  "n": "17"
+ },
+ {
+  "d": "2026-07-16T00:00:00.000Z",
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "n": "4"
+ }
+]
+
+
+=============== E9 actor null rate per entity ===============
+[
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "null_actor": "0",
+  "total": "2071"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "null_actor": "111",
+  "total": "111"
+ },
+ {
+  "entity_type": "seda",
+  "action_type": "update",
+  "null_actor": "1610",
+  "total": "1610"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "null_actor": "33",
+  "total": "925"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "null_actor": "0",
+  "total": "237"
+ }
+]

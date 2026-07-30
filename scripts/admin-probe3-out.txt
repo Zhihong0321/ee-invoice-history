@@ -1,0 +1,364 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+
+=============== D1 overlap: ee-admin activity_log rows vs invoice_audit_log within 60s ===============
+[
+ {
+  "entity_type": "payment",
+  "action": "verify",
+  "n": "36",
+  "has_audit_twin": "36"
+ },
+ {
+  "entity_type": "receipt",
+  "action": "send",
+  "n": "35",
+  "has_audit_twin": "0"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action": "update",
+  "n": "26",
+  "has_audit_twin": "0"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action": "update",
+  "n": "25",
+  "has_audit_twin": "25"
+ },
+ {
+  "entity_type": "invoice",
+  "action": "print",
+  "n": "25",
+  "has_audit_twin": "0"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action": "create",
+  "n": "19",
+  "has_audit_twin": "19"
+ },
+ {
+  "entity_type": "attachment",
+  "action": "upload",
+  "n": "14",
+  "has_audit_twin": "0"
+ },
+ {
+  "entity_type": "customer",
+  "action": "update",
+  "n": "13",
+  "has_audit_twin": "0"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action": "delete",
+  "n": "3",
+  "has_audit_twin": "3"
+ },
+ {
+  "entity_type": "invoice",
+  "action": "update",
+  "n": "1",
+  "has_audit_twin": "1"
+ },
+ {
+  "entity_type": "user",
+  "action": "update",
+  "n": "1",
+  "has_audit_twin": "0"
+ }
+]
+
+
+=============== D2 audit-log volume in the same window (since 2026-07-28) ===============
+[
+ {
+  "entity_type": "invoice",
+  "action_type": "update",
+  "n": "1213"
+ },
+ {
+  "entity_type": "viewer_activity",
+  "action_type": "invoice_viewed",
+  "n": "493"
+ },
+ {
+  "entity_type": "viewer_activity",
+  "action_type": "invoice_session_ended",
+  "n": "471"
+ },
+ {
+  "entity_type": "viewer_activity",
+  "action_type": "invoice_button_clicked",
+  "n": "260"
+ },
+ {
+  "entity_type": "invoice_upload",
+  "action_type": "added",
+  "n": "124"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action_type": "insert",
+  "n": "108"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "87"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "verify",
+  "n": "51"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action_type": "update",
+  "n": "47"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "47"
+ },
+ {
+  "entity_type": "seda",
+  "action_type": "update",
+  "n": "44"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "n": "36"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "update",
+  "n": "35"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action_type": "delete",
+  "n": "28"
+ },
+ {
+  "entity_type": "invoice",
+  "action_type": "insert",
+  "n": "24"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "n": "23"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action_type": "create",
+  "n": "23"
+ },
+ {
+  "entity_type": "drawing",
+  "action_type": "upload",
+  "n": "16"
+ },
+ {
+  "entity_type": "viewer_activity",
+  "action_type": "proposal_viewed",
+  "n": "11"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "n": "8"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "delete",
+  "n": "2"
+ },
+ {
+  "entity_type": "viewer_activity",
+  "action_type": "proposal_session_ended",
+  "n": "2"
+ },
+ {
+  "entity_type": "invoice_upload",
+  "action_type": "deleted",
+  "n": "1"
+ }
+]
+
+
+=============== D3 any user/customer entity in invoice_audit_log at all? ===============
+[]
+
+
+=============== D4 activity_log oldest row / retention window ===============
+[
+ {
+  "oldest": "2026-07-28T06:36:59.389Z",
+  "newest": "2026-07-30T06:43:45.307Z",
+  "n": "829",
+  "with_retain": "0"
+ }
+]
+
+
+=============== D5 ee-admin print: which invoices, repeat prints ===============
+[
+ {
+  "entity_label": "INV-1009623",
+  "prints": "8",
+  "first": "2026-07-28T09:14:55.425Z",
+  "last": "2026-07-29T08:55:29.533Z"
+ },
+ {
+  "entity_label": "INV-1010869",
+  "prints": "3",
+  "first": "2026-07-29T04:43:11.009Z",
+  "last": "2026-07-29T06:52:13.856Z"
+ },
+ {
+  "entity_label": "INV-1010044",
+  "prints": "3",
+  "first": "2026-07-29T08:17:01.121Z",
+  "last": "2026-07-29T08:37:55.825Z"
+ },
+ {
+  "entity_label": "INV-1010945",
+  "prints": "2",
+  "first": "2026-07-28T09:03:17.651Z",
+  "last": "2026-07-28T09:04:14.799Z"
+ },
+ {
+  "entity_label": "INV-1010045",
+  "prints": "2",
+  "first": "2026-07-29T09:07:57.054Z",
+  "last": "2026-07-29T09:08:34.522Z"
+ },
+ {
+  "entity_label": "INV-1010467",
+  "prints": "2",
+  "first": "2026-07-29T03:46:59.821Z",
+  "last": "2026-07-29T03:47:48.717Z"
+ },
+ {
+  "entity_label": "INV-1010947",
+  "prints": "1",
+  "first": "2026-07-28T08:53:18.872Z",
+  "last": "2026-07-28T08:53:18.872Z"
+ },
+ {
+  "entity_label": "INV-1010043",
+  "prints": "1",
+  "first": "2026-07-29T08:41:06.924Z",
+  "last": "2026-07-29T08:41:06.924Z"
+ },
+ {
+  "entity_label": "INV-1010676",
+  "prints": "1",
+  "first": "2026-07-29T06:27:05.362Z",
+  "last": "2026-07-29T06:27:05.362Z"
+ },
+ {
+  "entity_label": "INV-1010914",
+  "prints": "1",
+  "first": "2026-07-30T03:11:58.779Z",
+  "last": "2026-07-30T03:11:58.779Z"
+ }
+]
+
+
+=============== D6 receipt send success vs failed by day ===============
+[
+ {
+  "day": "2026-07-30T00:00:00.000Z",
+  "status": "failed",
+  "n": "20"
+ },
+ {
+  "day": "2026-07-29T00:00:00.000Z",
+  "status": "failed",
+  "n": "15"
+ }
+]
+
+
+=============== D7 payment verify → receipt send pairing (same entity_id) ===============
+[
+ {
+  "entity_id": "1288",
+  "verified_at": "2026-07-30T04:59:30.571Z",
+  "receipt_at": "2026-07-30T04:59:30.559Z",
+  "status": "failed"
+ },
+ {
+  "entity_id": "1314",
+  "verified_at": "2026-07-30T04:51:58.626Z",
+  "receipt_at": "2026-07-30T04:51:58.607Z",
+  "status": "failed"
+ },
+ {
+  "entity_id": "1320",
+  "verified_at": "2026-07-30T04:47:25.969Z",
+  "receipt_at": "2026-07-30T04:47:25.955Z",
+  "status": "failed"
+ },
+ {
+  "entity_id": "1319",
+  "verified_at": "2026-07-30T04:47:19.714Z",
+  "receipt_at": "2026-07-30T04:47:19.699Z",
+  "status": "failed"
+ },
+ {
+  "entity_id": "1317",
+  "verified_at": "2026-07-30T04:39:09.615Z",
+  "receipt_at": "2026-07-30T04:39:09.593Z",
+  "status": "failed"
+ },
+ {
+  "entity_id": "1315",
+  "verified_at": "2026-07-30T04:35:34.466Z",
+  "receipt_at": "2026-07-30T04:35:34.459Z",
+  "status": "failed"
+ },
+ {
+  "entity_id": "1321",
+  "verified_at": "2026-07-30T04:32:54.887Z",
+  "receipt_at": "2026-07-30T04:32:54.870Z",
+  "status": "failed"
+ },
+ {
+  "entity_id": "1313",
+  "verified_at": "2026-07-30T04:27:19.452Z",
+  "receipt_at": "2026-07-30T04:27:19.404Z",
+  "status": "failed"
+ },
+ {
+  "entity_id": "1310",
+  "verified_at": "2026-07-30T03:46:21.212Z",
+  "receipt_at": "2026-07-30T03:46:21.202Z",
+  "status": "failed"
+ },
+ {
+  "entity_id": "1309",
+  "verified_at": "2026-07-30T03:42:17.347Z",
+  "receipt_at": "2026-07-30T03:42:17.312Z",
+  "status": "failed"
+ },
+ {
+  "entity_id": "1307",
+  "verified_at": "2026-07-30T03:36:51.383Z",
+  "receipt_at": "2026-07-30T03:36:51.331Z",
+  "status": "failed"
+ },
+ {
+  "entity_id": "1311",
+  "verified_at": "2026-07-30T03:33:35.880Z",
+  "receipt_at": "2026-07-30T03:33:35.864Z",
+  "status": "failed"
+ }
+]

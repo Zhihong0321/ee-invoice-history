@@ -1,0 +1,505 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+
+=============== F1 milestone coverage per invoice ===============
+[
+ {
+  "invoices_with_seda_status": "1537",
+  "has_pending": "1343",
+  "has_submitted": "165",
+  "has_approved": "57",
+  "sub_and_appr": "22",
+  "pend_and_sub": "0"
+ }
+]
+
+
+=============== F2 submitted -> approved durations ===============
+[
+ {
+  "days": "0.19",
+  "invoice_id": 165836
+ },
+ {
+  "days": "8.22",
+  "invoice_id": 165953
+ },
+ {
+  "days": "8.22",
+  "invoice_id": 166027
+ },
+ {
+  "days": "8.32",
+  "invoice_id": 165663
+ },
+ {
+  "days": "8.33",
+  "invoice_id": 165692
+ },
+ {
+  "days": "10.03",
+  "invoice_id": 165901
+ },
+ {
+  "days": "10.93",
+  "invoice_id": 165637
+ },
+ {
+  "days": "10.94",
+  "invoice_id": 165686
+ },
+ {
+  "days": "10.94",
+  "invoice_id": 165664
+ },
+ {
+  "days": "10.98",
+  "invoice_id": 166043
+ },
+ {
+  "days": "10.99",
+  "invoice_id": 165949
+ },
+ {
+  "days": "11.00",
+  "invoice_id": 165934
+ },
+ {
+  "days": "11.01",
+  "invoice_id": 165961
+ },
+ {
+  "days": "11.89",
+  "invoice_id": 165854
+ },
+ {
+  "days": "11.93",
+  "invoice_id": 165673
+ },
+ {
+  "days": "12.19",
+  "invoice_id": 166062
+ },
+ {
+  "days": "12.23",
+  "invoice_id": 165823
+ },
+ {
+  "days": "12.23",
+  "invoice_id": 165695
+ },
+ {
+  "days": "12.23",
+  "invoice_id": 165645
+ },
+ {
+  "days": "12.23",
+  "invoice_id": 165618
+ },
+ {
+  "days": "12.24",
+  "invoice_id": 165891
+ },
+ {
+  "days": "18.98",
+  "invoice_id": 165861
+ }
+]
+
+
+=============== F3 pending -> submitted durations (summary) ===============
+[
+ {
+  "n": "0",
+  "avg_days": null,
+  "median_days": null,
+  "min_days": null,
+  "max_days": null
+ }
+]
+
+
+=============== G1 payment event inventory ===============
+[
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "2987",
+  "first_seen": "2024-04-29T00:00:00.000Z",
+  "last_seen": "2026-05-05T00:00:00.000Z",
+  "invoices": "1129"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "n": "1130",
+  "first_seen": "2026-03-09T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z",
+  "invoices": "556"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "verify",
+  "n": "419",
+  "first_seen": "2026-06-11T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z",
+  "invoices": "304"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "update",
+  "n": "322",
+  "first_seen": "2026-06-11T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z",
+  "invoices": "250"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "delete",
+  "n": "38",
+  "first_seen": "2026-05-12T00:00:00.000Z",
+  "last_seen": "2026-07-29T00:00:00.000Z",
+  "invoices": "31"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "delete",
+  "n": "12",
+  "first_seen": "2026-06-18T00:00:00.000Z",
+  "last_seen": "2026-07-03T00:00:00.000Z",
+  "invoices": "9"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "n": "11",
+  "first_seen": "2026-05-12T00:00:00.000Z",
+  "last_seen": "2026-07-10T00:00:00.000Z",
+  "invoices": "10"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "receipt_sent_manual",
+  "n": "2",
+  "first_seen": "2026-06-30T00:00:00.000Z",
+  "last_seen": "2026-07-17T00:00:00.000Z",
+  "invoices": "2"
+ }
+]
+
+
+=============== G2 first payment vs seda submitted — overlap + durations ===============
+[
+ {
+  "invoices_with_both_pay_and_submitted": "165",
+  "avg_days": "36.83",
+  "median_days": "27.55",
+  "min_days": "-0.04",
+  "max_days": "201.49",
+  "submitted_before_payment": "2"
+ }
+]
+
+
+=============== G3 first-payment coverage vs seda invoices ===============
+[
+ {
+  "seda_invoices": "1537",
+  "with_any_payment_event": "305"
+ }
+]
+
+
+=============== G4 payment date fields on invoice table ===============
+[
+ {
+  "column_name": "1st_payment",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "1st_payment__",
+  "data_type": "text"
+ },
+ {
+  "column_name": "1st_payment_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "2nd_payment",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "2nd_payment__",
+  "data_type": "text"
+ },
+ {
+  "column_name": "created_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "creation_date",
+  "data_type": "text"
+ },
+ {
+  "column_name": "final_comm_payment_amount",
+  "data_type": "text"
+ },
+ {
+  "column_name": "follow_up_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "full_payment_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "hide_payment_terms",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "installation_date",
+  "data_type": "text"
+ },
+ {
+  "column_name": "invoice_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "last_payment_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "linked_payment",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "linked_payment_plan",
+  "data_type": "text"
+ },
+ {
+  "column_name": "modified_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "payment_method",
+  "data_type": "text"
+ },
+ {
+  "column_name": "signature_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "updated_at",
+  "data_type": "timestamp with time zone"
+ }
+]
+
+
+=============== G5 sample end-to-end rows ===============
+[
+ {
+  "invoice_id": 166217,
+  "t_first_pay": "2026-07-27T03:40:24.908Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-30T02:37:02.324Z",
+  "t_approved": null
+ },
+ {
+  "invoice_id": 166187,
+  "t_first_pay": "2026-07-20T10:57:18.616Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-29T04:14:11.262Z",
+  "t_approved": null
+ },
+ {
+  "invoice_id": 166125,
+  "t_first_pay": "2026-07-20T09:05:20.983Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-29T04:13:37.727Z",
+  "t_approved": null
+ },
+ {
+  "invoice_id": 166009,
+  "t_first_pay": "2026-07-15T09:49:34.985Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-29T03:55:01.034Z",
+  "t_approved": null
+ },
+ {
+  "invoice_id": 166109,
+  "t_first_pay": "2026-07-15T07:17:22.464Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-29T03:46:00.373Z",
+  "t_approved": null
+ },
+ {
+  "invoice_id": 166072,
+  "t_first_pay": "2026-07-13T05:01:45.339Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-29T03:45:27.977Z",
+  "t_approved": null
+ },
+ {
+  "invoice_id": 166034,
+  "t_first_pay": "2026-07-15T06:06:36.289Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-29T03:44:04.842Z",
+  "t_approved": null
+ },
+ {
+  "invoice_id": 166029,
+  "t_first_pay": "2026-07-09T04:04:40.611Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-29T03:42:46.656Z",
+  "t_approved": null
+ },
+ {
+  "invoice_id": 166005,
+  "t_first_pay": "2026-07-17T12:17:27.550Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-29T03:41:22.738Z",
+  "t_approved": null
+ },
+ {
+  "invoice_id": 165981,
+  "t_first_pay": "2026-07-09T09:49:50.184Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-29T03:39:37.346Z",
+  "t_approved": null
+ },
+ {
+  "invoice_id": 165941,
+  "t_first_pay": "2026-07-02T09:16:56.251Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-29T03:20:34.434Z",
+  "t_approved": null
+ },
+ {
+  "invoice_id": 165917,
+  "t_first_pay": "2026-06-30T05:41:20.246Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-29T03:20:03.433Z",
+  "t_approved": null
+ },
+ {
+  "invoice_id": 165967,
+  "t_first_pay": "2026-07-10T08:09:38.475Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-20T05:33:03.182Z",
+  "t_approved": null
+ },
+ {
+  "invoice_id": 165953,
+  "t_first_pay": "2026-07-01T05:09:22.482Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-20T03:14:57.806Z",
+  "t_approved": "2026-07-28T08:28:27.493Z"
+ },
+ {
+  "invoice_id": 166027,
+  "t_first_pay": "2026-07-14T16:06:30.532Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-20T03:02:16.285Z",
+  "t_approved": "2026-07-28T08:25:54.991Z"
+ },
+ {
+  "invoice_id": 166037,
+  "t_first_pay": "2026-07-14T02:47:37.802Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-20T02:13:19.888Z",
+  "t_approved": null
+ },
+ {
+  "invoice_id": 166043,
+  "t_first_pay": "2026-07-09T06:43:44.452Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-17T07:23:49.367Z",
+  "t_approved": "2026-07-28T06:49:50.451Z"
+ },
+ {
+  "invoice_id": 165934,
+  "t_first_pay": "2026-06-30T12:00:40.128Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-17T06:44:27.092Z",
+  "t_approved": "2026-07-28T06:41:56.645Z"
+ },
+ {
+  "invoice_id": 165756,
+  "t_first_pay": "2026-06-18T15:08:32.230Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-16T01:28:58.607Z",
+  "t_approved": null
+ },
+ {
+  "invoice_id": 166062,
+  "t_first_pay": "2026-07-15T03:58:24.423Z",
+  "t_pending": null,
+  "t_submitted": "2026-07-16T01:24:59.139Z",
+  "t_approved": "2026-07-28T06:02:05.699Z"
+ }
+]
+
+
+=============== H1 combined-feed volume check (all seda rows by day, last 14d) ===============
+[
+ {
+  "d": "2026-07-30T00:00:00.000Z",
+  "rows_total": "37"
+ },
+ {
+  "d": "2026-07-29T00:00:00.000Z",
+  "rows_total": "85"
+ },
+ {
+  "d": "2026-07-28T00:00:00.000Z",
+  "rows_total": "80"
+ },
+ {
+  "d": "2026-07-27T00:00:00.000Z",
+  "rows_total": "52"
+ },
+ {
+  "d": "2026-07-26T00:00:00.000Z",
+  "rows_total": "36"
+ },
+ {
+  "d": "2026-07-25T00:00:00.000Z",
+  "rows_total": "25"
+ },
+ {
+  "d": "2026-07-24T00:00:00.000Z",
+  "rows_total": "30"
+ },
+ {
+  "d": "2026-07-23T00:00:00.000Z",
+  "rows_total": "60"
+ },
+ {
+  "d": "2026-07-22T00:00:00.000Z",
+  "rows_total": "26"
+ },
+ {
+  "d": "2026-07-21T00:00:00.000Z",
+  "rows_total": "60"
+ },
+ {
+  "d": "2026-07-20T00:00:00.000Z",
+  "rows_total": "45"
+ },
+ {
+  "d": "2026-07-19T00:00:00.000Z",
+  "rows_total": "29"
+ },
+ {
+  "d": "2026-07-18T00:00:00.000Z",
+  "rows_total": "12"
+ },
+ {
+  "d": "2026-07-17T00:00:00.000Z",
+  "rows_total": "40"
+ },
+ {
+  "d": "2026-07-16T00:00:00.000Z",
+  "rows_total": "43"
+ }
+]

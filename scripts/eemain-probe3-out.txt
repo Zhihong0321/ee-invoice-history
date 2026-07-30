@@ -1,0 +1,49 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+=== invoice_audit_log.application_name distinct (4) ===
+[
+  {
+    "v": "(null)",
+    "n": "64396"
+  },
+  {
+    "v": "agent-os",
+    "n": "14188"
+  },
+  {
+    "v": "invoice-creation-backfill",
+    "n": "6751"
+  },
+  {
+    "v": "ee-admin-v5",
+    "n": "61"
+  }
+]
+=== ai_activity_log.app distinct (1) ===
+[
+  {
+    "v": "ee-saj-api",
+    "n": "1"
+  }
+]
+=== ai_activity_log.app_env distinct (1) ===
+[
+  {
+    "v": "prod",
+    "n": "1"
+  }
+]
+=== activity_log.app_env distinct (2) ===
+[
+  {
+    "v": "dev",
+    "n": "672"
+  },
+  {
+    "v": "production",
+    "n": "203"
+  }
+]
+=== ee-main in application_name (0) ===
+[]
+=== ee-main in ai_activity_log (0) ===
+[]

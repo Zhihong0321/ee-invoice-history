@@ -1,0 +1,252 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+=== A1 distinct actor_kind for app=main-site ===
+[
+  {
+    "actor_kind": "bot",
+    "n": "17"
+  },
+  {
+    "actor_kind": "visitor",
+    "n": "7"
+  },
+  {
+    "actor_kind": "ai_bot",
+    "n": "2"
+  },
+  {
+    "actor_kind": "seo_bot",
+    "n": "1"
+  }
+]
+
+=== A2 distinct actor_name per actor_kind (top 40) ===
+[
+  {
+    "actor_kind": "bot",
+    "actor_name": "Generic Bot/Scraper",
+    "n": "17"
+  },
+  {
+    "actor_kind": "visitor",
+    "actor_name": "Anonymous Visitor",
+    "n": "7"
+  },
+  {
+    "actor_kind": "ai_bot",
+    "actor_name": "PerplexityBot",
+    "n": "2"
+  },
+  {
+    "actor_kind": "seo_bot",
+    "actor_name": "Googlebot",
+    "n": "1"
+  }
+]
+
+=== A3 distinct action values ===
+[
+  {
+    "action": "visit",
+    "n": "27"
+  }
+]
+
+=== A4 sample rows with fields/metadata-ish columns ===
+[
+  {
+    "id": "949",
+    "actor_kind": "seo_bot",
+    "actor_name": "Googlebot",
+    "actor_role": null,
+    "action": "visit",
+    "entity_type": "page",
+    "entity_label": "/malaysias-solar-sector-faces-stranded-asset-risk-amid-rising-capital-costs",
+    "description": "Googlebot (seo_crawler) visited /malaysias-solar-sector-faces-stranded-asset-risk-amid-rising-capital-costs [200, mobile, 46ms]",
+    "fields": null,
+    "status": "success",
+    "occurred_at": "2026-07-30T08:40:17.625Z"
+  },
+  {
+    "id": "948",
+    "actor_kind": "bot",
+    "actor_name": "Generic Bot/Scraper",
+    "actor_role": null,
+    "action": "visit",
+    "entity_type": "page",
+    "entity_label": "/malaysia-unveils-cream-empowering-community-led-renewable-energy-growth",
+    "description": "Generic Bot/Scraper (other_bot) visited /malaysia-unveils-cream-empowering-community-led-renewable-energy-growth [200, mobile, 116ms]",
+    "fields": null,
+    "status": "success",
+    "occurred_at": "2026-07-30T08:39:49.524Z"
+  },
+  {
+    "id": "947",
+    "actor_kind": "ai_bot",
+    "actor_name": "PerplexityBot",
+    "actor_role": null,
+    "action": "visit",
+    "entity_type": "page",
+    "entity_label": "/news",
+    "description": "PerplexityBot (ai_crawler) visited /news [200, desktop, 179ms]",
+    "fields": null,
+    "status": "success",
+    "occurred_at": "2026-07-30T08:38:42.690Z"
+  },
+  {
+    "id": "946",
+    "actor_kind": "ai_bot",
+    "actor_name": "PerplexityBot",
+    "actor_role": null,
+    "action": "visit",
+    "entity_type": "page",
+    "entity_label": "/robots.txt",
+    "description": "PerplexityBot (ai_crawler) visited /robots.txt [200, desktop, 0ms]",
+    "fields": null,
+    "status": "success",
+    "occurred_at": "2026-07-30T08:38:42.089Z"
+  },
+  {
+    "id": "945",
+    "actor_kind": "bot",
+    "actor_name": "Generic Bot/Scraper",
+    "actor_role": null,
+    "action": "visit",
+    "entity_type": "page",
+    "entity_label": "/dc-handal-expands-ev-charging-network-to-east-malaysia-with-new-kuching-facility",
+    "description": "Generic Bot/Scraper (other_bot) visited /dc-handal-expands-ev-charging-network-to-east-malaysia-with-new-kuching-facility [200, mobile, 59ms]",
+    "fields": null,
+    "status": "success",
+    "occurred_at": "2026-07-30T08:38:25.477Z"
+  },
+  {
+    "id": "944",
+    "actor_kind": "bot",
+    "actor_name": "Generic Bot/Scraper",
+    "actor_role": null,
+    "action": "visit",
+    "entity_type": "page",
+    "entity_label": "/empowering-rural-malaysia-how-clean-energy-transforms-local-economies",
+    "description": "Generic Bot/Scraper (other_bot) visited /empowering-rural-malaysia-how-clean-energy-transforms-local-economies [200, mobile, 40ms]",
+    "fields": null,
+    "status": "success",
+    "occurred_at": "2026-07-30T08:37:02.023Z"
+  },
+  {
+    "id": "942",
+    "actor_kind": "bot",
+    "actor_name": "Generic Bot/Scraper",
+    "actor_role": null,
+    "action": "visit",
+    "entity_type": "page",
+    "entity_label": "/visitor-analysis/daily/2026-06-30",
+    "description": "Generic Bot/Scraper (other_bot) visited /visitor-analysis/daily/2026-06-30 [200, mobile, 264ms]",
+    "fields": null,
+    "status": "success",
+    "occurred_at": "2026-07-30T08:35:39.032Z"
+  },
+  {
+    "id": "941",
+    "actor_kind": "bot",
+    "actor_name": "Generic Bot/Scraper",
+    "actor_role": null,
+    "action": "visit",
+    "entity_type": "page",
+    "entity_label": "/tesla-expands-charging-infrastructure-in-malaysia-key-updates-and-growth",
+    "description": "Generic Bot/Scraper (other_bot) visited /tesla-expands-charging-infrastructure-in-malaysia-key-updates-and-growth [200, mobile, 44ms]",
+    "fields": null,
+    "status": "success",
+    "occurred_at": "2026-07-30T08:35:23.158Z"
+  },
+  {
+    "id": "940",
+    "actor_kind": "bot",
+    "actor_name": "Generic Bot/Scraper",
+    "actor_role": null,
+    "action": "visit",
+    "entity_type": "page",
+    "entity_label": "/robots.txt",
+    "description": "Generic Bot/Scraper (other_bot) visited /robots.txt [200, desktop, 1ms]",
+    "fields": null,
+    "status": "success",
+    "occurred_at": "2026-07-30T08:33:57.548Z"
+  },
+  {
+    "id": "939",
+    "actor_kind": "bot",
+    "actor_name": "Generic Bot/Scraper",
+    "actor_role": null,
+    "action": "visit",
+    "entity_type": "page",
+    "entity_label": "/grid-infrastructure-challenges-hindering-ev-charging-expansion-in-malaysia",
+    "description": "Generic Bot/Scraper (other_bot) visited /grid-infrastructure-challenges-hindering-ev-charging-expansion-in-malaysia [200, mobile, 47ms]",
+    "fields": null,
+    "status": "success",
+    "occurred_at": "2026-07-30T08:32:51.333Z"
+  },
+  {
+    "id": "938",
+    "actor_kind": "bot",
+    "actor_name": "Generic Bot/Scraper",
+    "actor_role": null,
+    "action": "visit",
+    "entity_type": "page",
+    "entity_label": "/",
+    "description": "Generic Bot/Scraper (other_bot) visited / [200, desktop, 90ms]",
+    "fields": null,
+    "status": "success",
+    "occurred_at": "2026-07-30T08:31:59.765Z"
+  },
+  {
+    "id": "937",
+    "actor_kind": "bot",
+    "actor_name": "Generic Bot/Scraper",
+    "actor_role": null,
+    "action": "visit",
+    "entity_type": "page",
+    "entity_label": "/grid-infrastructure-challenges-hindering-ev-charging-expansion-in-malaysia",
+    "description": "Generic Bot/Scraper (other_bot) visited /grid-infrastructure-challenges-hindering-ev-charging-expansion-in-malaysia [200, mobile, 41ms]",
+    "fields": null,
+    "status": "success",
+    "occurred_at": "2026-07-30T08:31:27.701Z"
+  },
+  {
+    "id": "936",
+    "actor_kind": "bot",
+    "actor_name": "Generic Bot/Scraper",
+    "actor_role": null,
+    "action": "visit",
+    "entity_type": "page",
+    "entity_label": "/huawei-launches-ai-driven-fusionsolar-90-to-advance-malaysias-renewable-grid",
+    "description": "Generic Bot/Scraper (other_bot) visited /huawei-launches-ai-driven-fusionsolar-90-to-advance-malaysias-renewable-grid [200, mobile, 73ms]",
+    "fields": null,
+    "status": "success",
+    "occurred_at": "2026-07-30T08:30:04.477Z"
+  },
+  {
+    "id": "935",
+    "actor_kind": "bot",
+    "actor_name": "Generic Bot/Scraper",
+    "actor_role": null,
+    "action": "visit",
+    "entity_type": "page",
+    "entity_label": "/indonesian-authorities-intercept-mercury-shipment-destined-for-illegal-mines",
+    "description": "Generic Bot/Scraper (other_bot) visited /indonesian-authorities-intercept-mercury-shipment-destined-for-illegal-mines [200, mobile, 42ms]",
+    "fields": null,
+    "status": "success",
+    "occurred_at": "2026-07-30T08:28:40.755Z"
+  },
+  {
+    "id": "934",
+    "actor_kind": "bot",
+    "actor_name": "Generic Bot/Scraper",
+    "actor_role": null,
+    "action": "visit",
+    "entity_type": "page",
+    "entity_label": "/malaysia-solar-firms-rush-to-secure-stock-before-china-tax-breaks-end",
+    "description": "Generic Bot/Scraper (other_bot) visited /malaysia-solar-firms-rush-to-secure-stock-before-china-tax-breaks-end [200, mobile, 42ms]",
+    "fields": null,
+    "status": "success",
+    "occurred_at": "2026-07-30T08:27:17.158Z"
+  }
+]

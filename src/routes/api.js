@@ -2,11 +2,33 @@
 
 const express = require('express');
 const { pool } = require('../db');
+const { routerPool } = require('../routerDb');
 const { loadInvoiceHistory } = require('../repo/history');
 const { loadViewerActivity } = require('../repo/viewerActivity');
 const { listInvoices, loadInvoiceDetail } = require('../repo/invoiceFeed');
 const { loadDashboard, loadLive } = require('../repo/dashboard');
 const { loadActivityLog, loadActivityLogFacets, loadActivityLogSummary } = require('../repo/activityLog');
+const {
+    loadCalculatorActivity,
+    loadCalculatorUserSummaries,
+    loadSalesAgentActivityBoard,
+    loadSalesAgentActivitySummary,
+    loadInvoicePrep,
+    loadInvoiceEdit,
+    loadInvoiceView,
+    loadInvoiceAll,
+    loadSedaActivity,
+    loadSedaCycleTimes,
+    loadPaymentSubmission,
+    loadPaymentVerification,
+    loadPaymentActivity,
+    loadPaymentVerificationStats,
+    loadPaymentReceipt
+} = require('../repo/activityLogV2');
+const { loadUserProfile, loadUserProfileByName, loadUserProfiles, loadAllUserProfiles } = require('../repo/userProfile');
+const { loadAdminActivity, loadAdminSummary } = require('../repo/adminActivity');
+const { loadAiActivity, loadAiActivitySummary, loadSolarPresentationActivity } = require('../repo/aiActivity');
+const { loadAiRouterLogs, loadAiRouterSummary } = require('../repo/aiRouterLogs');
 
 const router = express.Router();
 
@@ -218,6 +240,552 @@ router.get('/activity-log', async (req, res) => {
         res.json({ ok: true, data: { ...feed, facets, summary, generatedAt: new Date().toISOString() } });
     } catch (err) {
         console.error('[api] /activity-log failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/calculator
+ * V2 endpoint: Calculator activity logs (residential_roi_calculation + commercial_roi_lookup).
+ *
+ * Returns: 200 { ok: true, rows: ActivityRow[], userSummaries: CalculatorUserSummary[] }
+ */
+router.get('/activity-log/calculator', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const [rows, userSummaries] = await Promise.all([
+            loadCalculatorActivity(client),
+            loadCalculatorUserSummaries(client)
+        ]);
+        res.json({ ok: true, rows, userSummaries });
+    } catch (err) {
+        console.error('[api] /activity-log/calculator failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/sales-agent-board
+ * Top five sales agents by calculator use in the last 30 days, with average
+ * TNB bill input and the requested input-range frequency distribution.
+ */
+router.get('/activity-log/sales-agent-board', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const [agents, summary] = await Promise.all([
+            loadSalesAgentActivityBoard(client),
+            loadSalesAgentActivitySummary(client)
+        ]);
+        res.json({ ok: true, agents, summary });
+    } catch (err) {
+        console.error('[api] /activity-log/sales-agent-board failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/invoice/prep
+ * V2 endpoint: invoices prepared (invoice:insert + its line items), one entry
+ * per invoice. Reads `invoice_audit_log`.
+ *
+ * Returns: 200 { ok: true, rows: PrepRow[] }
+ */
+router.get('/activity-log/invoice/prep', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const rows = await loadInvoicePrep(client, { limit: req.query.limit });
+        res.json({ ok: true, rows });
+    } catch (err) {
+        console.error('[api] /activity-log/invoice/prep failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/invoice/edit
+ * V2 endpoint: field-level invoice + line-item edits.
+ * Query params:
+ *   showAgentReassign - '1' to include linked_agent-only updates (hidden by default)
+ *   limit             - page size, default 60, max 200
+ *
+ * Returns: 200 { ok: true, rows: EditRow[] }
+ */
+router.get('/activity-log/invoice/edit', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const rows = await loadInvoiceEdit(client, {
+            limit: req.query.limit,
+            showAgentReassign: req.query.showAgentReassign === '1'
+        });
+        res.json({ ok: true, rows });
+    } catch (err) {
+        console.error('[api] /activity-log/invoice/edit failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/invoice/view
+ * V2 endpoint: invoice viewing sessions, collapsed from the three
+ * viewer_activity events into one entry per (invoice, device).
+ * Query params:
+ *   viewerType - 'all' (default) | 'anonymous' | 'logged_in'
+ *   limit      - session count, default 50, max 200
+ *
+ * Returns: 200 { ok: true, rows: SessionRow[] }
+ */
+router.get('/activity-log/invoice/view', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const rows = await loadInvoiceView(client, {
+            limit: req.query.limit,
+            viewerType: req.query.viewerType
+        });
+        res.json({ ok: true, rows });
+    } catch (err) {
+        console.error('[api] /activity-log/invoice/view failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/invoice/all
+ * V2 endpoint: prep + edit + view merged into one chronological stream.
+ * Query params:
+ *   showAgentReassign - '1' to include linked_agent-only updates
+ *   viewerType        - 'all' (default) | 'anonymous' | 'logged_in'
+ *   limit             - event count, default 60, max 200
+ *
+ * Returns: 200 { ok: true, rows: (PrepRow|EditRow|SessionRow & { kind })[] }
+ */
+router.get('/activity-log/invoice/all', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const rows = await loadInvoiceAll(client, {
+            limit: req.query.limit,
+            showAgentReassign: req.query.showAgentReassign === '1',
+            viewerType: req.query.viewerType
+        });
+        res.json({ ok: true, rows });
+    } catch (err) {
+        console.error('[api] /activity-log/invoice/all failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/seda
+ * V2 endpoint: one combined SEDA feed (registration + uploads + admin status).
+ * Query params:
+ *   kinds           - comma list of 'registration','documents','status' (default all)
+ *   includeBackfill - '1' to include the null -> status initial writes
+ *   limit           - default 120, max 500
+ *
+ * Returns: 200 { ok: true, rows: SedaRow[] }
+ */
+router.get('/activity-log/seda', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const kinds = String(req.query.kinds || '')
+            .split(',')
+            .map((k) => k.trim())
+            .filter(Boolean);
+        const rows = await loadSedaActivity(client, {
+            limit: req.query.limit,
+            kinds,
+            includeBackfill: req.query.includeBackfill === '1'
+        });
+        res.json({ ok: true, rows });
+    } catch (err) {
+        console.error('[api] /activity-log/seda failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/seda/cycle-times
+ * Median/avg days for the SEDA stages that are actually measurable.
+ *
+ * Returns: 200 { ok: true, stats: CycleStat[] }
+ */
+router.get('/activity-log/seda/cycle-times', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const stats = await loadSedaCycleTimes(client);
+        res.json({ ok: true, stats });
+    } catch (err) {
+        console.error('[api] /activity-log/seda/cycle-times failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/finance/submission
+ * V2 endpoint: payments submitted (submitted_payment:insert), each enriched
+ * with how it was resolved (verified / deleted / still pending).
+ *
+ * Returns: 200 { ok: true, rows: SubmissionRow[] }
+ */
+router.get('/activity-log/finance/submission', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const rows = await loadPaymentSubmission(client, { limit: req.query.limit });
+        res.json({ ok: true, rows });
+    } catch (err) {
+        console.error('[api] /activity-log/finance/submission failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/finance/verification
+ * V2 endpoint: field-level payment verify/update/delete events (plus the
+ * legacy pre-2026-05-05 verified_payment flow).
+ *
+ * Returns: 200 { ok: true, rows: VerificationRow[] }
+ */
+router.get('/activity-log/finance/verification', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const rows = await loadPaymentVerification(client, { limit: req.query.limit });
+        res.json({ ok: true, rows });
+    } catch (err) {
+        console.error('[api] /activity-log/finance/verification failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/finance/all
+ * V2 endpoint: submission + verification merged into one chronological
+ * stream (same "guaranteed-complete window" merge as /invoice/all).
+ *
+ * Returns: 200 { ok: true, rows: (SubmissionRow|VerificationRow & { kind })[] }
+ */
+router.get('/activity-log/finance/all', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const rows = await loadPaymentActivity(client, { limit: req.query.limit });
+        res.json({ ok: true, rows });
+    } catch (err) {
+        console.error('[api] /activity-log/finance/all failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/finance/stats
+ * Last-N-days summary for the Payment Activity page: average submit→verify
+ * turnaround and a daily verified-total series (default 30 days).
+ *
+ * Returns: 200 { ok: true, stats: { windowDays, resolvedCount, avgResolutionMs,
+ *   verifiedCount, verifiedTotal, daily: [{ date, total, count }] } }
+ */
+router.get('/activity-log/finance/stats', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const stats = await loadPaymentVerificationStats(client, { days: req.query.days });
+        res.json({ ok: true, stats });
+    } catch (err) {
+        console.error('[api] /activity-log/finance/stats failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/finance/receipt
+ * V2 endpoint: official receipt sends, merged from invoice_audit_log
+ * (full history, no success/failure signal) and activity_log (send
+ * status/error, available from 2026-07-28 onward).
+ *
+ * Returns: 200 { ok: true, rows: ReceiptRow[] }
+ */
+router.get('/activity-log/finance/receipt', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const rows = await loadPaymentReceipt(client, { limit: req.query.limit });
+        res.json({ ok: true, rows });
+    } catch (err) {
+        console.error('[api] /activity-log/finance/receipt failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/admin
+ * Admin console activity from activity_log WHERE app='ee-admin'.
+ * Query params:
+ *   areas           - comma list of area filters (print, payment, receipt, customer, user, attachment, invoice, other)
+ *   includeDuplicates - '1' to include rows that also exist in invoice_audit_log
+ *   cursor          - "<occurred_at ISO>|<id>" for pagination
+ *   limit           - page size, default 80, max 300
+ *
+ * Returns: 200 { ok: true, rows, hasMore, nextCursor }
+ */
+router.get('/activity-log/admin', async (req, res) => {
+    const { areas, includeDuplicates, cursor, limit } = req.query;
+    let client = null;
+    try {
+        client = await pool.connect();
+        const areaList = areas ? String(areas).split(',').map(a => a.trim()).filter(Boolean) : null;
+        const data = await loadAdminActivity(client, {
+            areas: areaList,
+            includeDuplicates: includeDuplicates === '1',
+            cursor,
+            limit
+        });
+        res.json({ ok: true, ...data });
+    } catch (err) {
+        console.error('[api] /activity-log/admin failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/admin/summary
+ * Summary stats for the admin console stat strip.
+ *
+ * Returns: 200 { ok: true, stats: StatTile[] }
+ */
+router.get('/activity-log/admin/summary', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const stats = await loadAdminSummary(client);
+        res.json({ ok: true, stats });
+    } catch (err) {
+        console.error('[api] /activity-log/admin/summary failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/solar-presentation
+ * Auto Proposal activity merged from `ai_activity_log` and `activity_log`,
+ * both filtered to app='solar-presentation'.
+ * Query params:
+ *   sources - comma list of 'ai' and/or 'activity' (default both)
+ *   limit   - page size, default 100, max 300
+ *
+ * Returns: 200 { ok: true, rows }
+ */
+router.get('/activity-log/solar-presentation', async (req, res) => {
+    const { sources, limit } = req.query;
+    let client = null;
+    try {
+        client = await pool.connect();
+        const sourceList = sources ? String(sources).split(',').map((source) => source.trim()).filter(Boolean) : null;
+        const rows = await loadSolarPresentationActivity(client, { sources: sourceList, limit });
+        res.json({ ok: true, rows });
+    } catch (err) {
+        console.error('[api] /activity-log/solar-presentation failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/ai-workflow
+ * AI Workflow activity from `ai_activity_log` — every AI agent run across
+ * all Eternalgy apps (Claude sessions, MiniMax TTS, etc.), regardless of app.
+ * Query params:
+ *   apps  - comma list of app filters (e.g. "solar-presentation,ee-saj-api")
+ *   limit - page size, default 100, max 300
+ *
+ * Returns: 200 { ok: true, rows }
+ */
+router.get('/activity-log/ai-workflow', async (req, res) => {
+    const { apps, limit } = req.query;
+    let client = null;
+    try {
+        client = await pool.connect();
+        const appList = apps ? String(apps).split(',').map(a => a.trim()).filter(Boolean) : null;
+        const rows = await loadAiActivity(client, { apps: appList, limit });
+        res.json({ ok: true, rows });
+    } catch (err) {
+        console.error('[api] /activity-log/ai-workflow failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/ai-workflow/summary
+ * Summary stats for the AI Workflow stat strip.
+ *
+ * Returns: 200 { ok: true, stats: StatTile[] }
+ */
+router.get('/activity-log/ai-workflow/summary', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const stats = await loadAiActivitySummary(client);
+        res.json({ ok: true, stats });
+    } catch (err) {
+        console.error('[api] /activity-log/ai-workflow/summary failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/ai-router/logs
+ * AI Router request logs from `request_logs` (tnb-tariff DB — a separate
+ * connection from the rest of this app; see ../routerDb.js).
+ * Query params:
+ *   status    - 'all' (default) | 'success' | 'error'
+ *   providers - comma list of provider_name filters
+ *   limit     - page size, default 100, max 300
+ *
+ * Returns: 200 { ok: true, rows }
+ */
+router.get('/ai-router/logs', async (req, res) => {
+    const { status, providers, limit } = req.query;
+    let client = null;
+    try {
+        client = await routerPool.connect();
+        const providerList = providers ? String(providers).split(',').map(p => p.trim()).filter(Boolean) : null;
+        const rows = await loadAiRouterLogs(client, { status, providers: providerList, limit });
+        res.json({ ok: true, rows });
+    } catch (err) {
+        console.error('[api] /ai-router/logs failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/ai-router/summary
+ * Summary stats for the AI Router stat strip.
+ *
+ * Returns: 200 { ok: true, stats: StatTile[] }
+ */
+router.get('/ai-router/summary', async (req, res) => {
+    let client = null;
+    try {
+        client = await routerPool.connect();
+        const stats = await loadAiRouterSummary(client);
+        res.json({ ok: true, stats });
+    } catch (err) {
+        console.error('[api] /ai-router/summary failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/users/profile/:userId
+ * Get user profile by ID
+ *
+ * Returns: 200 { ok: true, profile: UserProfile }
+ */
+router.get('/users/profile/:userId', async (req, res) => {
+    const { userId } = req.params;
+    let client = null;
+    try {
+        client = await pool.connect();
+        // userId is usually a Bubble id, not an integer — pass it through raw.
+        const profile = await loadUserProfile(client, userId);
+        if (!profile) {
+            return res.status(404).json({ ok: false, error: 'User not found' });
+        }
+        res.json({ ok: true, profile });
+    } catch (err) {
+        console.error(`[api] /users/profile/${userId} failed:`, err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/users/profile-by-name/:name
+ * Get user profile by name (fallback when user_id is not available)
+ *
+ * Returns: 200 { ok: true, profile: UserProfile }
+ */
+router.get('/users/profile-by-name/:name', async (req, res) => {
+    const { name } = req.params;
+    let client = null;
+    try {
+        client = await pool.connect();
+        const profile = await loadUserProfileByName(client, decodeURIComponent(name));
+        if (!profile) {
+            return res.status(404).json({ ok: false, error: 'User not found' });
+        }
+        res.json({ ok: true, profile });
+    } catch (err) {
+        console.error(`[api] /users/profile-by-name/${name} failed:`, err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/users/profiles-cache
+ * Get all users with profile pictures for client-side caching
+ *
+ * Returns: 200 { ok: true, profiles: UserProfile[] }
+ */
+router.get('/users/profiles-cache', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const profiles = await loadAllUserProfiles(client);
+        res.json({ ok: true, profiles, count: profiles.length });
+    } catch (err) {
+        console.error('[api] /users/profiles-cache failed:', err.message);
         res.status(500).json({ ok: false, error: err.message });
     } finally {
         if (client) client.release();

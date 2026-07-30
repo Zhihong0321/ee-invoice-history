@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0A0F1A; color: #E7EDF5; font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #93C5FD; }
+  a:hover { color: #E7EDF5; }
+</style>
+</helmet>
+<div style="display: flex; height: 100vh; overflow: hidden; background: #0A0F1A; color: #E7EDF5; font-family: 'Inter', system-ui, sans-serif;">
+  <aside style="width: 280px; flex-shrink: 0; background: #121A2A; border-right: 1px solid #1E2936; display: flex; flex-direction: column; overflow-y: auto;">
+    <div style="padding: 20px; border-bottom: 1px solid #1E2936;">
+      <h1 style="font-size: 18px; font-weight: 700; margin-bottom: 4px;">Activity Log V2</h1>
+      <div style="font-size: 11px; color: #5E6F88; font-weight: 500;">Department-based view</div>
+    </div>
+    <sc-for list="{{ depts }}" as="dept" hint-placeholder-count="6">
+      <div style="border-bottom: 1px solid #1E2936;">
+        <div onClick="{{ dept.toggle }}" style="padding: 14px 20px; font-size: 13px; font-weight: 700; color: #93A4BC; cursor: pointer; user-select: none; display: flex; align-items: center; gap: 8px;" style-hover="background: #0E1626;">
+          <span style="font-size: 12px; display: inline-block; transform: {{ dept.caret }};">▼</span>
+          <span>{{ dept.name }}</span>
+        </div>
+        <sc-if value="{{ dept.open }}" hint-placeholder-val="{{ true }}">
+          <div style="background: #0E1626;">
+            <sc-for list="{{ dept.items }}" as="item" hint-placeholder-count="2">
+              <div onClick="{{ item.go }}" style="padding: 10px 20px 10px 48px; font-size: 12px; color: {{ item.color }}; cursor: pointer; border-left: 3px solid {{ item.rule }}; background: {{ item.bg }}; font-weight: {{ item.weight }};">{{ item.label }}</div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </aside>
+
+  <main style="flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0;">
+    <div style="background: #121A2A; border-bottom: 1px solid #1E2936; padding: 16px 28px; display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #93A4BC;">
+        <span>{{ crumbDept }}</span>
+        <span>›</span>
+        <span style="color: #E7EDF5; font-weight: 600;">{{ crumbPage }}</span>
+      </div>
+      <div style="display: flex; gap: 12px;">
+        <button style="padding: 7px 14px; background: #1E2936; border: 1px solid #2E3A4D; border-radius: 6px; font-size: 12px; font-weight: 600; color: #E7EDF5; cursor: pointer; font-family: inherit;" style-hover="background: #2E3A4D;">Refresh</button>
+      </div>
+    </div>
+
+    <div style="flex: 1; overflow-y: auto; padding: 28px;">
+      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 20px;">
+        <div>
+          <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 6px;">{{ pageTitle }}</h2>
+          <div style="font-size: 13px; color: #93A4BC;">{{ pageDesc }}</div>
+        </div>
+      </div>
+
+      <sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; padding: 4px; background: #0E1626; border: 1px solid #1E2936; border-radius: 10px; width: fit-content; max-width: 100%;">
+          <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="4">
+            <button onClick="{{ tab.go }}" style="padding: 8px 16px; background: {{ tab.bg }}; border: none; border-radius: 7px; font-size: 12px; font-weight: 600; color: {{ tab.color }}; cursor: pointer; font-family: inherit; white-space: nowrap; box-shadow: {{ tab.ring }};">{{ tab.label }}</button>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showChips }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+          <sc-for list="{{ chips }}" as="c" hint-placeholder-count="2">
+            <button onClick="{{ c.go }}" style="padding: 6px 12px; background: {{ c.bg }}; border: 1px solid {{ c.border }}; border-radius: 999px; font-size: 11px; font-weight: 600; color: {{ c.color }}; cursor: pointer; font-family: inherit;">{{ c.label }}</button>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isFinance }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 18px;">
+            <div style="background: #131C2B; border: 1px solid #22304A; border-radius: 10px; padding: 14px 16px;">
+              <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #5E6F88; font-weight: 700;">Submit → Verify <span style="margin-left: 6px; padding: 1px 6px; border-radius: 999px; background: #1D2839; border: 1px solid #2C3A54; color: #93A4BC; font-size: 9px; letter-spacing: 0.04em;">last 30d</span></div>
+              <div style="font-size: 26px; font-weight: 700; color: #E6EDF7; margin-top: 6px; line-height: 1.1;">17.5h</div>
+              <div style="font-size: 11px; color: #5E6F88; margin-top: 6px;">64 verified payments with a known submit time</div>
+            </div>
+            <div style="background: #131C2B; border: 1px solid #22304A; border-radius: 10px; padding: 14px 16px;">
+              <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #5E6F88; font-weight: 700;">Verified total <span style="margin-left: 6px; padding: 1px 6px; border-radius: 999px; background: #1D2839; border: 1px solid #2C3A54; color: #93A4BC; font-size: 9px; letter-spacing: 0.04em;">last 30d</span></div>
+              <div style="font-size: 26px; font-weight: 700; color: #E6EDF7; margin-top: 6px; line-height: 1.1;">RM 412,880.00</div>
+              <div style="font-size: 11px; color: #5E6F88; margin-top: 6px;">71 payments verified</div>
+            </div>
+          </div>
+          <div style="background: #131C2B; border: 1px solid #22304A; border-radius: 10px; padding: 14px 16px; margin-bottom: 18px;">
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #5E6F88; font-weight: 700; margin-bottom: 12px;">Verified total per day <span style="margin-left: 6px; padding: 1px 6px; border-radius: 999px; background: #1D2839; border: 1px solid #2C3A54; color: #93A4BC; font-size: 9px; letter-spacing: 0.04em;">last 30d</span></div>
+            <div style="display: flex; align-items: flex-end; gap: 3px; height: 90px;">
+              <sc-for list="{{ dailyBars }}" as="bar" hint-placeholder-count="30">
+                <div style="flex: 1; min-width: 2px; border-radius: 2px 2px 0 0; background: {{ bar.color }}; height: {{ bar.h }};"></div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isBoard }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div style="display: grid; grid-template-columns: minmax(170px, 1.45fr) repeat(3, minmax(120px, 1fr)); gap: 10px;">
+            <sc-for list="{{ boardStats }}" as="s" hint-placeholder-count="4">
+              <div style="min-width: 0; padding: 13px 14px; border: 1px solid {{ s.border }}; border-radius: 9px; background: #101B2D;">
+                <span style="display: block; color: #7D8FA8; font-size: 10px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;">{{ s.label }}</span>
+                <strong style="display: block; margin-top: 5px; color: {{ s.color }}; font-size: 24px; font-weight: 800; font-variant-numeric: tabular-nums;">{{ s.value }}</strong>
+                <span style="display: block; margin-top: 2px; color: #93A4BC; font-size: 10px;">{{ s.note }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; color: #93A4BC; font-size: 12px;">
+            <span style="color: #7DD3FC; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;">Last 30 days</span>
+            <span>Frequency = residential TNB bill inputs</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(265px, 1fr)); gap: 14px;">
+            <sc-for list="{{ agents }}" as="a" hint-placeholder-count="5">
+              <section style="background: #121A2A; border: 1px solid #1E2936; border-radius: 10px; padding: 16px;">
+                <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                  <span style="display: grid; place-items: center; width: 28px; height: 28px; flex: 0 0 auto; border-radius: 7px; background: #172943; color: #93C5FD; font-size: 12px; font-weight: 800;">{{ a.rank }}</span>
+                  <span style="overflow: hidden; color: #E7EDF5; font-size: 14px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap;">{{ a.name }}</span>
+                  <span style="margin-left: auto; color: #93A4BC; font-size: 11px; white-space: nowrap;"><b style="color: #E7EDF5; font-size: 16px;">{{ a.uses }}</b> uses</span>
+                </div>
+                <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 16px 0 14px;">
+                  <span style="color: #7D8FA8; font-size: 10px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;">Average TNB bill input</span>
+                  <span style="color: #6EE7B7; font-size: 21px; font-weight: 800; font-variant-numeric: tabular-nums;">{{ a.avg }}</span>
+                </div>
+                <div style="margin-bottom: 8px; color: #93A4BC; font-size: 10px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;">Input frequency</div>
+                <sc-for list="{{ a.bars }}" as="b" hint-placeholder-count="3">
+                  <div style="display: grid; grid-template-columns: 72px minmax(0, 1fr) 28px; align-items: center; gap: 8px; margin-top: 7px;">
+                    <span style="color: #93A4BC; font-size: 10px; font-variant-numeric: tabular-nums;">{{ b.label }}</span>
+                    <div style="height: 8px; overflow: hidden; border-radius: 999px; background: #1C2738;">
+                      <div style="height: 100%; border-radius: inherit; background: {{ b.color }}; width: {{ b.w }};"></div>
+                    </div>
+                    <span style="color: #C7D3E4; font-size: 10px; font-weight: 700; text-align: right;">{{ b.count }}</span>
+                  </div>
+                </sc-for>
+              </section>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isFeed }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column;">
+          <sc-for list="{{ entries }}" as="e" hint-placeholder-count="4">
+            <div>
+              <sc-if value="{{ e.dayLabel }}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; align-items: center; gap: 18px; margin: 26px 0 16px;">
+                  <span style="flex: 1; border-top: 2px dotted #2E3A4D;"></span>
+                  <span style="font-size: 20px; font-weight: 700; letter-spacing: 0.06em; color: #93A4BC; font-variant-numeric: tabular-nums; white-space: nowrap;">{{ e.dayLabel }}</span>
+                  <span style="flex: 1; border-top: 2px dotted #2E3A4D;"></span>
+                </div>
+              </sc-if>
+              <div style="display: flex; gap: 18px; align-items: stretch;">
+                <div style="width: 56px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; position: relative;">
+                  <span style="position: absolute; top: 28px; bottom: 0; left: 50%; transform: translateX(-50%); border-left: 2px dotted {{ e.railColor }};"></span>
+                  <div style="position: relative; z-index: 1; width: 54px; height: 54px; border-radius: 13px; border: 2px solid {{ e.nodeBorder }}; background: {{ e.nodeBg }}; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: {{ e.nodeRing }};">
+                    <span style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 800; opacity: 0.16; color: {{ e.meridiemColor }};">{{ e.meridiem }}</span>
+                    <span style="position: relative; z-index: 1; font-size: 14px; font-weight: 700; letter-spacing: -0.02em; color: #E7EDF5; text-shadow: 0 1px 3px rgba(0,0,0,0.55); font-variant-numeric: tabular-nums;">{{ e.time }}</span>
+                  </div>
+                </div>
+                <div style="flex: 1; min-width: 0; padding-bottom: 16px;">
+                  <div style="background: {{ e.cardBg }}; border: 1px solid {{ e.cardBorder }}; border-radius: 8px; padding: 16px 18px;">
+                    <div style="display: flex; align-items: flex-start; gap: 12px;">
+                      <div style="width: 36px; height: 36px; border-radius: 6px; background: {{ e.avatarBg }}; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;">
+                        <span style="font-size: 13px; font-weight: 600; color: #93A4BC;">{{ e.avatar }}</span>
+                      </div>
+                      <div style="flex: 1; min-width: 0;">
+                        <div style="font-size: 14px; font-weight: 600; color: #E7EDF5; margin-bottom: 4px;">
+                          <sc-if value="{{ e.kind }}" hint-placeholder-val="{{ false }}">
+                            <span style="display: inline-block; padding: 2px 7px; margin-right: 6px; border-radius: 5px; font-size: 9px; font-weight: 800; letter-spacing: 0.06em; vertical-align: middle; background: {{ e.kindBg }}; color: {{ e.kindColor }}; border: 1px solid {{ e.kindBorder }};">{{ e.kind }}</span>
+                          </sc-if>{{ e.title }}</div>
+                        <div style="font-size: 12px; color: #93A4BC; margin-bottom: 8px;">{{ e.desc }}</div>
+                        <sc-if value="{{ e.hasTags }}" hint-placeholder-val="{{ false }}">
+                          <div style="display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0;">
+                            <sc-for list="{{ e.tags }}" as="t" hint-placeholder-count="2">
+                              <span style="display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; background: {{ t.bg }}; color: {{ t.color }}; border: 1px solid {{ t.border }};">{{ t.label }}</span>
+                            </sc-for>
+                          </div>
+                        </sc-if>
+                        <sc-if value="{{ e.hasChips }}" hint-placeholder-val="{{ false }}">
+                          <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;">
+                            <sc-for list="{{ e.chips }}" as="c" hint-placeholder-count="3">
+                              <span style="font-size: 11px; color: {{ c.color }}; background: {{ c.bg }}; border: 1px solid {{ c.border }}; border-radius: 5px; padding: 2px 7px; white-space: nowrap;"><b style="color: {{ c.labelColor }}; font-weight: 500;">{{ c.label }}</b> {{ c.value }}</span>
+                            </sc-for>
+                          </div>
+                        </sc-if>
+                        <sc-if value="{{ e.hasDiffs }}" hint-placeholder-val="{{ false }}">
+                          <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 4px;">
+                            <sc-for list="{{ e.diffs }}" as="d" hint-placeholder-count="2">
+                              <div style="font-size: 12px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;">
+                                <span style="color: #5E6F88; font-weight: 600; font-size: 11px; min-width: 130px;">{{ d.field }}</span>
+                                <span style="color: #93A4BC; text-decoration: line-through; opacity: 0.7;">{{ d.before }}</span>
+                                <span style="color: #5E6F88;">→</span>
+                                <span style="color: #86EFAC;">{{ d.after }}</span>
+                              </div>
+                            </sc-for>
+                          </div>
+                        </sc-if>
+                        <sc-if value="{{ e.hasItems }}" hint-placeholder-val="{{ false }}">
+                          <div style="margin: 10px 0 4px; border-top: 1px solid #1E2936;">
+                            <sc-for list="{{ e.items }}" as="it" hint-placeholder-count="3">
+                              <div style="display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #151F30; font-size: 12px; color: #93A4BC;">
+                                <span style="display: inline-flex; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 600; background: {{ it.tagBg }}; color: {{ it.tagColor }}; border: 1px solid {{ it.tagBorder }};">{{ it.type }}</span>
+                                <span style="flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ it.desc }}</span>
+                                <span style="font-variant-numeric: tabular-nums; color: {{ it.amtColor }}; font-weight: 600; flex-shrink: 0;">{{ it.amount }}</span>
+                              </div>
+                            </sc-for>
+                          </div>
+                        </sc-if>
+                        <sc-if value="{{ e.hasCycle }}" hint-placeholder-val="{{ false }}">
+                          <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                            <sc-for list="{{ e.cycle }}" as="cb" hint-placeholder-count="2">
+                              <div style="flex: 1; min-width: 0; background: #131C2B; border: 1px solid #22304A; border-radius: 8px; padding: 8px 10px;">
+                                <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: #5E6F88; font-weight: 700;">{{ cb.label }}</div>
+                                <div style="font-size: {{ cb.size }}; font-weight: 700; color: {{ cb.color }}; margin-top: 3px; line-height: 1.1;">{{ cb.value }}</div>
+                              </div>
+                            </sc-for>
+                          </div>
+                        </sc-if>
+                        <div style="display: flex; align-items: center; gap: 12px; font-size: 11px; color: #5E6F88; flex-wrap: wrap;">
+                          <sc-for list="{{ e.meta }}" as="m" hint-placeholder-count="3">
+                            <span>{{ m }}</span>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+const ROUTES = {
+  'invoice/activity': { dept: 'INVOICE', page: 'Invoice Activity', title: 'Invoice Activity', desc: 'Everything that happened to an invoice — prepared, edited and read — in one stream', tabs: true, chips: true, feed: 'invoice' },
+  'sales/calculator': { dept: 'SALES', page: 'Calculator', title: 'Calculator Usage Activity', desc: 'Residential & Commercial ROI calculation logs', feed: 'calculator' },
+  'sales/proposal': { dept: 'SALES', page: 'Sales Agent Activity', title: 'Sales Agent Activity', desc: 'Top 5 calculator users — last 30 days', board: true },
+  'finance/payment-activity': { dept: 'FINANCE', page: 'Payment Activity', title: 'Payment Activity', desc: 'Payment submissions and verifications in one stream', tabs: 'finance', finance: true, feed: 'finance' }
+};
+
+const DEPTS = [
+  ['SALES', [['sales/calculator', 'Calculator'], ['sales/proposal', 'Sales Agent Activity'], ['sales/auto-proposal', 'Auto Proposal AI-Voiced']]],
+  ['INVOICE', [['invoice/activity', 'Invoice Activity']]],
+  ['SEDA', [['seda/activity', 'SEDA Activity']]],
+  ['FINANCE', [['finance/payment-activity', 'Payment Activity'], ['finance/receipt', 'Official Receipt']]],
+  ['MARKETING', [['marketing/ads-research', 'Market Ads Research Automation'], ['marketing/seo-geo-site', 'SEO+GEO Site']]],
+  ['PR', [['pr/company-info', 'Company Info Collection'], ['pr/email', 'Email Received']]],
+  ['ADMIN', [['admin/console', 'Admin Console']]],
+  ['HR', [['hr/vacancy', 'Vacancy Email Handling']]],
+  ['USER APP', [['user-app/saj-api', 'SAJ API'], ['user-app/activity', 'User APP Activity Log']]],
+  ['AI WORKFLOW', [['ai-workflow/main', 'Main']]],
+  ['AI ROUTER', [['ai-router/logs', 'Request Logs']]]
+];
+
+const KIND = {
+  PREP: { bg: '#14304A', color: '#7DD3FC', border: '#1E4E75' },
+  EDIT: { bg: '#3A2F1E', color: '#FCD34D', border: '#6B532A' },
+  VIEW: { bg: '#2A1E4A', color: '#C4B5FD', border: '#4A3A80' },
+  SUBMISSION: { bg: '#14304A', color: '#7DD3FC', border: '#1E4E75' },
+  VERIFICATION: { bg: '#1E3A2B', color: '#86EFAC', border: '#276B45' }
+};
+const TAG = {
+  plain: { bg: '#1E2936', color: '#93A4BC', border: '#2E3A4D' },
+  discount: { bg: '#3B1D2B', color: '#F9A8D4', border: '#6B2740' },
+  voucher: { bg: '#1E3A2B', color: '#86EFAC', border: '#276B45' },
+  package: { bg: '#1E2A4D', color: '#93C5FD', border: '#2E4A8D' },
+  extra: { bg: '#3A2F1E', color: '#FCD34D', border: '#6B532A' },
+  danger: { bg: '#3A1E22', color: '#FCA5A5', border: '#7F2D33' }
+};
+
+const INVOICE_ROWS = [
+  { day: '30-07-2026', time: '2:41', meridiem: 'PM', kind: 'VIEW', avatar: '👤', visitor: true,
+    title: 'EE-2026-0418 · Lim Chee Hong', desc: 'VISITOR · Visitor #a41f read this invoice',
+    tags: [['👆 Download PDF', 'plain'], ['👆 Pay now', 'plain']],
+    meta: ['⏱ 12m ago', '⏳ 4m 12s on page', '🌏 Asia/Kuala_Lumpur', '🖥 390×844'] },
+  { day: null, time: '11:26', meridiem: 'AM', kind: 'EDIT', avatar: 'NA',
+    title: 'EE-2026-0418 · Lim Chee Hong', desc: 'Invoice',
+    diffs: [['total_amount', 'RM 41,200.00', 'RM 39,800.00'], ['payment_terms', '30% deposit', '60% deposit']],
+    meta: ['⏱ 3h ago', '👤 Nurul Aisyah', '📱 ee-admin'] },
+  { day: null, time: '9:08', meridiem: 'AM', kind: 'PREP', avatar: 'HR',
+    title: 'EE-2026-0421 · Sunway Trade Sdn Bhd', desc: 'Commercial 92kWp Hybrid · RM 268,400.00',
+    tags: [['6 items', 'plain'], ['1 discount', 'discount'], ['draft', 'plain']],
+    items: [['package', 'Commercial 92kWp hybrid package', 'RM 268,400.00'], ['extra', 'Additional SolarEdge optimisers ×14', 'RM 5,180.00'], ['discount', 'Q3 trade-in rebate', '-RM 4,000.00']],
+    meta: ['⏱ 5h ago', '👤 Hafiz Rahman', '📱 ee-admin'] },
+  { day: '29-07-2026', time: '6:54', meridiem: 'PM', kind: 'VIEW', avatar: 'CK',
+    title: 'EE-2026-0409 · Tan Wei Ming', desc: 'Chong Kai Wen opened this invoice',
+    meta: ['⏱ 1d ago', '⏳ 1m 04s on page', '🌏 Asia/Kuala_Lumpur'] }
+];
+
+const CALC_ROWS = [
+  { day: '30-07-2026', time: '3:12', meridiem: 'PM', avatar: 'SA',
+    title: 'Siti Aminah ran a residential ROI calculation', desc: 'Residential ROI Calculation',
+    chips: [['Bill', 'RM 620'], ['Battery', '10 kWh'], ['Sun peak', '3.6 h'], ['Saves', 'RM 486.20/mo', true]],
+    meta: ['⏱ 4m ago · 15:12:41', '👤 Siti Aminah', '📱 solar-calculator'] },
+  { day: null, time: '1:47', meridiem: 'PM', avatar: 'HR',
+    title: 'Hafiz Rahman ran a residential ROI calculation', desc: 'Residential ROI Calculation',
+    chips: [['Bill', 'RM 280'], ['Battery', 'none'], ['Sun peak', '3.4 h'], ['Saves', 'RM 214.80/mo', true]],
+    meta: ['⏱ 1h ago · 13:47:02', '👤 Hafiz Rahman', '📱 solar-calculator'] },
+  { day: null, time: '10:05', meridiem: 'AM', avatar: 'CK',
+    title: 'Chong Kai Wen looked up a commercial tariff', desc: 'Commercial ROI Calculation',
+    chips: [['Usage', '184,000 kWh'], ['Tariff', 'matched', true]],
+    meta: ['⏱ 5h ago · 10:05:38', '👤 Chong Kai Wen', '📱 solar-calculator'] },
+  { day: '29-07-2026', time: '4:22', meridiem: 'PM', avatar: 'NA',
+    title: 'Nurul Aisyah ran a residential ROI calculation', desc: 'Residential ROI Calculation',
+    chips: [['Bill', 'RM 940'], ['Battery', '15 kWh'], ['Sun peak', '3.8 h'], ['Saves', 'RM 742.10/mo', true]],
+    meta: ['⏱ 1d ago · 16:22:11', '👤 Nurul Aisyah', '📱 solar-calculator'] }
+];
+
+const FINANCE_ROWS = [
+  { day: '30-07-2026', time: '1:58', meridiem: 'PM', kind: 'SUBMISSION', avatar: 'NA',
+    title: 'EE-2026-0418 · Lim Chee Hong  pending', desc: 'RM 23,880.00 · Online transfer · 30 Jul 2026',
+    cycle: [['Submit → Verified', 'still pending', true], ['Deposit to 60%', '11d'], ['60% to full paid', 'pending', true]],
+    meta: ['⏱ 55m ago', '👤 Nurul Aisyah', '📱 ee-admin'] },
+  { day: null, time: '11:12', meridiem: 'AM', kind: 'VERIFICATION', avatar: '✅',
+    title: 'EE-2026-0411 · Wong Mei Ling', desc: '✅ Verified',
+    cycle: [['Time to Verify', '17.4h']],
+    diffs: [['status', 'pending', 'verified'], ['verified_amount', '—', 'RM 18,600.00']],
+    meta: ['⏱ 4h ago', '👤 Verifier (system)', '📱 ee-admin'] },
+  { day: '29-07-2026', time: '5:40', meridiem: 'PM', kind: 'SUBMISSION', avatar: 'HR',
+    title: 'EE-2026-0407 · Sunway Trade Sdn Bhd  verified',
+    desc: 'RM 80,520.00 · Cheque · 29 Jul 2026',
+    tags: [['⚠ verified as RM 78,520.00 — mismatch', 'danger']],
+    cycle: [['Submit → Verified', '1.2d'], ['Deposit to 60%', '19d'], ['60% to full paid', '6d']],
+    meta: ['⏱ 1d ago', '👤 Hafiz Rahman', '📱 ee-admin', '✅ resolved 1d ago'] }
+];
+
+class Component extends DCLogic {
+  state = { route: 'invoice/activity', open: { INVOICE: true, SALES: false, FINANCE: false }, tab: 'all', financeTab: 'all' };
+
+  entry(r, prevKind) {
+    const am = r.meridiem === 'AM';
+    const k = KIND[r.kind] || {};
+    return {
+      dayLabel: r.day || '',
+      time: r.time, meridiem: r.meridiem,
+      meridiemColor: am ? '#F59E0B' : '#818CF8',
+      nodeBg: am ? 'linear-gradient(155deg, #21283A 0%, #2C2418 100%)' : 'linear-gradient(155deg, #151D33 0%, #221C42 100%)',
+      nodeBorder: r.visitor ? '#8B5CF6' : (am ? '#5C4526' : '#3B3572'),
+      nodeRing: r.visitor ? '0 0 0 1px rgba(139,92,246,0.35)' : 'none',
+      railColor: '#2E3A4D',
+      cardBg: r.visitor ? '#0F1626' : '#121A2A',
+      cardBorder: r.visitor ? '#3B82F6' : '#1E2936',
+      avatar: r.avatar, avatarBg: r.visitor ? 'linear-gradient(135deg, #1E2936, #2E3A4D)' : '#1E2936',
+      kind: r.kind || '', kindBg: k.bg, kindColor: k.color, kindBorder: k.border,
+      title: r.title, desc: r.desc,
+      hasTags: !!(r.tags && r.tags.length),
+      tags: (r.tags || []).map(([label, t]) => ({ label, ...(TAG[t] || TAG.plain) })),
+      hasChips: !!(r.chips && r.chips.length),
+      chips: (r.chips || []).map(([label, value, accent]) => accent
+        ? { label, value, color: '#8BE3B0', bg: '#10241B', border: '#24523B', labelColor: '#5FA37D' }
+        : { label, value, color: '#C7D3E4', bg: '#1A2436', border: '#26334A', labelColor: '#7D8FA8' }),
+      hasDiffs: !!(r.diffs && r.diffs.length),
+      diffs: (r.diffs || []).map(([field, before, after]) => ({ field, before, after })),
+      hasItems: !!(r.items && r.items.length),
+      items: (r.items || []).map(([type, desc, amount]) => ({ type, desc, amount, amtColor: amount.startsWith('-') ? '#F9A8D4' : '#E7EDF5', tagBg: TAG[type].bg, tagColor: TAG[type].color, tagBorder: TAG[type].border })),
+      hasCycle: !!(r.cycle && r.cycle.length),
+      cycle: (r.cycle || []).map(([label, value, muted]) => ({ label, value, color: muted ? '#5E6F88' : '#8BE3B0', size: muted ? '13px' : '20px' })),
+      meta: r.meta
+    };
+  }
+
+  renderVals() {
+    const route = this.state.route;
+    const cfg = ROUTES[route] || { dept: route.split('/')[0].toUpperCase(), page: route.split('/')[1], title: 'Page not implemented yet', desc: 'Coming soon' };
+    const rows = cfg.feed === 'calculator' ? CALC_ROWS : cfg.feed === 'finance' ? FINANCE_ROWS : INVOICE_ROWS;
+
+    const tabDefs = cfg.tabs === 'finance'
+      ? [['all', '📋 All'], ['submission', '💳 Submission'], ['verification', '✅ Verification']]
+      : [['all', '📋 All'], ['prep', '🧾 Prep'], ['edit', '✏️ Edit'], ['view', '👀 View']];
+    const activeTab = cfg.tabs === 'finance' ? this.state.financeTab : this.state.tab;
+
+    return {
+      depts: DEPTS.map(([name, items]) => ({
+        name,
+        open: !!this.state.open[name],
+        caret: this.state.open[name] ? 'rotate(0deg)' : 'rotate(-90deg)',
+        toggle: () => this.setState(s => ({ open: { ...s.open, [name]: !s.open[name] } })),
+        items: items.map(([r, label]) => ({
+          label,
+          color: r === route ? '#3B82F6' : '#93A4BC',
+          bg: r === route ? '#1E2936' : 'transparent',
+          rule: r === route ? '#3B82F6' : 'transparent',
+          weight: r === route ? '600' : '400',
+          go: () => this.setState({ route: r })
+        }))
+      })),
+      crumbDept: cfg.dept, crumbPage: cfg.page, pageTitle: cfg.title, pageDesc: cfg.desc,
+      showTabs: !!cfg.tabs,
+      tabs: tabDefs.map(([key, label]) => ({
+        label,
+        bg: key === activeTab ? '#1E2936' : 'transparent',
+        color: key === activeTab ? '#E7EDF5' : '#93A4BC',
+        ring: key === activeTab ? 'inset 0 0 0 1px #2E3A4D' : 'none',
+        go: () => this.setState(cfg.tabs === 'finance' ? { financeTab: key } : { tab: key })
+      })),
+      showChips: !!cfg.chips,
+      chips: [
+        { label: 'Show agent reassignments', bg: '#121A2A', border: '#2E3A4D', color: '#93A4BC', go: () => {} },
+        { label: 'Visitors only', bg: '#121A2A', border: '#2E3A4D', color: '#93A4BC', go: () => {} }
+      ],
+      isFinance: !!cfg.finance, isBoard: !!cfg.board, isFeed: !!cfg.feed,
+      dailyBars: [12, 0, 34, 61, 22, 0, 0, 48, 71, 39, 18, 55, 92, 27, 0, 44, 66, 31, 12, 0, 58, 74, 41, 23, 0, 36, 88, 52, 19, 47]
+        .map(v => ({ h: v === 0 ? '1%' : Math.max(v, 3) + '%', color: v === 0 ? '#22304A' : '#34D399' })),
+      boardStats: [
+        { label: 'Total use', value: '412', note: 'all valid logs · last 30 days', border: '#263955', color: '#E7EDF5' },
+        { label: 'Low', value: '146', note: 'RM 0–300 inputs', border: '#315282', color: '#7DD3FC' },
+        { label: 'Mid', value: '188', note: 'RM 301–800 inputs', border: '#4C3D7F', color: '#C4B5FD' },
+        { label: 'High', value: '78', note: 'RM 800+ inputs', border: '#24523B', color: '#6EE7B7' }
+      ],
+      agents: [
+        ['Nurul Aisyah', 96, 'RM 612.40', [38, 44, 14]],
+        ['Hafiz Rahman', 84, 'RM 486.10', [31, 41, 12]],
+        ['Chong Kai Wen', 77, 'RM 728.90', [22, 36, 19]],
+        ['Siti Aminah', 81, 'RM 402.75', [37, 34, 10]],
+        ['Ravi Kumar', 74, 'RM 559.20', [28, 33, 13]]
+      ].map(([name, uses, avg, freq], i) => ({
+        rank: '#' + (i + 1), name, uses, avg,
+        bars: [['RM 0–300', freq[0], '#3B82F6'], ['RM 301–800', freq[1], '#A78BFA'], ['RM 800+', freq[2], '#34D399']]
+          .map(([label, count, color]) => ({ label, count, color, w: Math.max(4, Math.round((count / 44) * 100)) + '%' }))
+      })),
+      entries: rows.map(r => this.entry(r))
+    };
+  }
+}
+</script>
+</body>
+</html>

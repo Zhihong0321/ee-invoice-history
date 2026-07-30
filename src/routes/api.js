@@ -27,7 +27,7 @@ const {
 } = require('../repo/activityLogV2');
 const { loadUserProfile, loadUserProfileByName, loadUserProfiles, loadAllUserProfiles } = require('../repo/userProfile');
 const { loadAdminActivity, loadAdminSummary } = require('../repo/adminActivity');
-const { loadAiActivity, loadAiActivitySummary, loadSolarPresentationActivity } = require('../repo/aiActivity');
+const { loadAiActivity, loadAiActivitySummary, loadSolarPresentationActivity, loadReferralActivity } = require('../repo/aiActivity');
 const { loadAiRouterLogs, loadAiRouterSummary } = require('../repo/aiRouterLogs');
 
 const router = express.Router();
@@ -624,6 +624,34 @@ router.get('/activity-log/solar-presentation', async (req, res) => {
         res.json({ ok: true, rows });
     } catch (err) {
         console.error('[api] /activity-log/solar-presentation failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/referral
+ * Referral activity merged from `et_messages` (webchat events, channel=
+ * 'webchat') and `ai_activity_log` (app='00product-ai', the LLM answering
+ * those webchat questions). There is no `activity_log` app row for Referral,
+ * so the webchat stream stands in for "activity" here.
+ * Query params:
+ *   sources - comma list of 'ai' and/or 'activity' (default both)
+ *   limit   - page size, default 100, max 300
+ *
+ * Returns: 200 { ok: true, rows }
+ */
+router.get('/activity-log/referral', async (req, res) => {
+    const { sources, limit } = req.query;
+    let client = null;
+    try {
+        client = await pool.connect();
+        const sourceList = sources ? String(sources).split(',').map((source) => source.trim()).filter(Boolean) : null;
+        const rows = await loadReferralActivity(client, { sources: sourceList, limit });
+        res.json({ ok: true, rows });
+    } catch (err) {
+        console.error('[api] /activity-log/referral failed:', err.message);
         res.status(500).json({ ok: false, error: err.message });
     } finally {
         if (client) client.release();

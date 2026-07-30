@@ -70,7 +70,7 @@ async function loadCalculatorUserSummaries(client) {
 }
 
 /**
- * Top five calculator users in the last 30 days, including their residential
+ * Top fifteen calculator users in the last 30 days, including their residential
  * TNB bill distribution. Commercial lookups count toward usage but carry no
  * TNB bill value.
  */
@@ -104,7 +104,7 @@ async function loadSalesAgentActivityBoard(client) {
         FROM calculator_events
         GROUP BY actor_user_id, actor_name
         ORDER BY usage_count_30_days DESC, actor_name NULLS LAST
-        LIMIT 5
+        LIMIT 15
     `;
 
     const { rows } = await client.query(sql);

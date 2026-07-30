@@ -5,24 +5,44 @@ require('dotenv').config();
 /**
  * Second, independent DB connection — the AI Router's `request_logs` table
  * lives in a different database (tnb-tariff) than everything else in this
- * app (prod_main, via ../db.js). Same Railway HTTP proxy host, different
- * db_name + token.
+ * app (prod_main, via ../db.js).
  *
- * Two modes:
- *   proxy — set ROUTER_PG_PROXY_TOKEN (+ optional ROUTER_PG_PROXY_HOST,
- *           ROUTER_PG_PROXY_DB_NAME, default 'tnb-tariff').
- *   stub  — no token set. Returns empty rows so the UI still loads; the
- *           AI Router section just shows "no data" instead of crashing
- *           the whole app when the token is missing/expired.
+ * Three modes, same precedence as ../db.js:
+ *   direct — ROUTER_DATABASE_URL is set. Railway auto-injects this when a
+ *            Postgres plugin is linked to this service (private-network
+ *            `*.railway.internal` host, only reachable from inside Railway
+ *            — i.e. in production, not from a local dev machine).
+ *   proxy  — no ROUTER_DATABASE_URL, but ROUTER_PG_PROXY_TOKEN is set (+
+ *            optional ROUTER_PG_PROXY_HOST, ROUTER_PG_PROXY_DB_NAME,
+ *            default 'tnb-tariff'). What local dev uses, since it can't
+ *            reach the `.railway.internal` host.
+ *   stub   — neither set. Returns empty rows so the UI still loads; the
+ *            AI Router section just shows "no data" instead of crashing
+ *            the whole app when neither credential is available.
  */
 
+const ROUTER_DATABASE_URL = process.env.ROUTER_DATABASE_URL || '';
 const ROUTER_PROXY_HOST = process.env.ROUTER_PG_PROXY_HOST || 'pg-proxy-production.up.railway.app';
 const ROUTER_PROXY_DB_NAME = process.env.ROUTER_PG_PROXY_DB_NAME || 'tnb-tariff';
 const ROUTER_PROXY_TOKEN = process.env.ROUTER_PG_PROXY_TOKEN || '';
 
 let routerPool;
 
-if (ROUTER_PROXY_TOKEN) {
+if (ROUTER_DATABASE_URL) {
+    const { Pool } = require('pg');
+    routerPool = new Pool({
+        connectionString: ROUTER_DATABASE_URL,
+        application_name: 'invoice-history-router',
+        ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+        max: 5,
+        idleTimeoutMillis: 30_000,
+    });
+    routerPool.on('error', (err) => {
+        console.error('[router-db] idle pg client error:', err.message);
+    });
+
+    console.log('[router-db] running in direct mode (ROUTER_DATABASE_URL)');
+} else if (ROUTER_PROXY_TOKEN) {
     const https = require('https');
 
     function proxyQuery(sql, params = []) {

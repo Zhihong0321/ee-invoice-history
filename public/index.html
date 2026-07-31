@@ -2327,6 +2327,17 @@
       <div class="subtitle">Department-based view</div>
     </div>
 
+    <!-- HOME — landing page -->
+    <div class="dept-group">
+      <div class="dept-header active" data-dept="home">
+        <span class="dept-icon">▼</span>
+        <span>HOME</span>
+      </div>
+      <div class="submenu open" data-dept="home">
+        <div class="submenu-item active" data-route="home/overview">Overview</div>
+      </div>
+    </div>
+
     <!-- SALES Department -->
     <div class="dept-group">
       <div class="dept-header collapsed" data-dept="sales">
@@ -2392,17 +2403,6 @@
       <div class="dept-header collapsed" data-dept="warehouse">
         <span class="dept-icon">▼</span>
         <span>WAREHOUSE</span>
-    <!-- HOME — landing page -->
-    <div class="dept-group">
-      <div class="dept-header active" data-dept="home">
-        <span class="dept-icon">▼</span>
-        <span>HOME</span>
-      </div>
-      <div class="submenu open" data-dept="home">
-        <div class="submenu-item active" data-route="home/overview">Overview</div>
-      </div>
-    </div>
-
       </div>
       <div class="submenu" data-dept="warehouse">
         <div class="submenu-item" data-route="warehouse/stock-demand">Stock Demand</div>
@@ -5946,44 +5946,6 @@
       }
     }
 
-    function showPlaceholder(route) {
-      const feed = document.getElementById('feed');
-      feed.className = 'empty-state';
-      feed.innerHTML = `
-        <div class="empty-state-icon">🚧</div>
-        <h3>Page not implemented yet</h3>
-        <p>The "${route}" page is coming soon</p>
-      `;
-    }
-
-    function formatTime(iso) {
-      const date = new Date(iso);
-      const now = new Date();
-      const diff = now - date;
-      const minutes = Math.floor(diff / 60000);
-      const hours = Math.floor(minutes / 60);
-      const days = Math.floor(hours / 24);
-
-      if (minutes < 1) return 'just now';
-      if (minutes < 60) return `${minutes}m ago`;
-      if (hours < 24) return `${hours}h ago`;
-      if (days < 7) return `${days}d ago`;
-      return date.toLocaleDateString();
-    }
-
-    function reload() {
-      const active = document.querySelector('.submenu-item.active');
-      if (active) {
-        loadRoute(active.getAttribute('data-route'));
-      }
-    }
-
-    // Initial load — the landing page, matching the HOME item marked active
-    // in the sidebar markup.
-    loadOverview();
-  </script>
-</body>
-</html>
     /* ---------- HOME › Overview ----------
        The landing page. One box per activity log, each showing today's
        count, a 7-day shape and the last thing that happened, so the whole
@@ -6100,3 +6062,41 @@
       }
     }
 
+    function showPlaceholder(route) {
+      const feed = document.getElementById('feed');
+      feed.className = 'empty-state';
+      feed.innerHTML = `
+        <div class="empty-state-icon">🚧</div>
+        <h3>Page not implemented yet</h3>
+        <p>The "${route}" page is coming soon</p>
+      `;
+    }
+
+    function formatTime(iso) {
+      const date = new Date(iso);
+      const now = new Date();
+      const diff = now - date;
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+
+      if (minutes < 1) return 'just now';
+      if (minutes < 60) return `${minutes}m ago`;
+      if (hours < 24) return `${hours}h ago`;
+      if (days < 7) return `${days}d ago`;
+      return date.toLocaleDateString();
+    }
+
+    function reload() {
+      const active = document.querySelector('.submenu-item.active');
+      if (active) {
+        loadRoute(active.getAttribute('data-route'));
+      }
+    }
+
+    // Initial load — the landing page, matching the HOME item marked active
+    // in the sidebar markup.
+    loadOverview();
+  </script>
+</body>
+</html>

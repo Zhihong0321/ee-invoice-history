@@ -1,0 +1,485 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+=== ALL products (68) ===
+[
+ {
+  "bubble_id": "1703778738176x330325264407199740",
+  "name": "1 Phase Electrical Work",
+  "label": "Installation",
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1703778750326x679414674187616300",
+  "name": "3 Phase Electrical Work",
+  "label": "Installation",
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1703753749991x846223914710073300",
+  "name": "Solar System Installation (Flat Roof)",
+  "label": "Installation",
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1703753734530x891264340854571000",
+  "name": "Solar System Installation (Normal Roof)",
+  "label": "Installation",
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1703782657645x817164630116794400",
+  "name": "Travel Fee JB",
+  "label": "Installation",
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1703778887662x887428531011977200",
+  "name": "Workmanship",
+  "label": "Installation",
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1776182987917x004362228963947001",
+  "name": "[3P] SAJ R6 8KW String Inverter",
+  "label": "Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1776182988047x800815659516747800",
+  "name": "B3-16.0-LV",
+  "label": "LOV VOLTAGE BATTERY",
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1703835524354x454734092639404000",
+  "name": "NEP BDM 1000W",
+  "label": "Micro Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 1,
+  "active": false
+ },
+ {
+  "bubble_id": "1703815169794x514571837412737000",
+  "name": "NEP BDM 2000W",
+  "label": "Micro Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 2,
+  "active": false
+ },
+ {
+  "bubble_id": "1703815219673x291613300555776000",
+  "name": "NEP BDM 600W",
+  "label": "Micro Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 8,
+  "active": false
+ },
+ {
+  "bubble_id": "1712027911264x544501973692448800",
+  "name": "SAJ M2-1.0K-S2 Micro Inverter",
+  "label": "Micro Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 2,
+  "active": true
+ },
+ {
+  "bubble_id": "1712027846244x376551508591509500",
+  "name": "SAJ M2-1.8K-S4 Micro Inverter",
+  "label": "Micro Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 2,
+  "active": true
+ },
+ {
+  "bubble_id": "1696401096171x149217331616153600",
+  "name": "Concrete Addtional Cost",
+  "label": "Operation",
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1696401113197x881294205130899500",
+  "name": "Electrical Work",
+  "label": "Operation",
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1696401077810x367384612145725440",
+  "name": "Installation",
+  "label": "Operation",
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1703815669524x689205680820453400",
+  "name": "MSIG SOLAR PV HOME INSURANCE",
+  "label": "Operation",
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1696401035445x644853335042031600",
+  "name": "SEDA Application",
+  "label": "Operation",
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1696401406829x571743227504230400",
+  "name": "Skylift",
+  "label": "Operation",
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1692255863479x555358685401972740",
+  "name": "590W JinkoSolar Solar Panel N-Type TOPCon ",
+  "label": "Solar Panel",
+  "solar_output_rating": 590,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1696227082042x491448065157496800",
+  "name": "Canadian Solar TOPBiHiKu7 ",
+  "label": "Solar Panel",
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": false
+ },
+ {
+  "bubble_id": "1703832486959x361642797057966100",
+  "name": "[1P] SAJ R5 4KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 4,
+  "active": true
+ },
+ {
+  "bubble_id": "1703833932150x627237241211846700",
+  "name": "[1P] SAJ R5 5KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 5,
+  "active": true
+ },
+ {
+  "bubble_id": "1703832475148x566437913026887700",
+  "name": "[1P] SAJ R5 6KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 6,
+  "active": true
+ },
+ {
+  "bubble_id": "1703832445921x639989657399984100",
+  "name": "[1P] SAJ R5 7KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 7,
+  "active": true
+ },
+ {
+  "bubble_id": "1703815277423x923633591226466300",
+  "name": "[1P] SAJ R5 8KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 8,
+  "active": true
+ },
+ {
+  "bubble_id": "1703753919775x906442469182537700",
+  "name": "[3P] SAJ R6 10KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 10,
+  "active": true
+ },
+ {
+  "bubble_id": "1703832424223x792437775786049500",
+  "name": "[3P] SAJ R6 12KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 12,
+  "active": true
+ },
+ {
+  "bubble_id": "1703833938773x838044780385534000",
+  "name": "[3P] SAJ R6 15KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 15,
+  "active": true
+ },
+ {
+  "bubble_id": "1715267061230x935109140562051100",
+  "name": "[3P] SAJ R6 17KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 17,
+  "active": true
+ },
+ {
+  "bubble_id": null,
+  "name": "[1P] SAJ H2 4KW SINGLE PHASE Hybird Inverter",
+  "label": null,
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1767346676752x917404146809176000",
+  "name": "[1P] SAJ H2 5KW SINGLE PHASE Hybird Inverter",
+  "label": null,
+  "solar_output_rating": null,
+  "inverter_rating": 5,
+  "active": true
+ },
+ {
+  "bubble_id": "1767347123248x479900802043609100",
+  "name": "[1P] SAJ H2 6KW SINGLE PHASE Hybird Inverter",
+  "label": null,
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1767347251488x481367668775976960",
+  "name": "[1P] SAJ H2 7.6KW SINGLE PHASE Hybird Inverter",
+  "label": null,
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": false
+ },
+ {
+  "bubble_id": "1767347296348x541192008381497340",
+  "name": "[1P] SAJ H2 8KW SINGLE PHASE Hybird Inverter",
+  "label": null,
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1779719505392x615476240811365504",
+  "name": "2P40A RCBO (TYPE A)",
+  "label": null,
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1725954486871x542356245415198700",
+  "name": "[3P]SAJ C6 75K String Inverter",
+  "label": null,
+  "solar_output_rating": null,
+  "inverter_rating": 75,
+  "active": true
+ },
+ {
+  "bubble_id": "1767347771333x477744795123974140",
+  "name": "[3P] SAJ H2 10KW THREE PHASE Hybird Inverter",
+  "label": null,
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1767347810667x445499864602640400",
+  "name": "[3P] SAJ H2 12KW THREE PHASE Hybird Inverter",
+  "label": null,
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1767347895312x313789627015888900",
+  "name": "[3P] SAJ H2 15KW THREE PHASE Hybird Inverter",
+  "label": null,
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1780667331000xPROD107H220KW",
+  "name": "[3P] SAJ H2 20KW THREE PHASE Hybird Inverter",
+  "label": null,
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1767347366773x289959195173191700",
+  "name": "[3P] SAJ H2 8KW THREE PHASE Hybird Inverter",
+  "label": null,
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1724215072990x822675759905636400",
+  "name": "[3P] SAJ R5 10KW String Inverter",
+  "label": null,
+  "solar_output_rating": null,
+  "inverter_rating": 10,
+  "active": true
+ },
+ {
+  "bubble_id": "1741614860801x190167310062321660",
+  "name": "[3P] SAJ R6 12.5KW String Inverter",
+  "label": null,
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "bubble_id": "1724421132110x481560740678860800",
+  "name": "[3P] SAJ R6 20KW String Inverter",
+  "label": null,
+  "solar_output_rating": null,
+  "inverter_rating": 20,
+  "active": true
+ },
+ {
+  "bubble_id": "1725960619328x718293570166456300",
+
+=== package_item for a sample recent package (8) ===
+[
+ {
+  "bubble_id": "1780667331000xPKGITEM903P",
+  "qty": 16,
+  "inventory": true,
+  "name": "650W JinkoSolar Panel N-Type TOPCon  ",
+  "label": null
+ },
+ {
+  "bubble_id": "1780667331000xPKGITEM903I",
+  "qty": 1,
+  "inventory": true,
+  "name": "[3P] SAJ H2 8KW THREE PHASE Hybird Inverter",
+  "label": null
+ },
+ {
+  "bubble_id": "pitem_msig_allrisk_assured",
+  "qty": 1,
+  "inventory": null,
+  "name": "3 Year MSIG All-Risk Solar System Coverage up to RM10000 assured",
+  "label": null
+ },
+ {
+  "bubble_id": "1780667331000xPKGITEM903M",
+  "qty": 1,
+  "inventory": false,
+  "name": "3 Year MSIG All-Risk Solar System Coverage up to RM10000 assured",
+  "label": null
+ },
+ {
+  "bubble_id": "1780667331000xPKGITEM903W",
+  "qty": 1,
+  "inventory": null,
+  "name": "Workmanship",
+  "label": "Installation"
+ },
+ {
+  "bubble_id": "pki_res_903_mastertec_dc_cable_20260713",
+  "qty": 1,
+  "inventory": true,
+  "name": "MasterTec Solar DC Cable",
+  "label": null
+ },
+ {
+  "bubble_id": "pki_res_903_mega_ac_cable_20260713",
+  "qty": 1,
+  "inventory": true,
+  "name": "MEGA AC Cable",
+  "label": null
+ },
+ {
+  "bubble_id": "pki_res_903_mibet_mounting_20260713",
+  "qty": 1,
+  "inventory": true,
+  "name": "MIBET Solar Mounting Structure",
+  "label": null
+ }
+]
+
+=== Jul invoices: payment table vs submitted_payment (1) ===
+[
+ {
+  "pay_invoices": "51",
+  "sub_invoices": "52",
+  "sub_verified_invoices": "0"
+ }
+]
+
+=== submitted_payment status distinct (2) ===
+[
+ {
+  "status": "deleted",
+  "n": "1112"
+ },
+ {
+  "status": "pending",
+  "n": "6"
+ }
+]
+
+=== payments made IN july (by payment_date) regardless of invoice month (1) ===
+[
+ {
+  "invoices": "178",
+  "n": "218",
+  "total": "1916368.38"
+ }
+]
+
+=== Jul invoice x seda_status breakdown (4) ===
+[
+ {
+  "st": "Pending",
+  "n": "328"
+ },
+ {
+  "st": "Submitted",
+  "n": "12"
+ },
+ {
+  "st": "Approved",
+  "n": "10"
+ },
+ {
+  "st": "(null)",
+  "n": "9"
+ }
+]
+
+=== Jul invoices WITH payment: pct buckets (1) ===
+[
+ {
+  "with_payment": "51",
+  "lt59": "48",
+  "gte59": "3"
+ }
+]

@@ -29,9 +29,11 @@ const {
     loadClaimSubmission
 } = require('../repo/activityLogV2');
 const { loadUserProfile, loadUserProfileByName, loadUserProfiles, loadAllUserProfiles } = require('../repo/userProfile');
-const { loadAdminActivity, loadAdminSummary } = require('../repo/adminActivity');
+const { loadAdminActivity, loadAdminSummary, loadAdminActorMaps } = require('../repo/adminActivity');
+const { loadProjectAttachments, loadProjectAttachmentSummary } = require('../repo/projectAttachments');
 const { loadAiActivity, loadAiActivitySummary, loadSolarPresentationActivity, loadReferralActivity } = require('../repo/aiActivity');
 const { loadAiRouterLogs, loadAiRouterSummary } = require('../repo/aiRouterLogs');
+const { loadWarehouse } = require('../repo/warehouse');
 
 const router = express.Router();
 
@@ -636,6 +638,24 @@ router.get('/activity-log/finance/claim', async (req, res) => {
 });
 
 /**
+ * GET /api/warehouse
+ * Stock demand for one month, traced from invoices that carry a payment.
+ * Query params:
+ *   month - 'YYYY-MM' (defaults to the newest month that has any payment)
+ *
+ * Returns: 200 { ok: true, data: { month, monthLabel, months, totals, groups } }
+ */
+router.get('/warehouse', async (req, res) => {
+    try {
+        const data = await loadWarehouse({ month: req.query.month });
+        res.json({ ok: true, data });
+    } catch (err) {
+        console.error('[api] /warehouse failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    }
+});
+
+/**
  * GET /api/activity-log/admin
  * Admin console activity from activity_log WHERE app='ee-admin'.
  * Query params:
@@ -681,6 +701,89 @@ router.get('/activity-log/admin/summary', async (req, res) => {
         res.json({ ok: true, stats });
     } catch (err) {
         console.error('[api] /activity-log/admin/summary failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/admin/actor-maps
+ * One per-day heatmap per detected admin actor. Takes the same areas/
+ * duplicates filters as /activity-log/admin so the maps and the feed below
+ * them describe the same events.
+ * Query params:
+ *   weeks             - grid width in whole weeks, default 5, clamped 2..8
+ *                       (activity_log is purged at 30 days)
+ *   areas             - comma list of area filters
+ *   includeDuplicates - '1' to include rows that also exist in invoice_audit_log
+ *
+ * Returns: 200 { ok: true, map: { actors: ActorMap[], ...window } }
+ */
+router.get('/activity-log/admin/actor-maps', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const areaList = req.query.areas
+            ? String(req.query.areas).split(',').map(a => a.trim()).filter(Boolean)
+            : null;
+        const map = await loadAdminActorMaps(client, {
+            weeks: req.query.weeks,
+            areas: areaList,
+            includeDuplicates: req.query.includeDuplicates === '1'
+        });
+        res.json({ ok: true, map });
+    } catch (err) {
+        console.error('[api] /activity-log/admin/actor-maps failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/project/attachment
+ * PROJECT department: every file attached to or removed from an invoice —
+ * site photos, roof images, SEDA documents and engineering drawings — read
+ * from invoice_audit_log (invoice_upload / seda_upload / drawing).
+ * Query params:
+ *   kinds  - comma list of classified kinds (system_drawing, pv_drawing,
+ *            roof_drawing, roof_image, site_image, seda_doc, other)
+ *   cursor - "<edited_at ISO>|<id>" for pagination
+ *   limit  - page size, default 80, max 300
+ *
+ * Returns: 200 { ok: true, rows, hasMore, nextCursor }
+ */
+router.get('/activity-log/project/attachment', async (req, res) => {
+    const { kinds, cursor, limit } = req.query;
+    let client = null;
+    try {
+        client = await pool.connect();
+        const kindList = kinds ? String(kinds).split(',').map(k => k.trim()).filter(Boolean) : null;
+        const data = await loadProjectAttachments(client, { kinds: kindList, cursor, limit });
+        res.json({ ok: true, ...data });
+    } catch (err) {
+        console.error('[api] /activity-log/project/attachment failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/project/attachment/summary
+ * Whole-log totals per attachment kind, for the stat strip and chip counts.
+ *
+ * Returns: 200 { ok: true, summary }
+ */
+router.get('/activity-log/project/attachment/summary', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const summary = await loadProjectAttachmentSummary(client);
+        res.json({ ok: true, summary });
+    } catch (err) {
+        console.error('[api] /activity-log/project/attachment/summary failed:', err.message);
         res.status(500).json({ ok: false, error: err.message });
     } finally {
         if (client) client.release();

@@ -1094,6 +1094,81 @@
     .tag.extra    { background: #FFFBEB; color: #B45309; }
     .tag.danger   { background: #FFF1F2; color: #BE123C; }
 
+    /* ---------- PROJECT › Attachment Log ----------
+       Six attachment kinds share one stream. Colour is the only thing that
+       separates them at a glance, and the pair that MUST never be confused is
+       "PV System Drawing" (agent uploads it from agent-os) and "PV Drawing"
+       (back office produces it in admin.atap.solar) — both are a PV layout,
+       so they get the two most distant hues here: indigo vs amber. */
+    .att-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      margin-right: 7px;
+      border-radius: 7px;
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    .att-chip.k-system_drawing { background: #EEF2FF; color: #4338CA; }
+    .att-chip.k-pv_drawing     { background: #FEF3C7; color: #92400E; }
+    .att-chip.k-roof_drawing   { background: #CCFBF1; color: #0F766E; }
+    .att-chip.k-roof_image     { background: #DBEAFE; color: #1D4ED8; }
+    .att-chip.k-site_image     { background: #DCFCE7; color: #15803D; }
+    .att-chip.k-seda_doc       { background: #F1F5F9; color: #475569; }
+    .att-chip.k-other          { background: #F1F5F9; color: #64748B; }
+
+    /* Same hue again as a spine on the card, so a kind is scannable down the
+       whole column without reading a single chip. */
+    .att-item { border-left: 3px solid transparent; }
+    .att-item.k-system_drawing { border-left-color: #6366F1; }
+    .att-item.k-pv_drawing     { border-left-color: #F59E0B; }
+    .att-item.k-roof_drawing   { border-left-color: #14B8A6; }
+    .att-item.k-roof_image     { border-left-color: #3B82F6; }
+    .att-item.k-site_image     { border-left-color: #22C55E; }
+    .att-item.k-seda_doc       { border-left-color: #CBD5E1; }
+    .att-item.k-other          { border-left-color: #E2E8F0; }
+    /* A removal is an absence — mute the whole card rather than shout in red. */
+    .att-item.removed { opacity: 0.72; }
+    .att-item.removed .att-file-name { text-decoration: line-through; }
+
+    .att-thumb {
+      width: 62px;
+      height: 62px;
+      flex-shrink: 0;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #F1F5F9;
+      border: 1px solid rgba(226,232,240,0.95);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.95),
+        0 1px 2px rgba(15,23,42,0.06);
+    }
+    .att-file-name {
+      overflow: hidden;
+      max-width: 320px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* The chip counts are the whole point of the filter bar here — the log is
+       lopsided (2k SEDA docs vs 31 admin roof drawings) and the numbers say so. */
+    .filter-chip .chip-count {
+      margin-left: 6px;
+      opacity: 0.65;
+      font-variant-numeric: tabular-nums;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    @media (max-width: 768px) {
+      .att-thumb { width: 46px; height: 46px; }
+      .att-file-name { max-width: 150px; }
+    }
+
     .tag-row {
       display: flex;
       flex-wrap: wrap;
@@ -1236,6 +1311,188 @@
     }
     .stat-tile.thin { border-color: #FDE68A; }
     .stat-tile.thin .stat-sub { color: #B45309; }
+
+    /* WAREHOUSE — one card per demand group, each holding two hardware
+       tallies (panels, inverters) plus the invoices that produced them. */
+    .wh-group {
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(255,255,255,0.95);
+      border-radius: 20px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.95),
+        0 1px 2px rgba(15,23,42,0.05),
+        0 18px 36px -26px rgba(15,23,42,0.45);
+    }
+    .wh-group.g1 { border-left: 3px solid #F59E0B; }
+    .wh-group.g2 { border-left: 3px solid #059669; }
+    .wh-group.other { border-left: 3px solid #94A3B8; }
+    .wh-group-head {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .wh-group-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0B1524;
+      letter-spacing: -0.01em;
+    }
+    .wh-group-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748B;
+      background: rgba(241,245,249,0.9);
+      border-radius: 999px;
+      padding: 3px 9px;
+    }
+    .wh-group-desc {
+      font-size: 11.5px;
+      color: #94A3B8;
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+    .wh-tallies {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .wh-tally {
+      background: rgba(238,242,247,0.7);
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+    .wh-tally-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: #94A3B8;
+      margin-bottom: 8px;
+    }
+    .wh-tally-total {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #0B1524;
+      letter-spacing: 0;
+    }
+    .wh-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.9);
+      font-size: 12px;
+    }
+    .wh-row:last-child { border-bottom: none; }
+    .wh-row-model {
+      flex: 1;
+      min-width: 0;
+      color: #334155;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .wh-row-inv {
+      font-size: 10px;
+      color: #94A3B8;
+      flex-shrink: 0;
+    }
+    .wh-row-qty {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: #0B1524;
+      flex-shrink: 0;
+      font-variant-numeric: tabular-nums;
+    }
+    .wh-toggle {
+      margin-top: 14px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748B;
+      cursor: pointer;
+      user-select: none;
+    }
+    .wh-toggle:hover { color: #0B1524; }
+    .wh-invoices { margin-top: 10px; }
+    .wh-invoices[hidden] { display: none; }
+    .wh-inv {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(241,245,249,0.9);
+    }
+    .wh-inv:last-child { border-bottom: none; }
+    .wh-inv-main { flex: 1; min-width: 0; }
+    .wh-inv-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #0B1524;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .wh-inv-no {
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748B;
+      font-weight: 500;
+    }
+    .wh-inv-sub {
+      font-size: 11.5px;
+      color: #64748B;
+      margin-top: 3px;
+    }
+    .wh-inv-parts {
+      font-size: 11.5px;
+      color: #475569;
+      margin-top: 5px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .wh-part {
+      background: rgba(238,242,247,0.9);
+      border-radius: 8px;
+      padding: 3px 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+    }
+    .wh-inv-money {
+      text-align: right;
+      flex-shrink: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-variant-numeric: tabular-nums;
+    }
+    .wh-pct {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0B1524;
+    }
+    .wh-pct.low { color: #B45309; }
+    .wh-pct.high { color: #047857; }
+    .wh-inv-amt { font-size: 10.5px; color: #94A3B8; margin-top: 3px; }
+    .wh-seda {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      padding: 3px 8px;
+      background: rgba(241,245,249,0.9);
+      color: #64748B;
+    }
+    .wh-seda.approved { background: rgba(209,250,229,0.9); color: #047857; }
+    .wh-seda.pending { background: rgba(254,243,199,0.9); color: #B45309; }
 
     /* SEDA: contribution-style activity map — one cell per day, 7 rows
        (Sun..Sat) x one column per week. Answers "is this department busy
@@ -1394,6 +1651,37 @@
       text-align: center;
       white-space: nowrap;
     }
+    /* Actor variant (Admin Console): one card per detected admin, so the
+       identity — not the total — is the thing you scan down the column for.
+       All cards share one colour scale, hence the shared-scale note. */
+    .act-map-actor-head {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+    .act-map-actor-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0B1524;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .act-map-actor-role {
+      font-size: 11px;
+      color: #94A3B8;
+      margin-top: 2px;
+    }
+    .act-map.actor .act-map-total { font-size: 21px; margin-top: 6px; }
+    .act-map.actor .act-map-total small { font-size: 11px; }
+    .act-map-scale-note {
+      font-size: 10px;
+      color: #94A3B8;
+      margin: -6px 0 12px;
+    }
+    .act-map-cell.fail { box-shadow: inset 0 0 0 1.5px #DC2626; }
     @media (max-width: 640px) {
       .act-map { padding: 16px; }
       .act-map-total { font-size: 23px; }
@@ -1858,6 +2146,17 @@
       </div>
     </div>
 
+    <!-- Project Department -->
+    <div class="dept-group">
+      <div class="dept-header collapsed" data-dept="project">
+        <span class="dept-icon">▼</span>
+        <span>PROJECT</span>
+      </div>
+      <div class="submenu" data-dept="project">
+        <div class="submenu-item" data-route="project/attachment">Attachment Log</div>
+      </div>
+    </div>
+
     <!-- Finance Department -->
     <div class="dept-group">
       <div class="dept-header collapsed" data-dept="finance">
@@ -1868,6 +2167,17 @@
         <div class="submenu-item" data-route="finance/payment-activity">Payment Activity</div>
         <div class="submenu-item" data-route="finance/receipt">Official Receipt</div>
         <div class="submenu-item" data-route="finance/claim">Claim Submission</div>
+      </div>
+    </div>
+
+    <!-- Warehouse Department -->
+    <div class="dept-group">
+      <div class="dept-header collapsed" data-dept="warehouse">
+        <span class="dept-icon">▼</span>
+        <span>WAREHOUSE</span>
+      </div>
+      <div class="submenu" data-dept="warehouse">
+        <div class="submenu-item" data-route="warehouse/stock-demand">Stock Demand</div>
       </div>
     </div>
 
@@ -2009,6 +2319,17 @@
 
         header.classList.toggle('collapsed');
         submenu.classList.toggle('open');
+
+        // The sidebar scrolls, and the last departments (AI WORKFLOW, AI
+        // ROUTER) sit at the bottom of it. On a phone the sidebar is only
+        // viewport-tall, so expanding one of those opened its submenu below
+        // the fold — the tap looked like it did nothing. Pull the whole group
+        // into view after the submenu has taken up its space.
+        if (submenu.classList.contains('open')) {
+          requestAnimationFrame(() => {
+            header.parentElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          });
+        }
       });
     });
 
@@ -2048,7 +2369,7 @@
       // Only the live feeds poll; leaving them must stop the timer.
       const LIVE_ROUTES = [
         'invoice/activity', 'sales/calculator', 'sales/auto-proposal', 'sales/referral', 'seda/activity',
-        'finance/payment-activity', 'finance/receipt', 'finance/claim',
+        'project/attachment', 'finance/payment-activity', 'finance/receipt', 'finance/claim',
         'admin/console', 'ai-workflow/main', 'ai-router/logs'
       ];
       if (!LIVE_ROUTES.includes(route)) stopAutoRefresh();
@@ -2074,6 +2395,9 @@
       } else if (route === 'seda/activity') {
         setHeader('SEDA Activity', 'Registrations, documents and admin status — one combined log');
         loadSedaActivity();
+      } else if (route === 'project/attachment') {
+        setHeader('Attachment Log', 'Every file attached to an invoice — site photos, roof images, SEDA documents and drawings');
+        loadProjectAttachments();
       } else if (route === 'admin/console') {
         setHeader('Admin Console Activity', 'What back-office staff did in admin.atap.solar — last 30 days');
         loadAdminActivity();
@@ -2092,6 +2416,9 @@
       } else if (route === 'finance/claim') {
         setHeader('Claim Submission', 'Staff expense claims — activity_log events merged with the claim_receipt record');
         loadClaimSubmissionLog();
+      } else if (route === 'warehouse/stock-demand') {
+        setHeader('Warehouse Stock Demand', 'Loading...');
+        loadWarehouseStock();
       } else if (route === 'marketing/ads-research') {
         setHeader('Market Ads Research Automation', 'Automated ads/market research runs — no activity logged yet',
           '<a class="header-link-btn" href="https://ee-html.up.railway.app/app/malaysia-solar-pv-teardown/" target="_blank" rel="noopener noreferrer">VISIT MALAYSIA SOLAR PV TEARDOWN</a>');
@@ -2236,7 +2563,7 @@
       all: new Set(), prep: new Set(), edit: new Set(), view: new Set(), calculator: new Set(), seda: new Set(),
       submission: new Set(), verification: new Set(), receipt: new Set(), claim: new Set(), financeAll: new Set(), admin: new Set(),
       aiWorkflow: new Set(), marketingSeoGeo: new Set(), autoProposal: new Set(), aiRouter: new Set(),
-      referral: new Set()
+      referral: new Set(), projectAttachment: new Set()
     };
     let refreshTimer = null;
     let newRowCount = 0;
@@ -3502,6 +3829,145 @@
       `;
     }
 
+    /* Per-admin activity maps — one contribution grid per detected actor,
+       busiest first. The feed answers "what happened"; this answers "who is
+       actually in the console, and on which days". Window is 5 weeks, not
+       SEDA's 26: activity_log is purged at 30 days, so a wider grid would be
+       mostly dead space that reads as absence rather than missing rows. */
+    const ADMIN_AREA_LABELS = {
+      print: '🖨 print', payment: '💳 payments', receipt: '🧾 receipts',
+      customer: '🏠 customers', user: '👤 users', attachment: '📎 attachments',
+      invoice: '✏️ invoice edits', other: '📌 other'
+    };
+
+    async function renderAdminActorMaps(map) {
+      const actors = map.actors || [];
+      if (actors.length === 0) return '';
+
+      const longDate = iso => {
+        const d = new Date(`${iso}T00:00:00Z`);
+        return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString(undefined, {
+          weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC'
+        });
+      };
+      const shortDate = iso => {
+        const d = new Date(`${iso}T00:00:00Z`);
+        return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString(undefined, {
+          month: 'short', day: 'numeric', timeZone: 'UTC'
+        });
+      };
+      const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+
+      const cards = await Promise.all(actors.map(async actor => {
+        const days = actor.days || [];
+        const cols = Math.ceil(days.length / 7);
+
+        const cells = days.map(d => {
+          if (d.count === 0) return '<div class="act-map-cell"></div>';
+          const parts = [`${plural(d.count, 'event')} · ${longDate(d.date)}`];
+          Object.entries(d.areas || {})
+            .sort((a, b) => b[1] - a[1])
+            .forEach(([area, n]) => parts.push(`${ADMIN_AREA_LABELS[area] || area} ${n}`));
+          if (d.failures) parts.push(`${plural(d.failures, 'failure')}`);
+          return `<div class="act-map-cell l${actMapLevel(d.count, map.maxCount)} ${d.failures ? 'fail' : ''}"
+                       title="${escapeHtml(parts.join(' · '))}"></div>`;
+        });
+        // Pad the final column so the grid keeps its 7-row shape past today.
+        const pad = (7 - (days.length % 7)) % 7;
+        for (let i = 0; i < pad; i++) cells.push('<div class="act-map-cell future"></div>');
+
+        // The window is ~5 weeks, so it spans one or two months at most —
+        // a month owning a single column gets no label, it would collide.
+        const monthCols = new Map();
+        for (let c = 0; c < cols; c++) {
+          const first = days[c * 7];
+          if (!first) break;
+          const month = first.date.slice(0, 7);
+          const seen = monthCols.get(month);
+          if (seen) seen.span++;
+          else monthCols.set(month, { col: c, span: 1 });
+        }
+        const monthLabels = [...monthCols.entries()]
+          .filter(([, m]) => m.span >= 2 && m.col <= cols - 2)
+          .map(([month, m]) => ({ col: m.col, text: shortDate(`${month}-01`).split(' ')[0] }));
+
+        const icon = await renderActorIcon(actor.actorUserId, actor.actorName, '🛠');
+        const busiest = actor.busiestDay
+          ? `<span class="act-map-fact"><b>${actor.busiestDay.count}</b>busiest · ${escapeHtml(shortDate(actor.busiestDay.date))}</span>`
+          : '';
+        const failures = actor.failures
+          ? `<span class="act-map-fact"><b>${actor.failures}</b>failed</span>`
+          : '';
+        const topArea = actor.topArea
+          ? `<div class="act-map-range">mostly ${escapeHtml(ADMIN_AREA_LABELS[actor.topArea] || actor.topArea)}</div>`
+          : '';
+
+        return `
+          <div class="act-map actor">
+            <div class="act-map-header">
+              <div class="act-map-actor-head">
+                ${icon}
+                <div>
+                  <div class="act-map-actor-name">${escapeHtml(actor.actorName || 'Unattributed')}</div>
+                  <div class="act-map-actor-role">${escapeHtml(actor.actorRole || (actor.actorUserId ? `user #${actor.actorUserId}` : 'no actor id'))}</div>
+                  <div class="act-map-total">${actor.totalEvents.toLocaleString()} <small>events</small></div>
+                </div>
+              </div>
+              ${topArea}
+            </div>
+            <div class="act-map-facts">
+              <span class="act-map-fact"><b>${actor.activeDays}</b>active days</span>
+              <span class="act-map-fact"><b>${actor.avgPerActiveDay}</b>avg per active day</span>
+              <span class="act-map-fact"><b>${actor.currentStreak}d</b>current streak</span>
+              <span class="act-map-fact"><b>${actor.longestStreak}d</b>longest streak</span>
+              ${busiest}
+              ${failures}
+            </div>
+            <div class="act-map-scroll">
+              <div class="act-map-grid-wrap">
+                <div class="act-map-months" style="grid-template-columns: repeat(${cols}, 12px);">
+                  ${monthLabels.map(l => `<div class="act-map-month" style="grid-column: ${l.col + 1};">${escapeHtml(l.text)}</div>`).join('')}
+                </div>
+                <div class="act-map-body">
+                  <div class="act-map-days">
+                    ${ACT_MAP_DOW.map(d => `<div class="act-map-day">${d}</div>`).join('')}
+                  </div>
+                  <div class="act-map-grid">${cells.join('')}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }));
+
+      return `
+        <div class="act-map">
+          <div class="act-map-header">
+            <div>
+              <div class="act-map-title">Admin activity map · ${actors.length} ${actors.length === 1 ? 'admin' : 'admins'}</div>
+              <div class="act-map-total">${map.totalEvents.toLocaleString()} <small>events</small></div>
+            </div>
+            <div class="act-map-range">${map.weeks} weeks · ${escapeHtml(shortDate(map.startDate))} → ${escapeHtml(shortDate(map.endDate))}</div>
+          </div>
+          <div class="act-map-scale-note">
+            Cells share one colour scale across all admins (busiest day = ${map.maxCount} events).
+            activity_log keeps ${map.retentionDays} days, so anything older is purged, not idle.
+            A red outline marks a day with a failed action.
+          </div>
+          <div class="act-map-legend">
+            <span class="act-map-legend-label">Less</span>
+            <div class="act-map-cell"></div>
+            <div class="act-map-cell l1"></div>
+            <div class="act-map-cell l2"></div>
+            <div class="act-map-cell l3"></div>
+            <div class="act-map-cell l4"></div>
+            <span class="act-map-legend-label">More</span>
+          </div>
+        </div>
+        ${cards.join('')}
+      `;
+    }
+
     async function loadAdminActivity(opts = {}) {
       renderAdminFilters();
       startAutoRefresh(() => loadAdminActivity({ silent: true }));
@@ -3517,12 +3983,16 @@
         if (adminHideDupes) params.set('includeDuplicates', '0');
         else params.set('includeDuplicates', '1');
 
-        const [dataRes, summaryRes] = await Promise.all([
+        // The per-admin maps take the same filters as the feed, so switching
+        // to "Payments" reshapes both instead of leaving them contradicting.
+        const [dataRes, summaryRes, mapRes] = await Promise.all([
           fetch('/api/activity-log/admin?' + params.toString()),
-          fetch('/api/activity-log/admin/summary')
+          fetch('/api/activity-log/admin/summary'),
+          fetch('/api/activity-log/admin/actor-maps?' + params.toString())
         ]);
         const data = await dataRes.json();
         const summary = await summaryRes.json();
+        const mapData = await mapRes.json();
         if (!data.ok) throw new Error(data.error);
 
         if (data.rows.length === 0) {
@@ -3606,9 +4076,10 @@
         }));
 
         const strip = summary.ok ? renderAdminSummary(summary.stats) : '';
+        const actorMaps = mapData.ok ? await renderAdminActorMaps(mapData.map) : '';
         const isNew = markNewRows('admin', data.rows, r => r.id);
 
-        feed.innerHTML = strip + newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
+        feed.innerHTML = strip + actorMaps + newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
           occurredAt: row.occurredAt,
           html: cards[i],
           isNew: isNew[i]
@@ -4871,6 +5342,192 @@
       }
     }
 
+    /* ---------- PROJECT › Attachment Log ----------
+       One stream for every file that lands on an invoice. The kinds are wildly
+       uneven (2k SEDA documents against 31 admin roof drawings), so the chips
+       carry their whole-log counts and the cards carry a colour spine — the
+       feed is unreadable otherwise. */
+
+    const ATTACHMENT_KINDS = [
+      { key: 'system_drawing', label: '📐 PV System Drawing', emoji: '📐' },
+      { key: 'pv_drawing',     label: '📐 PV Drawing · Admin', emoji: '📐' },
+      { key: 'roof_drawing',   label: '📐 Roof Drawing · Admin', emoji: '📐' },
+      { key: 'roof_image',     label: '🏠 Roof Image', emoji: '🏠' },
+      { key: 'site_image',     label: '📷 Site Image', emoji: '📷' },
+      { key: 'seda_doc',       label: '📄 SEDA Document', emoji: '📄' },
+      { key: 'other',          label: '📎 Other', emoji: '📎' }
+    ];
+    let attachmentKinds = [];
+    let attachmentSummary = null;
+
+    function renderAttachmentFilters() {
+      const byKind = (attachmentSummary && attachmentSummary.byKind) || {};
+      const count = key => (byKind[key] ? byKind[key].total : 0);
+
+      document.getElementById('filters').innerHTML = `
+        <div class="filter-bar">
+          <button class="filter-chip ${attachmentKinds.length ? '' : 'active'}" data-att-kind="">
+            All${attachmentSummary ? `<span class="chip-count">${attachmentSummary.total}</span>` : ''}
+          </button>
+          ${ATTACHMENT_KINDS
+            // A kind nobody has ever uploaded is noise, not a filter.
+            .filter(k => !attachmentSummary || count(k.key) > 0 || attachmentKinds.includes(k.key))
+            .map(k => `
+              <button class="filter-chip ${attachmentKinds.includes(k.key) ? 'active' : ''}"
+                      data-att-kind="${k.key}">
+                ${k.label}${attachmentSummary ? `<span class="chip-count">${count(k.key)}</span>` : ''}
+              </button>
+            `).join('')}
+        </div>
+      `;
+
+      document.querySelectorAll('[data-att-kind]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const key = btn.getAttribute('data-att-kind');
+          if (!key) {
+            attachmentKinds = [];
+          } else if (attachmentKinds.includes(key)) {
+            attachmentKinds = attachmentKinds.filter(k => k !== key);
+          } else {
+            attachmentKinds = [...attachmentKinds, key];
+          }
+          // A different slice is a different feed — let its rows arrive
+          // without the whole list flashing as "new".
+          seenRowIds.projectAttachment.clear();
+          loadProjectAttachments();
+        });
+      });
+    }
+
+    function attachmentStatsHtml() {
+      if (!attachmentSummary) return '';
+      const byKind = attachmentSummary.byKind || {};
+      const n = key => (byKind[key] ? byKind[key].total : 0);
+      const images = n('roof_image') + n('site_image');
+
+      return `
+        <div class="stat-strip">
+          <div class="stat-tile">
+            <div class="stat-label">Attachments logged</div>
+            <div class="stat-value">${attachmentSummary.total.toLocaleString()}</div>
+            <div class="stat-sub">${attachmentSummary.added.toLocaleString()} added · ${attachmentSummary.removed.toLocaleString()} removed</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-label">PV System Drawing</div>
+            <div class="stat-value">${n('system_drawing').toLocaleString()}</div>
+            <div class="stat-sub">uploaded by agents from agent-os</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-label">PV Drawing <span class="stat-derived">admin</span></div>
+            <div class="stat-value">${n('pv_drawing').toLocaleString()}</div>
+            <div class="stat-sub">${n('roof_drawing').toLocaleString()} roof drawings · engineering-v2</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-label">Photos &amp; documents</div>
+            <div class="stat-value">${images.toLocaleString()}</div>
+            <div class="stat-sub">${n('seda_doc').toLocaleString()} SEDA documents alongside</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // `drawing` rows label their file with the bare upload type ("pv"), which
+    // says nothing on a card — use the classified name for those.
+    function attachmentLabel(row) {
+      if (row.entityType === 'drawing') return row.kindLabel;
+      return row.field || row.kindLabel;
+    }
+
+    async function loadProjectAttachments(opts = {}) {
+      startAutoRefresh(() => loadProjectAttachments({ silent: true }));
+      const feed = opts.silent
+        ? document.getElementById('feed')
+        : setLoading('Loading attachment log...');
+
+      try {
+        if (!window.userProfileCache.initialized) await window.userProfileCache.init();
+
+        const query = new URLSearchParams({ limit: '120' });
+        if (attachmentKinds.length) query.set('kinds', attachmentKinds.join(','));
+
+        // The summary counts the whole log, so it only has to be fetched once.
+        const [res, summaryRes] = await Promise.all([
+          fetch(`/api/activity-log/project/attachment?${query}`),
+          attachmentSummary
+            ? Promise.resolve(null)
+            : fetch('/api/activity-log/project/attachment/summary')
+        ]);
+
+        if (summaryRes) {
+          const summaryData = await summaryRes.json();
+          if (summaryData.ok) attachmentSummary = summaryData.summary;
+        }
+        renderAttachmentFilters();
+
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error);
+
+        if (data.rows.length === 0) {
+          renderEmpty(feed, '📎', 'No attachments found', 'Nothing matches the selected kinds');
+          return;
+        }
+
+        feed.className = 'timeline';
+        const cards = await Promise.all(data.rows.map(async row => {
+          const kind = ATTACHMENT_KINDS.find(k => k.key === row.kind) || ATTACHMENT_KINDS[6];
+          const icon = await renderActorIcon(row.actorUserId, row.actorName, kind.emoji);
+          const label = attachmentLabel(row);
+          const removed = row.action === 'removed';
+
+          return `
+            <div class="activity-item att-item k-${escapeHtml(row.kind)}${removed ? ' removed' : ''}">
+              <div class="activity-row">
+                ${icon}
+                <div class="activity-body">
+                  <div class="activity-title">
+                    <span class="att-chip k-${escapeHtml(row.kind)}">${escapeHtml(row.kindLabel)}</span>
+                    ${label !== row.kindLabel ? escapeHtml(label) : escapeHtml(row.invoiceNumber || '')}
+                    ${removed ? '<span class="tag danger">removed</span>' : ''}
+                  </div>
+                  <div class="activity-desc">
+                    ${escapeHtml(row.actorName || 'Someone')}
+                    ${removed ? 'removed' : 'attached'}
+                    <b>${escapeHtml(label)}</b>
+                    ${removed ? 'from' : 'to'}
+                    ${escapeHtml(row.invoiceNumber || 'an invoice')}
+                    ${row.customerName ? '· ' + escapeHtml(row.customerName) : ''}
+                  </div>
+                  <div class="activity-meta">
+                    <span>⏱ ${formatTime(row.occurredAt)}</span>
+                    ${row.sourceApp ? `<span>📦 ${escapeHtml(row.sourceApp)}</span>` : ''}
+                    ${row.fileName
+                      ? `<span class="att-file-name" title="${escapeHtml(row.fileName)}">📄 ${escapeHtml(row.fileName)}</span>`
+                      : ''}
+                    ${row.fileUrl
+                      ? `<a href="${escapeHtml(row.fileUrl)}" target="_blank" rel="noopener noreferrer">🔗 open file</a>`
+                      : ''}
+                  </div>
+                </div>
+                ${row.viewable && !removed
+                  ? `<img class="att-thumb" src="${escapeHtml(row.fileUrl)}" alt="" loading="lazy"
+                          onerror="this.remove()">`
+                  : ''}
+              </div>
+            </div>
+          `;
+        }));
+
+        const isNew = markNewRows('projectAttachment', data.rows, r => r.id);
+        feed.innerHTML = attachmentStatsHtml() + newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
+          occurredAt: row.occurredAt,
+          html: cards[i],
+          isNew: isNew[i]
+        })));
+      } catch (err) {
+        if (!opts.silent) renderError(feed, err);
+      }
+    }
+
     async function renderActorIcon(actorUserId, actorName, emoji = '🧮') {
       const profilePic = await window.userProfileCache.getProfilePicture(actorUserId, actorName);
 
@@ -4889,6 +5546,194 @@
           <div class="activity-icon-initials">${initials}</div>
         </div>
       `;
+    }
+
+    /* ---------- WAREHOUSE › Stock Demand ----------
+       Traces one month of invoices that carry a payment into the hardware
+       they commit us to. Two groups the warehouse actually acts on:
+         Group 1 — under 59% paid AND SEDA not approved  -> don't reserve
+         Group 2 — 59%+ paid AND SEDA approved           -> reserve
+       Everything else lands in "Unmatched" so no invoice silently vanishes. */
+
+    let warehouseMonth = null;
+
+    function warehouseMonthBarHtml(months, current) {
+      if (!months.length) return '';
+      const chips = months.slice(0, 12).map(m => `
+        <button class="filter-chip ${m.month === current ? 'active' : ''}"
+                data-warehouse-month="${escapeHtml(m.month)}">${escapeHtml(m.label)}</button>
+      `).join('');
+      return `<div class="filter-bar">${chips}</div>`;
+    }
+
+    function bindWarehouseMonths() {
+      document.querySelectorAll('[data-warehouse-month]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          warehouseMonth = btn.getAttribute('data-warehouse-month');
+          loadWarehouseStock();
+        });
+      });
+    }
+
+    function warehouseTallyHtml(label, rows, unit) {
+      const total = rows.reduce((s, r) => s + r.qty, 0);
+      const body = rows.length
+        ? rows.map(r => `
+            <div class="wh-row">
+              <span class="wh-row-model" title="${escapeHtml(r.model)}">${escapeHtml(r.model)}</span>
+              <span class="wh-row-inv">${r.invoices} inv</span>
+              <span class="wh-row-qty">${r.qty}</span>
+            </div>
+          `).join('')
+        : '<div class="wh-row"><span class="wh-row-model">—</span></div>';
+
+      return `
+        <div class="wh-tally">
+          <div class="wh-tally-head">
+            <span>${escapeHtml(label)}</span>
+            <span class="wh-tally-total">${total} ${escapeHtml(unit)}</span>
+          </div>
+          ${body}
+        </div>
+      `;
+    }
+
+    function warehouseSedaPill(status) {
+      const raw = status || 'Not registered';
+      const key = String(status || '').trim().toLowerCase();
+      let cls = '';
+      if (key === 'approved' || key === 'approved by seda') cls = 'approved';
+      else if (key === '' || key === 'pending' || key === 'submitted') cls = 'pending';
+      return `<span class="wh-seda ${cls}">SEDA ${escapeHtml(raw)}</span>`;
+    }
+
+    function warehouseInvoiceHtml(inv) {
+      const pct = inv.paidPct === null ? '—' : `${inv.paidPct}%`;
+      const pctCls = inv.paidPct === null ? '' : (inv.paidPct < 59 ? 'low' : 'high');
+      const parts = [
+        ...inv.panels.map(p => `<span class="wh-part">☀ ${escapeHtml(p.model)} × ${p.qty}</span>`),
+        ...inv.inverters.map(v => `<span class="wh-part">⚡ ${escapeHtml(v.model)} × ${v.qty}</span>`)
+      ];
+
+      return `
+        <div class="wh-inv">
+          <div class="wh-inv-main">
+            <div class="wh-inv-title">
+              <span class="wh-inv-no">${escapeHtml(inv.invoiceNumber)}</span>
+              <span>${escapeHtml(inv.customerName || 'Unknown customer')}</span>
+              ${warehouseSedaPill(inv.sedaStatus)}
+            </div>
+            <div class="wh-inv-sub">
+              ${new Date(inv.invoiceDate).toLocaleDateString()}
+              ${inv.packageName ? ' · ' + escapeHtml(inv.packageName) : ' · no package linked'}
+            </div>
+            <div class="wh-inv-parts">
+              ${parts.length ? parts.join('') : '<span class="wh-part">no panel / inverter on this package</span>'}
+            </div>
+          </div>
+          <div class="wh-inv-money">
+            <div class="wh-pct ${pctCls}">${pct}</div>
+            <div class="wh-inv-amt">${money(inv.paid)} / ${money(inv.totalAmount)}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function warehouseGroupHtml(group) {
+      const cls = group.key === 'group1' ? 'g1' : group.key === 'group2' ? 'g2' : 'other';
+      return `
+        <div class="wh-group ${cls}">
+          <div class="wh-group-head">
+            <span class="wh-group-title">${escapeHtml(group.title)}</span>
+            <span class="wh-group-count">${group.invoiceCount} invoices</span>
+            <span class="wh-group-count">${money(group.totalPaid)} collected</span>
+          </div>
+          <div class="wh-group-desc">${escapeHtml(group.description)}</div>
+          <div class="wh-tallies">
+            ${warehouseTallyHtml('Jinko panels', group.panels, 'pcs')}
+            ${warehouseTallyHtml('Inverters', group.inverters, 'units')}
+          </div>
+          ${group.invoiceCount ? `
+            <div class="wh-toggle" data-warehouse-toggle="${group.key}">▸ Show ${group.invoiceCount} invoices</div>
+            <div class="wh-invoices" id="wh-invoices-${group.key}" hidden>
+              ${group.invoices.map(warehouseInvoiceHtml).join('')}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    function bindWarehouseToggles() {
+      document.querySelectorAll('[data-warehouse-toggle]').forEach(el => {
+        el.addEventListener('click', () => {
+          const key = el.getAttribute('data-warehouse-toggle');
+          const box = document.getElementById(`wh-invoices-${key}`);
+          if (!box) return;
+          const open = box.hasAttribute('hidden');
+          if (open) box.removeAttribute('hidden'); else box.setAttribute('hidden', '');
+          const count = box.children.length;
+          el.textContent = `${open ? '▾ Hide' : '▸ Show'} ${count} invoices`;
+        });
+      });
+    }
+
+    async function loadWarehouseStock() {
+      const feed = setLoading('Loading warehouse stock demand...');
+
+      try {
+        const qs = warehouseMonth ? `?month=${encodeURIComponent(warehouseMonth)}` : '';
+        const res = await fetch(`/api/warehouse${qs}`);
+        const payload = await res.json();
+        if (!payload.ok) throw new Error(payload.error);
+
+        const data = payload.data;
+        warehouseMonth = data.month;
+
+        document.getElementById('filters').innerHTML =
+          warehouseMonthBarHtml(data.months, data.month);
+        bindWarehouseMonths();
+
+        setHeader('Warehouse Stock Demand',
+          `${data.monthLabel || '—'} — invoices with a payment, traced to the panels and inverters their package commits`);
+
+        if (!data.month || !data.totals || data.totals.invoices === 0) {
+          renderEmpty(feed, '📦', 'No invoices with payment', 'Nothing was paid against an invoice raised in this month.');
+          return;
+        }
+
+        const g2 = data.groups.find(g => g.key === 'group2') || { panelQty: 0, inverterQty: 0 };
+        const stats = `
+          <div class="stat-strip">
+            <div class="stat-tile">
+              <div class="stat-label">Invoices with payment</div>
+              <div class="stat-value">${data.totals.invoices}</div>
+              <div class="stat-sub">${money(data.totals.amount)} invoiced</div>
+            </div>
+            <div class="stat-tile">
+              <div class="stat-label">Collected</div>
+              <div class="stat-value">${money(data.totals.paid)}</div>
+              <div class="stat-sub">${data.totals.amount > 0
+                ? Math.round(data.totals.paid / data.totals.amount * 1000) / 10 : 0}% of invoiced</div>
+            </div>
+            <div class="stat-tile">
+              <div class="stat-label">Panels to reserve <span class="stat-derived">group 2</span></div>
+              <div class="stat-value">${g2.panelQty} <small>pcs</small></div>
+              <div class="stat-sub">59%+ paid and SEDA approved</div>
+            </div>
+            <div class="stat-tile">
+              <div class="stat-label">Inverters to reserve <span class="stat-derived">group 2</span></div>
+              <div class="stat-value">${g2.inverterQty} <small>units</small></div>
+              <div class="stat-sub">59%+ paid and SEDA approved</div>
+            </div>
+          </div>
+        `;
+
+        feed.className = '';
+        feed.innerHTML = stats + data.groups.map(warehouseGroupHtml).join('');
+        bindWarehouseToggles();
+      } catch (err) {
+        renderError(feed, err);
+      }
     }
 
     function showPlaceholder(route) {

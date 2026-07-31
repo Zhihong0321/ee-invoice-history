@@ -1,0 +1,414 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+=== package columns (1) ===
+[
+ {
+  "c": "id:integer, bubble_id:text, last_synced_at:timestamp with time zone, created_at:timestamp with time zone, updated_at:timestamp with time zone, special:boolean, panel_qty:integer, created_date:timestamp with time zone, price:numeric, invoice_desc:text, linked_package_item:ARRAY, created_by:text, package_name:text, panel:text, type:text, max_discount:integer, need_approval:boolean, active:boolean, modified_date:timestamp with time zone, password:text, creation_date:text, creator:text, slug:text, system_default:text, inverter_1:text, inverter_2:text, inverter_3:text, inverter_4:text, unique_id:text, nett_price:numeric"
+ }
+]
+
+=== package_item columns (1) ===
+[
+ {
+  "c": "id:integer, bubble_id:text, last_synced_at:timestamp with time zone, created_at:timestamp with time zone, updated_at:timestamp with time zone, total_cost:integer, created_by:text, modified_date:timestamp with time zone, created_date:timestamp with time zone, product:text, qty:integer, sort:integer, inventory:boolean"
+ }
+]
+
+=== product columns (1) ===
+[
+ {
+  "c": "id:integer, bubble_id:text, last_synced_at:timestamp with time zone, created_at:timestamp with time zone, updated_at:timestamp with time zone, linked_brand:text, inventory:boolean, image:text, modified_date:timestamp with time zone, created_date:timestamp with time zone, warranty_name:text, active:boolean, cost_price:numeric, selling_price:numeric, description:text, linked_category:text, name:text, warranty_link:text, label:text, pdf_product:text, product_warranty_desc:text, solar_output_rating:integer, created_by:text, inverter_rating:integer, creation_date:text, creator:text, power_warranty:text, warranty_button:text, unique_id:text"
+ }
+]
+
+=== seda_registration columns (1) ===
+[
+ {
+  "c": "id:integer, bubble_id:text, last_synced_at:timestamp with time zone, created_at:timestamp with time zone, updated_at:timestamp with time zone, mapper_status:text, created_by:text, drawing_system_submitted:boolean, modified_date:timestamp with time zone, state:text, redex_status:text, roof_images:ARRAY, sunpeak_hours:numeric, system_size_in_form_kwp:numeric, created_date:timestamp with time zone, agent:text, project_price:numeric, system_size:numeric, city:text, linked_customer:text, inverter_kwac:numeric, slug:text, estimated_monthly_saving:numeric, average_tnb:numeric, price_category:text, g_electric_folder_link:text, g_roof_folder_link:text, installation_address:text, linked_invoice:ARRAY, customer_signature:text, email:text, ic_copy_back:text, ic_copy_front:text, tnb_bill_3:text, tnb_bill_1:text, tnb_meter:text, e_contact_no:text, tnb_bill_2:text, drawing_pdf_system:ARRAY, e_contact_name:text, seda_status:text, version:integer, nem_application_no:text, e_contact_relationship:text, ic_no:text, request_drawing_date:timestamp with time zone, phase_type:text, special_remark:text, tnb_account_no:text, nem_cert:text, property_ownership_prove:text, inverter_serial_no:text, tnb_meter_install_date:timestamp with time zone, tnb_meter_status:text, first_completion_date:timestamp with time zone, e_contact_mykad:text, mykad_pdf:text, nem_type:text, e_email:text, redex_remark:text, site_images:ARRAY, company_registration_no:text, drawing_system_actual:ARRAY, check_tnb_bill_and_meter_image:boolean, check_mykad:boolean, check_ownership:boolean, check_fill_in_detail:boolean, drawing_engineering_seda_pdf:ARRAY, postcode:text, share_token:character varying, share_enabled:boolean, share_expires_at:timestamp without time zone, 1st_generation:text, creation_date:text, creator:text, drawing_engineer_seda_done:text, epcc:text, epcc_remark:text, g_folder_seda_doc:text, house_ownership_doc_type:text, house_ownership_image:text, if_counter_date:text, installation_appointment:text, installment_tenure:text, inverter:text, link_appointment:text, overwrite_redex_date:text, seda_application_fee:text, tnb_status:text, chat_deleted:text, unique_id:text, seda_profile_status:text, seda_profile_id:text, seda_profile_checked_at:timestamp with time zone, installation_address_1:text, installation_address_2:text, latitude:numeric, longitude:numeric, applicant_name:text, applicant_ic:text, applicant_phone:text, applicant_email:text, applicant_tin:text, tax_document:character varying, application_type:text, tnb_bills_12_months:ARRAY, tnb_bills_12_months_requested_at:timestamp with time zone, tnb_bills_12_months_note:text, ssm_form_9:text, ssm_form_49:text, director_ic_front:text, director_ic_back:text, commercial_docs_completed:boolean, ssm_registration:text, company_stamp:text"
+ }
+]
+
+=== payment columns (1) ===
+[
+ {
+  "c": "id:integer, bubble_id:text, last_synced_at:timestamp with time zone, created_at:timestamp with time zone, updated_at:timestamp with time zone, payment_method:text, modified_date:timestamp with time zone, amount:numeric, created_by:text, linked_agent:text, created_date:timestamp with time zone, remark:text, payment_date:timestamp with time zone, linked_invoice:text, linked_customer:text, payment_index:numeric, attachment:ARRAY, verified_by:text, edit_history:text, issuer_bank:text, epp_month:numeric, payment_method_v2:text, terminal:text, bank_charges:numeric, epp_type:text, creation_date:text, creator:text, referrer:text, actual_received:text, unique_id:text, log:text, epp_cost:numeric"
+ }
+]
+
+=== submitted_payment columns (1) ===
+[
+ {
+  "c": "id:integer, bubble_id:text, last_synced_at:timestamp with time zone, created_at:timestamp with time zone, updated_at:timestamp with time zone, payment_method:text, modified_date:timestamp with time zone, amount:numeric, created_by:text, linked_agent:text, created_date:timestamp with time zone, remark:text, payment_date:timestamp with time zone, linked_invoice:text, linked_customer:text, payment_index:numeric, attachment:ARRAY, verified_by:text, edit_history:text, issuer_bank:text, epp_month:numeric, payment_method_v2:text, terminal:text, bank_charges:numeric, epp_type:text, status:character varying, creation_date:text, creator:text, epp:text, linked_installment:text, payment_type:text, referrer:text, slug:text, unique_id:text, log:text, epp_cost:numeric"
+ }
+]
+
+=== package sample (3) ===
+[
+ {
+  "id": 1146,
+  "bubble_id": "pkg_ev_11kw_3p_charger_only_20260713",
+  "last_synced_at": "2026-07-13T06:04:10.037Z",
+  "created_at": "2026-07-13T06:04:10.037Z",
+  "updated_at": "2026-07-13T06:04:10.037Z",
+  "special": null,
+  "panel_qty": null,
+  "created_date": "2026-07-13T06:04:10.037Z",
+  "price": "980",
+  "invoice_desc": "Supply of 1 ARMORVOLT MODEL 111 11kW three-phase EV charger. Charger warranty: 1 year. Installation, cabling, DB box, and breaker are not included.",
+  "linked_package_item": [
+   "pki_ev_11kw_3p_charger_only_20260713"
+  ],
+  "created_by": "1695894230041x154962290574647280",
+  "package_name": "11Kw [3P] EV Charger Only",
+  "panel": null,
+  "type": "EV Charger",
+  "max_discount": null,
+  "need_approval": null,
+  "active": true,
+  "modified_date": "2026-07-13T06:04:10.037Z",
+  "password": null,
+  "creation_date": null,
+  "creator": null,
+  "slug": null,
+  "system_default": null,
+  "inverter_1": null,
+  "inverter_2": null,
+  "inverter_3": null,
+  "inverter_4": null,
+  "unique_id": "pkg_ev_11kw_3p_charger_only_20260713",
+  "nett_price": null
+ },
+ {
+  "id": 1147,
+  "bubble_id": "pkg_ev_installation_1p_20260713",
+  "last_synced_at": "2026-07-13T06:04:10.037Z",
+  "created_at": "2026-07-13T06:04:10.037Z",
+  "updated_at": "2026-07-13T06:04:10.037Z",
+  "special": null,
+  "panel_qty": null,
+  "created_date": "2026-07-13T06:04:10.037Z",
+  "price": "1688",
+  "invoice_desc": "Single-phase EV charger installation service only; charger not included. Includes 3 x 1C 6mm AC cable up to 15m, an 8.5-way PVC DB box, and a 2P 40A Type A RCBO. Includes safety protection, testing and commissioning, 1-year installation warranty, and one wall crossing.",
+  "linked_package_item": [
+   "pki_ev_install_1p_cable_20260713",
+   "pki_ev_install_1p_db_box_20260713",
+   "pki_ev_install_1p_breaker_20260713",
+   "pki_ev_install_1p_workmanship_20260713"
+  ],
+  "created_by": "1695894230041x154962290574647280",
+  "package_name": "Installation Job for EV Charger[1P]",
+  "panel": null,
+  "type": "EV Charger",
+  "max_discount": null,
+  "need_approval": null,
+  "active": true,
+  "modified_date": "2026-07-13T06:04:10.037Z",
+  "password": null,
+  "creation_date": null,
+  "creator": null,
+  "slug": null,
+  "system_default": null,
+  "inverter_1": null,
+  "inverter_2": null,
+  "inverter_3": null,
+  "inverter_4": null,
+  "unique_id": "pkg_ev_installation_1p_20260713",
+  "nett_price": null
+ },
+ {
+  "id": 1148,
+  "bubble_id": "pkg_ev_installation_3p_20260713",
+  "last_synced_at": "2026-07-13T06:04:10.037Z",
+  "created_at": "2026-07-13T06:04:10.037Z",
+  "updated_at": "2026-07-13T06:04:10.037Z",
+  "special": null,
+  "panel_qty": null,
+  "created_date": "2026-07-13T06:04:10.037Z",
+  "price": "1988",
+  "invoice_desc": "Three-phase EV charger installation service only; charger not included. Includes 5 x 1C 6mm AC cable up to 15m, an 8.5-way PVC DB box, and a 4P 40A Type A RCBO. Includes safety protection, testing and commissioning, 1-year installation warranty, and one wall crossing.",
+  "linked_package_item": [
+   "pki_ev_install_3p_cable_20260713",
+   "pki_ev_install_3p_db_box_20260713",
+   "pki_ev_install_3p_breaker_20260713",
+   "pki_ev_install_3p_workmanship_20260713"
+  ],
+  "created_by": "1695894230041x154962290574647280",
+  "package_name": "Installation Job for EV Charger[3P]",
+  "panel": null,
+  "type": "EV Charger",
+  "max_discount": null,
+  "need_approval": null,
+  "active": true,
+  "modified_date": "2026-07-13T06:04:10.037Z",
+  "password": null,
+  "creation_date": null,
+  "creator": null,
+  "slug": null,
+  "system_default": null,
+  "inverter_1": null,
+  "inverter_2": null,
+  "inverter_3": null,
+  "inverter_4": null,
+  "unique_id": "pkg_ev_installation_3p_20260713",
+  "nett_price": null
+ }
+]
+
+=== package_item sample (5) ===
+[
+ {
+  "id": 1,
+  "bubble_id": "1703833647950x563318101277147140",
+  "last_synced_at": "2025-09-12T07:46:06.627Z",
+  "created_at": "2025-09-12T07:46:06.627Z",
+  "updated_at": "2025-09-12T07:46:06.627Z",
+  "total_cost": 0,
+  "created_by": "1695894230041x154962290574647280",
+  "modified_date": "2023-12-29T07:07:27.249Z",
+  "created_date": "2023-12-29T07:07:27.248Z",
+  "product": "1703778887662x887428531011977200",
+  "qty": 1,
+  "sort": 99,
+  "inventory": null
+ },
+ {
+  "id": 2,
+  "bubble_id": "1703833688009x880194653421043700",
+  "last_synced_at": "2025-09-12T07:46:06.636Z",
+  "created_at": "2025-09-12T07:46:06.636Z",
+  "updated_at": "2025-09-12T07:46:06.636Z",
+  "total_cost": 0,
+  "created_by": "1695894230041x154962290574647280",
+  "modified_date": "2023-12-29T07:08:07.272Z",
+  "created_date": "2023-12-29T07:08:07.272Z",
+  "product": "1703778887662x887428531011977200",
+  "qty": 1,
+  "sort": 99,
+  "inventory": null
+ },
+ {
+  "id": 3,
+  "bubble_id": "1703833734749x631886264903401500",
+  "last_synced_at": "2025-09-12T07:46:06.648Z",
+  "created_at": "2025-09-12T07:46:06.648Z",
+  "updated_at": "2025-09-12T07:46:06.648Z",
+  "total_cost": 4950,
+  "created_by": "1695894230041x154962290574647280",
+  "modified_date": "2025-01-09T08:04:13.476Z",
+  "created_date": "2023-12-29T07:08:54.107Z",
+  "product": "1692255863479x555358685401972740",
+  "qty": 9,
+  "sort": 2,
+  "inventory": true
+ },
+ {
+  "id": 4,
+  "bubble_id": "1703833735236x178001135011889150",
+  "last_synced_at": "2025-09-12T07:46:06.658Z",
+  "created_at": "2025-09-12T07:46:06.658Z",
+  "updated_at": "2025-09-12T07:46:06.658Z",
+  "total_cost": 0,
+  "created_by": "1695894230041x154962290574647280",
+  "modified_date": "2025-01-09T08:04:13.476Z",
+  "created_date": "2023-12-29T07:08:54.530Z",
+  "product": "1703832486959x361642797057966100",
+  "qty": 1,
+  "sort": 3,
+  "inventory": true
+ },
+ {
+  "id": 5,
+  "bubble_id": "1703833788622x357641073103732740",
+  "last_synced_at": "2025-09-12T07:46:06.662Z",
+  "created_at": "2025-09-12T07:46:06.662Z",
+  "updated_at": "2025-09-12T07:46:06.662Z",
+  "total_cost": 0,
+  "created_by": "1695894230041x154962290574647280",
+  "modified_date": "2023-12-29T07:09:48.343Z",
+  "created_date": "2023-12-29T07:09:48.343Z",
+  "product": "1703778887662x887428531011977200",
+  "qty": 1,
+  "sort": 99,
+  "inventory": null
+ }
+]
+
+=== product sample (5) ===
+[
+ {
+  "id": 2,
+  "bubble_id": "1696227082042x491448065157496800",
+  "last_synced_at": "2025-11-05T04:44:01.896Z",
+  "created_at": "2025-11-05T04:44:01.896Z",
+  "updated_at": "2025-11-05T04:44:01.896Z",
+  "linked_brand": "1696226956061x517808424640260100",
+  "inventory": null,
+  "image": "//a317bcce3a4814c60687fe307b0dbe6b.cdn.bubble.io/f1696227022132x403847008735290750/TOPBiHiKu7-detailed1.png",
+  "modified_date": "2024-08-22T16:35:27.942Z",
+  "created_date": "2023-10-02T06:11:13.881Z",
+  "warranty_name": "10 Years Product Warranty",
+  "active": false,
+  "cost_price": null,
+  "selling_price": null,
+  "description": null,
+  "linked_category": "1692255756673x335736081690132500",
+  "name": "Canadian Solar TOPBiHiKu7 ",
+  "warranty_link": null,
+  "label": "Solar Panel",
+  "pdf_product": "//a317bcce3a4814c60687fe307b0dbe6b.cdn.bubble.io/f1696227059206x122929054467228130/Canadian-Solar-TOPCon-Module-Technical-White-Paper.v5.pdf",
+  "product_warranty_desc": null,
+  "solar_output_rating": null,
+  "created_by": "1694840898359x952314974070402000",
+  "inverter_rating": null,
+  "creation_date": null,
+  "creator": null,
+  "power_warranty": null,
+  "warranty_button": null,
+  "unique_id": null
+ },
+ {
+  "id": 3,
+  "bubble_id": "1696401035445x644853335042031600",
+  "last_synced_at": "2025-11-05T04:44:01.902Z",
+  "created_at": "2025-11-05T04:44:01.902Z",
+  "updated_at": "2025-11-05T04:44:01.902Z",
+  "linked_brand": null,
+  "inventory": null,
+  "image": null,
+  "modified_date": "2024-08-22T16:35:21.550Z",
+  "created_date": "2023-10-04T06:30:25.001Z",
+  "warranty_name": null,
+  "active": true,
+  "cost_price": "1200",
+  "selling_price": "1500",
+  "description": null,
+  "linked_category": "1696401011142x573248835555688450",
+  "name": "SEDA Application",
+  "warranty_link": null,
+  "label": "Operation",
+  "pdf_product": null,
+  "product_warranty_desc": null,
+  "solar_output_rating": null,
+  "created_by": "1694840898359x952314974070402000",
+  "inverter_rating": null,
+  "creation_date": null,
+  "creator": null,
+  "power_warranty": null,
+  "warranty_button": null,
+  "unique_id": null
+ },
+ {
+  "id": 4,
+  "bubble_id": "1696401077810x367384612145725440",
+  "last_synced_at": "2025-11-05T04:44:01.907Z",
+  "created_at": "2025-11-05T04:44:01.907Z",
+  "updated_at": "2025-11-05T04:44:01.907Z",
+  "linked_brand": null,
+  "inventory": null,
+  "image": null,
+  "modified_date": "2024-08-22T16:35:21.550Z",
+  "created_date": "2023-10-04T06:31:07.074Z",
+  "warranty_name": null,
+  "active": true,
+  "cost_price": "155",
+  "selling_price": "200",
+  "description": null,
+  "linked_category": "1696401011142x573248835555688450",
+  "name": "Installation",
+  "warranty_link": null,
+  "label": "Operation",
+  "pdf_product": null,
+  "product_warranty_desc": "1 Year Roof Leaking Warranty\n3 Years Workmanship Warranty",
+  "solar_output_rating": null,
+  "created_by": "1694840898359x952314974070402000",
+  "inverter_rating": null,
+  "creation_date": null,
+  "creator": null,
+  "power_warranty": null,
+  "warranty_button": null,
+  "unique_id": null
+ },
+ {
+  "id": 5,
+  "bubble_id": "1696401096171x149217331616153600",
+  "last_synced_at": "2025-11-05T04:44:01.914Z",
+  "created_at": "2025-11-05T04:44:01.914Z",
+  "updated_at": "2025-11-05T04:44:01.914Z",
+  "linked_brand": null,
+  "inventory": null,
+  "image": null,
+  "modified_date": "2024-08-22T16:35:21.550Z",
+  "created_date": "2023-10-04T06:31:25.432Z",
+  "warranty_name": null,
+  "active": true,
+  "cost_price": "230",
+  "selling_price": "250",
+  "description": null,
+  "linked_category": "1696401011142x573248835555688450",
+  "name": "Concrete Addtional Cost",
+  "warranty_link": null,
+  "label": "Operation",
+  "pdf_product": null,
+  "product_warranty_desc": null,
+  "solar_output_rating": null,
+  "created_by": "1694840898359x952314974070402000",
+  "inverter_rating": null,
+  "creation_date": null,
+  "creator": null,
+  "power_warranty": null,
+  "warranty_button": null,
+  "unique_id": null
+ },
+ {
+  "id": 6,
+  "bubble_id": "1696401113197x881294205130899500",
+  "last_synced_at": "2025-11-05T04:44:01.920Z",
+  "created_at": "2025-11-05T04:44:01.920Z",
+  "updated_at": "2025-11-05T04:44:01.920Z",
+  "linked_brand": null,
+  "inventory": null,
+  "image": null,
+  "modified_date": "2024-08-22T16:35:21.550Z",
+  "created_date": "2023-10-04T06:31:42.364Z",
+  "warranty_name": null,
+  "active": true,
+  "cost_price": "60",
+  "selling_price": "80",
+  "description": null,
+  "linked_category": "1696401011142x573248835555688450",
+  "name": "Electrical Work",
+  "warranty_link": null,
+  "label": "Operation",
+  "pdf_product": null,
+  "product_warranty_desc": null,
+  "solar_output_rating": null,
+  "created_by": "1694840898359x952314974070402000",
+  "inverter_rating": null,
+  "creation_date": null,
+  "creator": null,
+  "power_warranty": null,
+  "warranty_button": null,
+  "unique_id": null
+ }
+]
+
+=== product count (1) ===
+[
+ {
+  "n": "68"
+ }
+]
+
+=== package count (1) ===
+[
+ {
+  "n": "1146"
+ }
+]
+
+=== package_item count (1) ===
+[
+ {
+  "n": "5802"
+ }
+]

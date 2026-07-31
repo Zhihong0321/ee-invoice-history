@@ -428,7 +428,164 @@ async function loadAdminSummary(client) {
     ];
 }
 
+/**
+ * Per-admin activity heatmaps — one contribution-style grid per distinct
+ * actor found in `activity_log` for app='ee-admin'.
+ *
+ * The window is deliberately short (5 weeks default, 8 max): activity_log is
+ * hard-purged at 30 days, so a 26-week grid like SEDA's would be 80% dead
+ * space that reads as "this person stopped working" rather than "we don't
+ * keep the rows".
+ *
+ * Takes the same areas/duplicates filters as the feed so the maps and the
+ * timeline below them always describe the same events.
+ *
+ * @param {object} client - pg client
+ * @param {object} opts - { weeks, areas: string[], includeDuplicates }
+ */
+async function loadAdminActorMaps(client, opts = {}) {
+    const weeks = Math.min(Math.max(Number(opts.weeks) || 5, 2), 8);
+    const areas = Array.isArray(opts.areas) && opts.areas.length ? opts.areas : null;
+    const includeDuplicates = Boolean(opts.includeDuplicates);
+
+    const dayKey = (d) => d.toISOString().slice(0, 10);
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    // Back to the first day of the window, then back again to that week's
+    // Sunday so the grid's first column is a whole week.
+    const start = new Date(today);
+    start.setUTCDate(start.getUTCDate() - (weeks * 7 - 1));
+    start.setUTCDate(start.getUTCDate() - start.getUTCDay());
+
+    // Area is a JS-side derivation of (entity_type, action), so group on the
+    // raw pair in SQL and fold into areas here — one row per actor/day/pair
+    // is still tiny at 30-day retention.
+    const { rows } = await client.query(
+        `SELECT to_char(occurred_at AT TIME ZONE 'UTC', 'YYYY-MM-DD') AS day,
+                actor_user_id, actor_name, actor_role,
+                entity_type, action,
+                count(*)::int AS n,
+                count(*) FILTER (WHERE status <> 'success')::int AS failures
+           FROM activity_log
+          WHERE app = 'ee-admin'
+            AND occurred_at >= $1::timestamptz
+          GROUP BY 1, 2, 3, 4, 5, 6`,
+        [`${dayKey(start)}T00:00:00Z`]
+    );
+
+    const actors = new Map();
+    for (const row of rows) {
+        const area = areaForEvent(row.entity_type, row.action);
+        if (areas && !areas.includes(area)) continue;
+        if (!includeDuplicates && hasDuplicateInAudit(row.entity_type, row.action)) continue;
+
+        // actor_user_id is null on system/unattributed writes — they still
+        // belong on the page, grouped under one "unattributed" card.
+        const key = row.actor_user_id === null || row.actor_user_id === undefined
+            ? `name:${row.actor_name || 'unknown'}`
+            : `id:${row.actor_user_id}`;
+
+        let actor = actors.get(key);
+        if (!actor) {
+            actor = {
+                key,
+                actorUserId: row.actor_user_id ?? null,
+                actorName: row.actor_name || null,
+                actorRole: row.actor_role || null,
+                byDay: new Map(),
+                byArea: {},
+                failures: 0
+            };
+            actors.set(key, actor);
+        }
+        if (!actor.actorName && row.actor_name) actor.actorName = row.actor_name;
+        if (!actor.actorRole && row.actor_role) actor.actorRole = row.actor_role;
+
+        const bucket = actor.byDay.get(row.day) || { count: 0, failures: 0, areas: {} };
+        bucket.count += row.n;
+        bucket.failures += row.failures;
+        bucket.areas[area] = (bucket.areas[area] || 0) + row.n;
+        actor.byDay.set(row.day, bucket);
+
+        actor.byArea[area] = (actor.byArea[area] || 0) + row.n;
+        actor.failures += row.failures;
+    }
+
+    // Every day in the window, gaps included — a heatmap that skipped quiet
+    // days would put the wrong date under every cell after the first gap.
+    const calendar = [];
+    for (let d = new Date(start); d <= today; d.setUTCDate(d.getUTCDate() + 1)) {
+        calendar.push(dayKey(d));
+    }
+
+    const shaped = [...actors.values()].map((actor) => {
+        const days = calendar.map((date) => {
+            const bucket = actor.byDay.get(date);
+            return bucket
+                ? { date, count: bucket.count, failures: bucket.failures, areas: bucket.areas }
+                : { date, count: 0, failures: 0, areas: {} };
+        });
+
+        const counts = days.map((d) => d.count);
+        const totalEvents = counts.reduce((sum, n) => sum + n, 0);
+        const activeDays = counts.filter((n) => n > 0).length;
+        const busiest = days.reduce(
+            (best, d) => (best === null || d.count > best.count ? d : best),
+            null
+        );
+
+        // Longest run of consecutive active days anywhere in the window, and
+        // the run still open at the end of it. A streak that ends yesterday
+        // still counts as current — today's work may not be logged yet.
+        let longestStreak = 0;
+        let run = 0;
+        for (const d of days) {
+            run = d.count > 0 ? run + 1 : 0;
+            if (run > longestStreak) longestStreak = run;
+        }
+        let currentStreak = 0;
+        for (let i = days.length - 1; i >= 0; i--) {
+            if (days[i].count > 0) currentStreak++;
+            else if (i === days.length - 1) continue; // today not logged yet
+            else break;
+        }
+
+        return {
+            key: actor.key,
+            actorUserId: actor.actorUserId,
+            actorName: actor.actorName,
+            actorRole: actor.actorRole,
+            totalEvents,
+            activeDays,
+            avgPerActiveDay: activeDays > 0 ? Math.round((totalEvents / activeDays) * 10) / 10 : 0,
+            currentStreak,
+            longestStreak,
+            failures: actor.failures,
+            busiestDay: busiest && busiest.count > 0 ? busiest : null,
+            maxCount: counts.length ? Math.max(...counts) : 0,
+            topArea: Object.entries(actor.byArea).sort((a, b) => b[1] - a[1])[0]?.[0] || null,
+            byArea: actor.byArea,
+            days
+        };
+    })
+        .filter((a) => a.totalEvents > 0)
+        .sort((a, b) => b.totalEvents - a.totalEvents);
+
+    return {
+        weeks,
+        startDate: calendar[0] || null,
+        endDate: calendar[calendar.length - 1] || null,
+        retentionDays: 30,
+        // One scale shared by every card: per-actor scaling would paint a
+        // 3-event day and a 90-event day the same shade of blue.
+        maxCount: shaped.reduce((max, a) => Math.max(max, a.maxCount), 0),
+        totalEvents: shaped.reduce((sum, a) => sum + a.totalEvents, 0),
+        actors: shaped
+    };
+}
+
 module.exports = {
     loadAdminActivity,
-    loadAdminSummary
+    loadAdminSummary,
+    loadAdminActorMaps
 };

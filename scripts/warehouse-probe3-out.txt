@@ -1,0 +1,668 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+=== product labels (8) ===
+[
+ {
+  "label": null,
+  "n": "38"
+ },
+ {
+  "label": "String Inverter",
+  "n": "9"
+ },
+ {
+  "label": "Installation",
+  "n": "6"
+ },
+ {
+  "label": "Operation",
+  "n": "6"
+ },
+ {
+  "label": "Micro Inverter",
+  "n": "5"
+ },
+ {
+  "label": "Solar Panel",
+  "n": "2"
+ },
+ {
+  "label": "LOV VOLTAGE BATTERY",
+  "n": "1"
+ },
+ {
+  "label": "Inverter",
+  "n": "1"
+ }
+]
+
+=== products (panel/inverter-ish) (19) ===
+[
+ {
+  "id": 102,
+  "bubble_id": "1776182987917x004362228963947001",
+  "name": "[3P] SAJ R6 8KW String Inverter",
+  "label": "Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "id": 25,
+  "bubble_id": "1703835524354x454734092639404000",
+  "name": "NEP BDM 1000W",
+  "label": "Micro Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 1,
+  "active": false
+ },
+ {
+  "id": 15,
+  "bubble_id": "1703815169794x514571837412737000",
+  "name": "NEP BDM 2000W",
+  "label": "Micro Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 2,
+  "active": false
+ },
+ {
+  "id": 16,
+  "bubble_id": "1703815219673x291613300555776000",
+  "name": "NEP BDM 600W",
+  "label": "Micro Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 8,
+  "active": false
+ },
+ {
+  "id": 27,
+  "bubble_id": "1712027911264x544501973692448800",
+  "name": "SAJ M2-1.0K-S2 Micro Inverter",
+  "label": "Micro Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 2,
+  "active": true
+ },
+ {
+  "id": 26,
+  "bubble_id": "1712027846244x376551508591509500",
+  "name": "SAJ M2-1.8K-S4 Micro Inverter",
+  "label": "Micro Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 2,
+  "active": true
+ },
+ {
+  "id": 1,
+  "bubble_id": "1692255863479x555358685401972740",
+  "name": "590W JinkoSolar Solar Panel N-Type TOPCon ",
+  "label": "Solar Panel",
+  "solar_output_rating": 590,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "id": 2,
+  "bubble_id": "1696227082042x491448065157496800",
+  "name": "Canadian Solar TOPBiHiKu7 ",
+  "label": "Solar Panel",
+  "solar_output_rating": null,
+  "inverter_rating": null,
+  "active": false
+ },
+ {
+  "id": 22,
+  "bubble_id": "1703832486959x361642797057966100",
+  "name": "[1P] SAJ R5 4KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 4,
+  "active": true
+ },
+ {
+  "id": 23,
+  "bubble_id": "1703833932150x627237241211846700",
+  "name": "[1P] SAJ R5 5KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 5,
+  "active": true
+ },
+ {
+  "id": 21,
+  "bubble_id": "1703832475148x566437913026887700",
+  "name": "[1P] SAJ R5 6KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 6,
+  "active": true
+ },
+ {
+  "id": 20,
+  "bubble_id": "1703832445921x639989657399984100",
+  "name": "[1P] SAJ R5 7KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 7,
+  "active": true
+ },
+ {
+  "id": 17,
+  "bubble_id": "1703815277423x923633591226466300",
+  "name": "[1P] SAJ R5 8KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 8,
+  "active": true
+ },
+ {
+  "id": 10,
+  "bubble_id": "1703753919775x906442469182537700",
+  "name": "[3P] SAJ R6 10KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 10,
+  "active": true
+ },
+ {
+  "id": 19,
+  "bubble_id": "1703832424223x792437775786049500",
+  "name": "[3P] SAJ R6 12KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 12,
+  "active": true
+ },
+ {
+  "id": 24,
+  "bubble_id": "1703833938773x838044780385534000",
+  "name": "[3P] SAJ R6 15KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 15,
+  "active": true
+ },
+ {
+  "id": 28,
+  "bubble_id": "1715267061230x935109140562051100",
+  "name": "[3P] SAJ R6 17KW String Inverter",
+  "label": "String Inverter",
+  "solar_output_rating": null,
+  "inverter_rating": 17,
+  "active": true
+ },
+ {
+  "id": 38,
+  "bubble_id": "1741540531671x608460181016150000",
+  "name": "620W JinkoSolar Solar Panel N-Type TOPCon ",
+  "label": null,
+  "solar_output_rating": 620,
+  "inverter_rating": null,
+  "active": true
+ },
+ {
+  "id": 63,
+  "bubble_id": "1771039183637x205243619540992000",
+  "name": "650W JinkoSolar Panel N-Type TOPCon  ",
+  "label": null,
+  "solar_output_rating": 650,
+  "inverter_rating": null,
+  "active": true
+ }
+]
+
+=== package.panel distinct (5) ===
+[
+ {
+  "panel": "1692255863479x555358685401972740",
+  "n": "378"
+ },
+ {
+  "panel": "1741540531671x608460181016150000",
+  "n": "343"
+ },
+ {
+  "panel": "1771039183637x205243619540992000",
+  "n": "203"
+ },
+ {
+  "panel": "1724333977749x259189494577102850",
+  "n": "188"
+ },
+ {
+  "panel": null,
+  "n": "34"
+ }
+]
+
+=== package.inverter_1 distinct (30) ===
+[
+ {
+  "inverter_1": null,
+  "n": "637"
+ },
+ {
+  "inverter_1": "1724421132110x481560740678860800",
+  "n": "86"
+ },
+ {
+  "inverter_1": "1703832424223x792437775786049500",
+  "n": "44"
+ },
+ {
+  "inverter_1": "1780667331000xPROD107H220KW",
+  "n": "37"
+ },
+ {
+  "inverter_1": "1703833938773x838044780385534000",
+  "n": "35"
+ },
+ {
+  "inverter_1": "1741614860801x190167310062321660",
+  "n": "29"
+ },
+ {
+  "inverter_1": "1767347895312x313789627015888900",
+  "n": "22"
+ },
+ {
+  "inverter_1": "1703753919775x906442469182537700",
+  "n": "21"
+ },
+ {
+  "inverter_1": "1776182987917x004362228963947001",
+  "n": "18"
+ },
+ {
+  "inverter_1": "1767347366773x289959195173191700",
+  "n": "18"
+ },
+ {
+  "inverter_1": "1767347810667x445499864602640400",
+  "n": "17"
+ },
+ {
+  "inverter_1": "1703832445921x639989657399984100",
+  "n": "16"
+ },
+ {
+  "inverter_1": "1703815277423x923633591226466300",
+  "n": "16"
+ },
+ {
+  "inverter_1": "1725960619328x718293570166456300",
+  "n": "15"
+ },
+ {
+  "inverter_1": "1767347771333x477744795123974140",
+  "n": "14"
+ },
+ {
+  "inverter_1": "1767347123248x479900802043609100",
+  "n": "14"
+ },
+ {
+  "inverter_1": "1724215072990x822675759905636400",
+  "n": "13"
+ },
+ {
+  "inverter_1": "1703833932150x627237241211846700",
+  "n": "13"
+ },
+ {
+  "inverter_1": "1776182987956x606618364561138300",
+  "n": "12"
+ },
+ {
+  "inverter_1": "1725962092667x484135533310902300",
+  "n": "12"
+ },
+ {
+  "inverter_1": "1767346676752x917404146809176000",
+  "n": "10"
+ },
+ {
+  "inverter_1": "1776182988011x951519061695254500",
+  "n": "9"
+ },
+ {
+  "inverter_1": "1703832475148x566437913026887700",
+  "n": "9"
+ },
+ {
+  "inverter_1": "1703832486959x361642797057966100",
+  "n": "9"
+ },
+ {
+  "inverter_1": "1715267061230x935109140562051100",
+  "n": "7"
+ },
+ {
+  "inverter_1": "1767347296348x541192008381497340",
+  "n": "5"
+ },
+ {
+  "inverter_1": "1725962178479x327901387212455940",
+  "n": "3"
+ },
+ {
+  "inverter_1": "1779719047940x940110744677805312",
+  "n": "2"
+ },
+ {
+  "inverter_1": "1779719047940x501009584476202496",
+  "n": "2"
+ },
+ {
+  "inverter_1": "1779719047940x250740760788659840",
+  "n": "1"
+ }
+]
+
+=== package.type distinct (5) ===
+[
+ {
+  "type": "Residential",
+  "n": "582"
+ },
+ {
+  "type": "Tariff B&D Low Voltage",
+  "n": "504"
+ },
+ {
+  "type": "Special / Roadshow",
+  "n": "41"
+ },
+ {
+  "type": "EV Charger",
+  "n": "15"
+ },
+ {
+  "type": null,
+  "n": "4"
+ }
+]
+
+=== seda_status distinct (6) ===
+[
+ {
+  "seda_status": null,
+  "n": "8606"
+ },
+ {
+  "seda_status": "Pending",
+  "n": "2696"
+ },
+ {
+  "seda_status": "Submitted",
+  "n": "195"
+ },
+ {
+  "seda_status": "Approved",
+  "n": "62"
+ },
+ {
+  "seda_status": "DEMO",
+  "n": "9"
+ },
+ {
+  "seda_status": "APPROVED BY SEDA",
+  "n": "4"
+ }
+]
+
+=== invoice jul 2026 count (1) ===
+[
+ {
+  "n": "359",
+  "with_total": "359"
+ }
+]
+
+=== payments by invoice month jul (1) ===
+[
+ {
+  "invoices": "51",
+  "payments": "54",
+  "total": "164133.50"
+ }
+]
+
+=== sample jul invoice with pkg + seda + paid (12) ===
+[
+ {
+  "id": 166308,
+  "invoice_number": "INV-1010996",
+  "bubble_id": "64ecd62c-abbd-46e4-87ca-e8ecedf093de",
+  "invoice_date": "2026-07-31T03:54:15.676Z",
+  "total_amount": "36000",
+  "amount": null,
+  "panel_qty": null,
+  "linked_package": "1777969947000xPKG903",
+  "package_name": "[3P] HYBIRD SAJ JINKO 16 PCS 650W",
+  "panel": "1771039183637x205243619540992000",
+  "pkg_panel_qty": 16,
+  "inverter_1": "1767347366773x289959195173191700",
+  "inverter_2": null,
+  "inverter_3": null,
+  "inverter_4": null,
+  "pkg_type": "Residential",
+  "seda_status": "Pending",
+  "seda_id": "seda_d6252e2398b59aff",
+  "paid": null
+ },
+ {
+  "id": 166307,
+  "invoice_number": "INV-1010995",
+  "bubble_id": "b96d9748-59de-4a5e-ace3-4028a4f2b9d6",
+  "invoice_date": "2026-07-31T03:05:29.273Z",
+  "total_amount": "20130",
+  "amount": null,
+  "panel_qty": null,
+  "linked_package": "1777969947000xPKG813",
+  "package_name": "[1P] STRING SAJ JINKO 12 PCS",
+  "panel": "1771039183637x205243619540992000",
+  "pkg_panel_qty": 12,
+  "inverter_1": "1703833932150x627237241211846700",
+  "inverter_2": null,
+  "inverter_3": null,
+  "inverter_4": null,
+  "pkg_type": "Residential",
+  "seda_status": "Pending",
+  "seda_id": "seda_9c67dc9611fc9932",
+  "paid": null
+ },
+ {
+  "id": 166306,
+  "invoice_number": "INV-1010994",
+  "bubble_id": "124f8a1f-8833-4cee-8ada-5d1b80843988",
+  "invoice_date": "2026-07-31T02:48:38.819Z",
+  "total_amount": "23000",
+  "amount": null,
+  "panel_qty": null,
+  "linked_package": "1777969947000xPKG873",
+  "package_name": "[1P] HYBIRD SAJ JINKO 15 PCS 650W",
+  "panel": "1771039183637x205243619540992000",
+  "pkg_panel_qty": 15,
+  "inverter_1": "1767347123248x479900802043609100",
+  "inverter_2": null,
+  "inverter_3": null,
+  "inverter_4": null,
+  "pkg_type": "Residential",
+  "seda_status": "Pending",
+  "seda_id": "seda_b4288add4ec90947",
+  "paid": null
+ },
+ {
+  "id": 166305,
+  "invoice_number": "INV-1010993",
+  "bubble_id": "3b8e6989-1e60-41af-82aa-f69ab470273f",
+  "invoice_date": "2026-07-30T09:18:14.113Z",
+  "total_amount": "55560",
+  "amount": null,
+  "panel_qty": null,
+  "linked_package": "1777969947000xPKG971",
+  "package_name": "[3P] HYBIRD SAJ JINKO 30 PCS 650W",
+  "panel": "1771039183637x205243619540992000",
+  "pkg_panel_qty": 30,
+  "inverter_1": "1767347895312x313789627015888900",
+  "inverter_2": null,
+  "inverter_3": null,
+  "inverter_4": null,
+  "pkg_type": "Residential",
+  "seda_status": "Pending",
+  "seda_id": "seda_6d631a64cde70457",
+  "paid": null
+ },
+ {
+  "id": 166304,
+  "invoice_number": "INV-1010992",
+  "bubble_id": "b48bc955-2425-4dc4-8b0b-897109613c73",
+  "invoice_date": "2026-07-30T07:31:42.700Z",
+  "total_amount": "24000",
+  "amount": null,
+  "panel_qty": null,
+  "linked_package": "1777969947000xPKG826",
+  "package_name": "[3P] STRING SAJ JINKO 16 PCS",
+  "panel": "1771039183637x205243619540992000",
+  "pkg_panel_qty": 16,
+  "inverter_1": "1776182987917x004362228963947001",
+  "inverter_2": null,
+  "inverter_3": null,
+  "inverter_4": null,
+  "pkg_type": "Residential",
+  "seda_status": "Pending",
+  "seda_id": "seda_94d70a0d871d3317",
+  "paid": null
+ },
+ {
+  "id": 166303,
+  "invoice_number": "INV-1010991",
+  "bubble_id": "9e88ba8f-de68-4ad2-95b7-1976178a67ce",
+  "invoice_date": "2026-07-30T06:56:47.639Z",
+  "total_amount": "23500",
+  "amount": null,
+  "panel_qty": null,
+  "linked_package": "1777969947000xPKG826",
+  "package_name": "[3P] STRING SAJ JINKO 16 PCS",
+  "panel": "1771039183637x205243619540992000",
+  "pkg_panel_qty": 16,
+  "inverter_1": "1776182987917x004362228963947001",
+  "inverter_2": null,
+  "inverter_3": null,
+  "inverter_4": null,
+  "pkg_type": "Residential",
+  "seda_status": "Pending",
+  "seda_id": "seda_0ae258477b3dd3bc",
+  "paid": null
+ },
+ {
+  "id": 166302,
+  "invoice_number": "INV-1010990",
+  "bubble_id": "935a948e-2680-4ab5-a66b-d7f99b48843c",
+  "invoice_date": "2026-07-30T03:37:01.975Z",
+  "total_amount": "50000",
+  "amount": null,
+  "panel_qty": null,
+  "linked_package": "1777969597000xPKG1017",
+  "package_name": "COMMERCIAL 37PCS JINKO 650W",
+  "panel": "1771039183637x205243619540992000",
+  "pkg_panel_qty": 37,
+  "inverter_1": "1724421132110x481560740678860800",
+  "inverter_2": null,
+  "inverter_3": null,
+  "inverter_4": null,
+  "pkg_type": "Tariff B&D Low Voltage",
+  "seda_status": "Pending",
+  "seda_id": "seda_cf98fe3eb2ad9995",
+  "paid": null
+ },
+ {
+  "id": 166301,
+  "invoice_number": "INV-1010989",
+  "bubble_id": "d6835f65-adee-4ead-a705-008da918afd1",
+  "invoice_date": "2026-07-30T03:36:09.082Z",
+  "total_amount": "50000",
+  "amount": null,
+  "panel_qty": null,
+  "linked_package": "1777969597000xPKG1017",
+  "package_name": "COMMERCIAL 37PCS JINKO 650W",
+  "panel": "1771039183637x205243619540992000",
+  "pkg_panel_qty": 37,
+  "inverter_1": "1724421132110x481560740678860800",
+  "inverter_2": null,
+  "inverter_3": null,
+  "inverter_4": null,
+  "pkg_type": "Tariff B&D Low Voltage",
+  "seda_status": "Pending",
+  "seda_id": "seda_45eb590040a255f9",
+  "paid": null
+ },
+ {
+  "id": 166300,
+  "invoice_number": "INV-1010988",
+  "bubble_id": "e08be6fa-c3d8-4bcd-bf3a-efce67ab1107",
+  "invoice_date": "2026-07-30T03:31:26.040Z",
+  "total_amount": "25000",
+  "amount": null,
+  "panel_qty": null,
+  "linked_package": "1777969597000xPKG993",
+  "package_name": "COMMERCIAL 13PCS JINKO 650W",
+  "panel": "1771039183637x205243619540992000",
+  "pkg_panel_qty": 13,
+  "inverter_1": "1776182988011x951519061695254500",
+  "inverter_2": null,
+  "inverter_3": null,
+  "inverter_4": null,
+  "pkg_type": "Tariff B&D Low Voltage",
+  "seda_status": "Pending",
+  "seda_id": "seda_7edc282d13edadb5",
+  "paid": null
+ },
+ {
+  "id": 166299,
+  "invoice_number": "INV-1010987",
+  "bubble_id": "b15d6fee-7446-4d0b-afe8-965ced2f6bf2",
+  "invoice_date": "2026-07-30T03:28:32.409Z",
+  "total_amount": "21300",
+  "amount": null,
+  "panel_qty": null,
+  "linked_package": "1777969597000xPKG990",
+  "package_name": "COMMERCIAL 10PCS JINKO 650W",
+  "panel": "1771039183637x205243619540992000",
+  "pkg_panel_qty": 10,
+  "inverter_1": "1776182987956x606618364561138300",
+  "inverter_2": null,
+  "inverter_3": null,
+  "inverter_4": null,
+  "pkg_type": "Tariff B&D Low Voltage",
+  "seda_status": "Pending",
+  "seda_id": "seda_7ce6f77699a322d1",
+  "paid": null
+ },
+ {
+  "id": 166298,
+  "invoice_number": "INV-1010986",
+  "bubble_id": "0da8ac87-7a39-402d-8cee-50957ab44a59",
+  "invoice_date": "2026-07-30T03:28:08.374Z",
+  "total_amount": "21300",
+  "amount": null,
+  "panel_qty": null,
+  "linked_package": "1777969597000xPKG990",
+  "package_name": "COMMERCIAL 10PCS JINKO 650W",
+  "panel": "1771039183637x205243619540992000",
+  "pkg_panel_qty": 10,
+  "inverter_1": "1776182987956x606618364561138300",
+  "inverter_2": null,
+  "inverter_3": null,
+  "inverter_4": null,
+  "pkg_type": "Tariff B&D Low Voltage",
+  "seda_status": "Pending",
+  "seda_id": "seda_130f37caf2de2ea2",
+  "paid": null
+ },
+ {
+  "id": 166297,
+  "invoice_number": "INV-1010985",
+  "bubble_id": "b8039c57-1f8d-4500-958d-ee0f0fe44e24",
+  "invoice_date": "2026-07-30T03:27

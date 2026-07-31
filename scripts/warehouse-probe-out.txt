@@ -1,0 +1,942 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+=== all tables (163) ===
+[
+ {
+  "table_name": "_activity_feed"
+ },
+ {
+  "table_name": "_admin_backup_logs"
+ },
+ {
+  "table_name": "_ai_progress"
+ },
+ {
+  "table_name": "_dept_metadata"
+ },
+ {
+  "table_name": "activity_log"
+ },
+ {
+  "table_name": "activity_v2_report"
+ },
+ {
+  "table_name": "activity_v2_task_preset"
+ },
+ {
+  "table_name": "agent"
+ },
+ {
+  "table_name": "agent_content"
+ },
+ {
+  "table_name": "agent_daily_report"
+ },
+ {
+  "table_name": "agent_email_accounts"
+ },
+ {
+  "table_name": "agent_monthly_commission"
+ },
+ {
+  "table_name": "agent_monthly_perf"
+ },
+ {
+  "table_name": "agent_retirement_backup_20260720"
+ },
+ {
+  "table_name": "ai2026_department_plans"
+ },
+ {
+  "table_name": "ai2026_departments"
+ },
+ {
+  "table_name": "ai2026_work_reports"
+ },
+ {
+  "table_name": "ai_activity_log"
+ },
+ {
+  "table_name": "ai_contact"
+ },
+ {
+  "table_name": "ai_profile"
+ },
+ {
+  "table_name": "api_key"
+ },
+ {
+  "table_name": "api_keys"
+ },
+ {
+  "table_name": "app_news_articles"
+ },
+ {
+  "table_name": "app_news_headlines"
+ },
+ {
+  "table_name": "app_search_tasks"
+ },
+ {
+  "table_name": "app_settings"
+ },
+ {
+  "table_name": "audit_log"
+ },
+ {
+  "table_name": "auth_hub_cors_origins"
+ },
+ {
+  "table_name": "auth_hub_otps"
+ },
+ {
+  "table_name": "auth_hub_referral_auth_urls"
+ },
+ {
+  "table_name": "auth_session"
+ },
+ {
+  "table_name": "blacklisted_sites"
+ },
+ {
+  "table_name": "brand"
+ },
+ {
+  "table_name": "bug_report"
+ },
+ {
+  "table_name": "calendar_appointments"
+ },
+ {
+  "table_name": "calendar_departments"
+ },
+ {
+  "table_name": "calendar_member_departments"
+ },
+ {
+  "table_name": "calendar_tasks"
+ },
+ {
+  "table_name": "career_invitation"
+ },
+ {
+  "table_name": "categories"
+ },
+ {
+  "table_name": "category"
+ },
+ {
+  "table_name": "chat_message"
+ },
+ {
+  "table_name": "chat_tag_assignment"
+ },
+ {
+  "table_name": "chat_thread"
+ },
+ {
+  "table_name": "claim_receipt"
+ },
+ {
+  "table_name": "commission_adjustment"
+ },
+ {
+  "table_name": "commission_adjustment_v2"
+ },
+ {
+  "table_name": "company_setting"
+ },
+ {
+  "table_name": "content_category"
+ },
+ {
+  "table_name": "conversation"
+ },
+ {
+  "table_name": "customer"
+ },
+ {
+  "table_name": "customer_created_by_identity_backup_20260720"
+ },
+ {
+  "table_name": "customer_history"
+ },
+ {
+  "table_name": "customer_profile"
+ },
+ {
+  "table_name": "customer_snapshot"
+ },
+ {
+  "table_name": "daily_job_planning"
+ },
+ {
+  "table_name": "dealership"
+ },
+ {
+  "table_name": "department"
+ },
+ {
+  "table_name": "department_member"
+ },
+ {
+  "table_name": "department_report"
+ },
+ {
+  "table_name": "departments"
+ },
+ {
+  "table_name": "dept_report_comment"
+ },
+ {
+  "table_name": "discovery_logs"
+ },
+ {
+  "table_name": "ee_attachment"
+ },
+ {
+  "table_name": "ee_calendar"
+ },
+ {
+  "table_name": "ee_circular"
+ },
+ {
+  "table_name": "email_logs"
+ },
+ {
+  "table_name": "emails"
+ },
+ {
+  "table_name": "epp_gateway"
+ },
+ {
+  "table_name": "epp_option"
+ },
+ {
+  "table_name": "et_channel_sessions"
+ },
+ {
+  "table_name": "et_leads"
+ },
+ {
+  "table_name": "et_messages"
+ },
+ {
+  "table_name": "eternalgy_agreement"
+ },
+ {
+  "table_name": "eternalgynotification"
+ },
+ {
+  "table_name": "expenses"
+ },
+ {
+  "table_name": "financial_projection"
+ },
+ {
+  "table_name": "follow_up_notes"
+ },
+ {
+  "table_name": "forum_replies"
+ },
+ {
+  "table_name": "forum_topics"
+ },
+ {
+  "table_name": "generated_commission_report"
+ },
+ {
+  "table_name": "hod_departments"
+ },
+ {
+  "table_name": "hosted_html_app"
+ },
+ {
+  "table_name": "hybrid_inverter_upgrade_application"
+ },
+ {
+  "table_name": "hybrid_inverter_upgrade_rule"
+ },
+ {
+  "table_name": "invoice"
+ },
+ {
+  "table_name": "invoice_action"
+ },
+ {
+  "table_name": "invoice_audit_log"
+ },
+ {
+  "table_name": "invoice_edit_history"
+ },
+ {
+  "table_name": "invoice_item"
+ },
+ {
+  "table_name": "invoice_new"
+ },
+ {
+  "table_name": "invoice_payment_planning"
+ },
+ {
+  "table_name": "invoice_snapshot"
+ },
+ {
+  "table_name": "invoice_template"
+ },
+ {
+  "table_name": "invoice_voucher_selection"
+ },
+ {
+  "table_name": "job_applications"
+ },
+ {
+  "table_name": "join_us_form"
+ },
+ {
+  "table_name": "legacy_data_01"
+ },
+ {
+  "table_name": "legacy_ini_to_be_remove_later"
+ },
+ {
+  "table_name": "linked_agent_resync_backup_20260728"
+ },
+ {
+  "table_name": "news_links"
+ },
+ {
+  "table_name": "otps"
+ },
+ {
+  "table_name": "package"
+ },
+ {
+  "table_name": "package_formula"
+ },
+ {
+  "table_name": "package_item"
+ },
+ {
+  "table_name": "package_test"
+ },
+ {
+  "table_name": "payment"
+ },
+ {
+  "table_name": "pending_schema_patches"
+ },
+ {
+  "table_name": "pipeline_events"
+ },
+ {
+  "table_name": "processed_content"
+ },
+ {
+  "table_name": "product"
+ },
+ {
+  "table_name": "query_task_runs"
+ },
+ {
+  "table_name": "query_tasks"
+ },
+ {
+  "table_name": "receipts"
+ },
+ {
+  "table_name": "received_emails"
+ },
+ {
+  "table_name": "recycle_bin_upload"
+ },
+ {
+  "table_name": "referal_contact"
+ },
+ {
+  "table_name": "referral"
+ },
+ {
+  "table_name": "referral_agent_identity_backup_20260720"
+ },
+ {
+  "table_name": "relationship_discovery_status"
+ },
+ {
+  "table_name": "rewriter_prompts"
+ },
+ {
+  "table_name": "saj_backfill_device"
+ },
+ {
+  "table_name": "saj_backfill_job"
+ },
+ {
+  "table_name": "saj_customer_device_map"
+ },
+ {
+  "table_name": "saj_daily_energy"
+ },
+ {
+  "table_name": "saj_device"
+ },
+ {
+  "table_name": "saj_plant"
+ },
+ {
+  "table_name": "saj_reading"
+ },
+ {
+  "table_name": "saving_report"
+ },
+ {
+  "table_name": "schema_descriptions"
+ },
+ {
+  "table_name": "schema_migrations"
+ },
+ {
+  "table_name": "seda_agent_identity_backup_20260428"
+ },
+ {
+  "table_name": "seda_registration"
+ },
+ {
+  "table_name": "seda_tasks"
+ },
+ {
+  "table_name": "submit_payment"
+ },
+ {
+  "table_name": "submitted_payment"
+ },
+ {
+  "table_name": "support_ai_session"
+ },
+ {
+  "table_name": "support_ticket"
+ },
+ {
+  "table_name": "support_ticket_notification_contact"
+ },
+ {
+  "table_name": "sync_cursors"
+ },
+ {
+  "table_name": "sync_progress"
+ },
+ {
+  "table_name": "sync_status"
+ },
+ {
+  "table_name": "synced_records"
+ },
+ {
+ 
+
+=== invoice columns (130) ===
+[
+ {
+  "column_name": "id",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "bubble_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "last_synced_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "created_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "updated_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "visit",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "eligible_amount_description",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_seda_registration",
+  "data_type": "text"
+ },
+ {
+  "column_name": "normal_commission",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "linked_agent",
+  "data_type": "text"
+ },
+ {
+  "column_name": "performance_tier_month",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "full_payment_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "modified_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "need_approval",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "linked_package",
+  "data_type": "text"
+ },
+ {
+  "column_name": "locked_package",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "linked_customer",
+  "data_type": "text"
+ },
+ {
+  "column_name": "panel_qty",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "dealercode",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_agreement",
+  "data_type": "text"
+ },
+ {
+  "column_name": "performance_tier_year",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "invoice_id",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "last_payment_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "approval_status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "1st_payment_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "commission_paid",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "paid",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "version",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "amount_eligible_for_comm",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "2nd_payment",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "created_by",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_payment",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "amount",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "invoice_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "1st_payment",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "logs",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_stock_transaction",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "stamp_cash_price",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "created_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "stock_status_inv",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_invoice_item",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "perf_tier_commission",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "linked_agent_monthly_perf",
+  "data_type": "text"
+ },
+ {
+  "column_name": "how_you_win",
+  "data_type": "text"
+ },
+ {
+  "column_name": "stock_status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "customer_average_tnb",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "estimated_saving",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "linked_roof_image",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "description",
+  "data_type": "text"
+ },
+ {
+  "column_name": "state",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_notification",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "linked_follow_up",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "case_status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "referrer_name",
+  "data_type": "text"
+ },
+ {
+  "column_name": "customer_signature",
+  "data_type": "text"
+ },
+ {
+  "column_name": "signature_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "estimated_new_bill_amount",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "effective_epp",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "lead_source",
+  "data_type": "text"
+ },
+ {
+  "column_name": "strategic_va",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "hide_payment_terms",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "premium_electrical_job",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "panel_rating",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "custom_proposal",
+  "data_type": "text"
+ },
+ {
+  "column_name": "package_type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "request_urgent_submission",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_voucher",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "approved_toberemove",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "user_manual_pdf",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_payment_plan",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_saving_report",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_lead_from_customer",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "achieved_monthly_anp",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "1st_payment__",
+  "data_type": "text"
+ },
+ {
+  "column_name": "2nd_payment__",
+  "data_type": "text"
+ },
+ {
+  "column_name": "stock_status__",
+  "data_type": "text"
+ },
+ {
+  "column_name": "invoice_number",
+  "data_type": "character varying"
+ },
+ {
+  "column_name": "status",
+  "data_type": "character varying"
+ },
+ {
+  "column_name": "is_latest",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "package_id",
+  "data_type": "character varying"
+ },
+ {
+  "column_name": "discount_percent",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "voucher_code",
+  "data_type": "text"
+ },
+ {
+  "column_name": "total_amount",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "paid_amount",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "balance_due",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "sent_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "viewed_at",
+  "data_type": 
+
+=== invoice_item columns (25) ===
+[
+ {
+  "column_name": "id",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "bubble_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "last_synced_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "created_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "updated_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "description",
+  "data_type": "text"
+ },
+ {
+  "column_name": "modified_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "qty",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "amount",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "unit_price",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "created_by",
+  "data_type": "text"
+ },
+ {
+  "column_name": "created_date",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "is_a_package",
+  "data_type": "boolean"
+ },
+ {
+  "column_name": "inv_item_type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_package",
+  "data_type": "text"
+ },
+ {
+  "column_name": "epp",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "linked_invoice",
+  "data_type": "text"
+ },
+ {
+  "column_name": "sort",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "linked_voucher",
+  "data_type": "text"
+ },
+ {
+  "column_name": "voucher_remark",
+  "data_type": "text"
+ },
+ {
+  "column_name": "creation_date",
+  "data_type": "text"
+ },
+ {
+  "column_name": "creator",
+  "data_type": "text"
+ },
+ {
+  "column_name": "slug",
+  "data_type": "text"
+ },
+ {
+  "column_name": "unique_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "linked_product",
+  "data_type": "text"
+ }
+]
+
+=== tables matching package/product/item/panel/inverter/stock (15) ===
+[
+ {
+  "table_name": "hybrid_inverter_upgrade_application"
+ },
+ {
+  "table_name": "hybrid_inverter_upgrade_rule"
+ },
+ {
+  "table_name": "invoice_item"
+ },
+ {
+  "table_name": "invoice_payment_planning"
+ },
+ {
+  "table_name": "package"
+ },
+ {
+  "table_name": "package_formula"
+ },
+ {
+  "table_name": "package_item"
+ },
+ {
+  "table_name": "package_test"
+ },
+ {
+  "table_name": "payment"
+ },
+ {
+  "table_name": "product"
+ },
+ {
+  "table_name": "seda_agent_identity_backup_20260428"
+ },
+ {
+  "table_name": "seda_registration"
+ },
+ {
+  "table_name": "seda_tasks"
+ },
+ {
+  "table_name": "submit_payment"
+ },
+ {
+  "table_name": "submitted_payment"
+ }
+]

@@ -10,6 +10,7 @@ const { loadDashboard, loadLive } = require('../repo/dashboard');
 const { loadActivityLog, loadActivityLogFacets, loadActivityLogSummary } = require('../repo/activityLog');
 const {
     loadCalculatorActivity,
+    loadCalculatorActivityMap,
     loadCalculatorUserSummaries,
     loadSalesAgentActivityBoard,
     loadSalesAgentActivitySummary,
@@ -265,6 +266,30 @@ router.get('/activity-log/calculator', async (req, res) => {
         res.json({ ok: true, rows, userSummaries });
     } catch (err) {
         console.error('[api] /activity-log/calculator failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/calculator/activity-map
+ * Per-day x per-4-hour-slot calculator counts for the heatmap grid: one
+ * column per day, six rows (00-04 ... 20-24) inside it. Bucketed in
+ * Asia/Kuala_Lumpur so the time-of-day axis reads as local working hours.
+ * Query params:
+ *   days - window width, default 14, clamped 3..180
+ *
+ * Returns: 200 { ok: true, map: { days: DayColumn[], ...summary } }
+ */
+router.get('/activity-log/calculator/activity-map', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const map = await loadCalculatorActivityMap(client, { days: req.query.days });
+        res.json({ ok: true, map });
+    } catch (err) {
+        console.error('[api] /activity-log/calculator/activity-map failed:', err.message);
         res.status(500).json({ ok: false, error: err.message });
     } finally {
         if (client) client.release();

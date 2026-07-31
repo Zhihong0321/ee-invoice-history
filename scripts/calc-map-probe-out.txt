@@ -1,0 +1,124 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+
+=============== C1 span + totals per entity_type ===============
+[
+ {
+  "entity_type": "residential_roi_calculation",
+  "n": "392",
+  "first_seen": "2026-07-29T00:00:00.000Z",
+  "last_seen": "2026-07-31T00:00:00.000Z"
+ },
+ {
+  "entity_type": "commercial_roi_lookup",
+  "n": "44",
+  "first_seen": "2026-07-29T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ }
+]
+
+
+=============== C2 occurred_at column type ===============
+[
+ {
+  "column_name": "occurred_at",
+  "data_type": "timestamp with time zone"
+ }
+]
+
+
+=============== C3 4-hour slot distribution (Asia/Kuala_Lumpur) ===============
+[
+ {
+  "slot": 1,
+  "n": "3"
+ },
+ {
+  "slot": 2,
+  "n": "86"
+ },
+ {
+  "slot": 3,
+  "n": "184"
+ },
+ {
+  "slot": 4,
+  "n": "147"
+ },
+ {
+  "slot": 5,
+  "n": "16"
+ }
+]
+
+
+=============== C4 daily totals last 60 days (KL) ===============
+[
+ {
+  "day": "2026-07-31",
+  "n": "37"
+ },
+ {
+  "day": "2026-07-30",
+  "n": "179"
+ },
+ {
+  "day": "2026-07-29",
+  "n": "220"
+ }
+]
+
+
+=============== C5 busiest day x slot cells ===============
+[
+ {
+  "day": "2026-07-29",
+  "slot": 3,
+  "n": "118"
+ },
+ {
+  "day": "2026-07-30",
+  "slot": 4,
+  "n": "80"
+ },
+ {
+  "day": "2026-07-29",
+  "slot": 4,
+  "n": "67"
+ },
+ {
+  "day": "2026-07-30",
+  "slot": 3,
+  "n": "66"
+ },
+ {
+  "day": "2026-07-31",
+  "slot": 2,
+  "n": "37"
+ },
+ {
+  "day": "2026-07-30",
+  "slot": 2,
+  "n": "27"
+ },
+ {
+  "day": "2026-07-29",
+  "slot": 2,
+  "n": "22"
+ },
+ {
+  "day": "2026-07-29",
+  "slot": 5,
+  "n": "13"
+ },
+ {
+  "day": "2026-07-30",
+  "slot": 1,
+  "n": "3"
+ },
+ {
+  "day": "2026-07-30",
+  "slot": 5,
+  "n": "3"
+ }
+]

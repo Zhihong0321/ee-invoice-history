@@ -1378,6 +1378,22 @@
     }
     .act-map-legend .act-map-cell { width: 11px; height: 11px; }
     .act-map-legend-label { margin: 0 3px; }
+    /* Hour variant (Calculator): a column is one DAY and the six rows inside
+       it are 4-hour slots, so the readable axis is time of day rather than
+       week-over-week. Fewer rows means the cells can afford to be bigger. */
+    .act-map.hours .act-map-grid,
+    .act-map.hours .act-map-days { grid-template-rows: repeat(6, 16px); }
+    .act-map.hours .act-map-days { width: 30px; }
+    .act-map.hours .act-map-day { line-height: 16px; }
+    .act-map.hours .act-map-grid .act-map-cell { width: 16px; height: 16px; border-radius: 4px; }
+    .act-map.hours .act-map-months { margin-left: 35px; }
+    .act-map.hours .act-map-col-label {
+      color: #94A3B8;
+      font-size: 9px;
+      font-weight: 600;
+      text-align: center;
+      white-space: nowrap;
+    }
     @media (max-width: 640px) {
       .act-map { padding: 16px; }
       .act-map-total { font-size: 23px; }
@@ -2821,6 +2837,104 @@
       `;
     }
 
+    /* Calculator activity map — the SEDA heatmap turned 90°. SEDA asks
+       "which weeks were busy"; calculator use is a within-the-day behaviour,
+       so here a column is one day and the six rows inside it are 4-hour
+       slots. Buckets are Asia/Kuala_Lumpur (server side), so the rows read as
+       local working hours. */
+    function slotLabel(slot, hoursPerSlot) {
+      const pad = n => String(n).padStart(2, '0');
+      return `${pad(slot * hoursPerSlot)}:00–${pad((slot + 1) * hoursPerSlot % 24)}:00`;
+    }
+
+    function renderCalculatorActivityMap(map) {
+      const days = map.days || [];
+      if (days.length === 0) return '';
+
+      const slots = map.hourSlots || 6;
+      const per = map.hoursPerSlot || 4;
+      const dayNum = iso => Number(iso.slice(8, 10));
+      const shortDate = iso => {
+        const d = new Date(`${iso}T00:00:00Z`);
+        return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString(undefined, {
+          month: 'short', day: 'numeric', timeZone: 'UTC'
+        });
+      };
+
+      // Cells fill column-by-column: all six slots of day 1, then day 2.
+      const cells = [];
+      for (const day of days) {
+        for (let s = 0; s < slots; s++) {
+          const cell = day.slots[s] || { count: 0, residential: 0, commercial: 0 };
+          const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+          const parts = [`${plural(cell.count, 'calculation')} · ${shortDate(day.date)} ${slotLabel(s, per)}`];
+          if (cell.residential) parts.push(`${cell.residential} residential`);
+          if (cell.commercial) parts.push(`${cell.commercial} commercial`);
+          cells.push(`<div class="act-map-cell l${actMapLevel(cell.count, map.maxCount)}"
+                           title="${escapeHtml(parts.join(' · '))}"></div>`);
+        }
+      }
+
+      // Day-of-month above each column, thinned once the window gets wide
+      // enough that every label would collide.
+      const cols = days.length;
+      const every = cols <= 21 ? 1 : cols <= 45 ? 3 : 7;
+      const colLabels = days.map((d, index) =>
+        (index % every === 0 || index === cols - 1)
+          ? `<div class="act-map-col-label" style="grid-column: ${index + 1};">${dayNum(d.date)}</div>`
+          : ''
+      ).join('');
+
+      const peak = map.peakSlot === null || map.peakSlot === undefined
+        ? ''
+        : `<span class="act-map-fact"><b>${escapeHtml(slotLabel(map.peakSlot, per))}</b>peak window · ${map.peakSlotCount} calcs</span>`;
+      const busiest = map.busiestCell
+        ? `<span class="act-map-fact"><b>${map.busiestCell.count}</b>busiest block · ${escapeHtml(shortDate(map.busiestCell.date))} ${escapeHtml(slotLabel(map.busiestCell.slot, per))}</span>`
+        : '';
+
+      return `
+        <div class="act-map hours">
+          <div class="act-map-header">
+            <div>
+              <div class="act-map-title">Calculator activity map</div>
+              <div class="act-map-total">${map.totalEvents.toLocaleString()} <small>calculations</small></div>
+            </div>
+            <div class="act-map-range">${map.windowDays} days · ${per}h blocks · KL time</div>
+          </div>
+          <div class="act-map-facts">
+            <span class="act-map-fact"><b>${map.activeDays}</b>active days</span>
+            <span class="act-map-fact"><b>${map.avgPerActiveDay}</b>avg per active day</span>
+            ${peak}
+            ${busiest}
+            <span class="act-map-fact"><b>${map.byKind.residential}</b>residential · <b>${map.byKind.commercial}</b>commercial</span>
+          </div>
+          <div class="act-map-scroll">
+            <div class="act-map-grid-wrap">
+              <div class="act-map-months" style="grid-template-columns: repeat(${cols}, 16px);">
+                ${colLabels}
+              </div>
+              <div class="act-map-body">
+                <div class="act-map-days">
+                  ${Array.from({ length: slots }, (_, s) =>
+                    `<div class="act-map-day">${String(s * per).padStart(2, '0')}</div>`).join('')}
+                </div>
+                <div class="act-map-grid">${cells.join('')}</div>
+              </div>
+            </div>
+          </div>
+          <div class="act-map-legend">
+            <span class="act-map-legend-label">Less</span>
+            <div class="act-map-cell"></div>
+            <div class="act-map-cell l1"></div>
+            <div class="act-map-cell l2"></div>
+            <div class="act-map-cell l3"></div>
+            <div class="act-map-cell l4"></div>
+            <span class="act-map-legend-label">More</span>
+          </div>
+        </div>
+      `;
+    }
+
     async function loadCalculatorActivity(opts = {}) {
       const feed = opts.silent
         ? document.getElementById('feed')
@@ -2835,8 +2949,12 @@
           await window.userProfileCache.init();
         }
 
-        const res = await fetch('/api/activity-log/calculator');
+        const [res, mapRes] = await Promise.all([
+          fetch('/api/activity-log/calculator'),
+          fetch('/api/activity-log/calculator/activity-map?days=14')
+        ]);
         const data = await res.json();
+        const mapData = await mapRes.json();
 
         if (!data.ok) throw new Error(data.error);
 
@@ -2879,7 +2997,8 @@
         }));
 
         const isNew = markNewRows('calculator', data.rows, row => row.id);
-        feed.innerHTML = newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
+        const activityMap = mapData.ok ? renderCalculatorActivityMap(mapData.map) : '';
+        feed.innerHTML = activityMap + newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
           occurredAt: row.occurred_at,
           html: itemsHtml[i],
           isNew: isNew[i]

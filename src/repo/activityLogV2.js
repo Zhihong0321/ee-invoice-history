@@ -39,6 +39,122 @@ async function loadCalculatorActivity(client) {
     return result.rows;
 }
 
+const CALC_ENTITY_TYPES = ['residential_roi_calculation', 'commercial_roi_lookup'];
+// Six 4-hour slots per day. Index is `floor(hour / 4)` in KL time.
+const HOUR_SLOTS = 6;
+const HOURS_PER_SLOT = 4;
+
+/**
+ * Calculator activity map — same heatmap idea as `loadSedaActivityMap`, but
+ * turned 90°: a column is one DAY and the six rows inside it are 4-hour
+ * slots (00-04 ... 20-24). SEDA's week columns answer "which weeks were
+ * busy"; calculator use is a within-the-day behaviour, so the interesting
+ * axis is time of day.
+ *
+ * Bucketing is Asia/Kuala_Lumpur, not UTC — this is the one place the
+ * timezone genuinely changes the reading (KL is UTC+8, so a UTC bucket would
+ * report the 9am rush as midnight). Same convention as dashboard.js.
+ *
+ * The data is very young: `activity_log` calculator rows only start
+ * 2026-07-29, so anything before that is legitimately empty, which is why
+ * the default window is 14 days rather than SEDA's 26 weeks.
+ *
+ * @param {object} client - pg client
+ * @param {object} opts   - { days }
+ */
+async function loadCalculatorActivityMap(client, opts = {}) {
+    const days = Math.min(Math.max(Number(opts.days) || 14, 3), 180);
+
+    const result = await client.query(
+        `SELECT to_char(a.occurred_at AT TIME ZONE 'Asia/Kuala_Lumpur', 'YYYY-MM-DD') AS day,
+                floor(extract(hour FROM a.occurred_at AT TIME ZONE 'Asia/Kuala_Lumpur')
+                      / ${HOURS_PER_SLOT})::int AS slot,
+                a.entity_type,
+                count(*)::int AS n
+           FROM activity_log a
+          WHERE a.entity_type = ANY($1::text[])
+            AND a.occurred_at >= (now() AT TIME ZONE 'Asia/Kuala_Lumpur')::date
+                                 - make_interval(days => $2::int)
+          GROUP BY 1, 2, 3`,
+        [CALC_ENTITY_TYPES, days - 1]
+    );
+
+    const emptyDay = () => ({
+        count: 0,
+        residential: 0,
+        commercial: 0,
+        slots: Array.from({ length: HOUR_SLOTS }, () => ({ count: 0, residential: 0, commercial: 0 }))
+    });
+    const buckets = new Map();
+    for (const row of result.rows) {
+        const day = buckets.get(row.day) || emptyDay();
+        const slot = day.slots[row.slot];
+        const kind = row.entity_type === 'commercial_roi_lookup' ? 'commercial' : 'residential';
+        day.count += row.n;
+        day[kind] += row.n;
+        if (slot) {
+            slot.count += row.n;
+            slot[kind] += row.n;
+        }
+        buckets.set(row.day, day);
+    }
+
+    // "Today" is the KL calendar day, so the last column is the day the user
+    // is actually looking at rather than a UTC one that flips at 8am local.
+    const klToday = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kuala_Lumpur' }).format(new Date());
+    const cursor = new Date(`${klToday}T00:00:00Z`);
+    cursor.setUTCDate(cursor.getUTCDate() - (days - 1));
+
+    const grid = [];
+    for (let i = 0; i < days; i++) {
+        const key = cursor.toISOString().slice(0, 10);
+        grid.push({ date: key, ...(buckets.get(key) || emptyDay()) });
+        cursor.setUTCDate(cursor.getUTCDate() + 1);
+    }
+
+    // Peak slot across the whole window — the "when does this team actually
+    // use the calculator" answer the grid is built to give.
+    const slotTotals = Array.from({ length: HOUR_SLOTS }, () => 0);
+    let maxCount = 0;
+    let busiestCell = null;
+    for (const day of grid) {
+        day.slots.forEach((slot, index) => {
+            slotTotals[index] += slot.count;
+            if (slot.count > maxCount) {
+                maxCount = slot.count;
+                busiestCell = { date: day.date, slot: index, count: slot.count };
+            }
+        });
+    }
+    const peakSlot = slotTotals.some((n) => n > 0)
+        ? slotTotals.indexOf(Math.max(...slotTotals))
+        : null;
+
+    const totalEvents = grid.reduce((sum, d) => sum + d.count, 0);
+    const activeDays = grid.filter((d) => d.count > 0).length;
+
+    return {
+        windowDays: days,
+        hourSlots: HOUR_SLOTS,
+        hoursPerSlot: HOURS_PER_SLOT,
+        startDate: grid.length ? grid[0].date : null,
+        endDate: grid.length ? grid[grid.length - 1].date : null,
+        totalEvents,
+        activeDays,
+        maxCount,
+        busiestCell,
+        peakSlot,
+        peakSlotCount: peakSlot === null ? 0 : slotTotals[peakSlot],
+        slotTotals,
+        avgPerActiveDay: activeDays > 0 ? Math.round((totalEvents / activeDays) * 10) / 10 : 0,
+        byKind: {
+            residential: grid.reduce((sum, d) => sum + d.residential, 0),
+            commercial: grid.reduce((sum, d) => sum + d.commercial, 0)
+        },
+        days: grid
+    };
+}
+
 /**
  * Aggregate calculator usage by actor across the complete seven-day period.
  * This is separate from the 100-row timeline limit because every activity
@@ -1639,6 +1755,7 @@ async function loadClaimSubmission(client, opts = {}) {
 
 module.exports = {
     loadCalculatorActivity,
+    loadCalculatorActivityMap,
     loadCalculatorUserSummaries,
     loadSalesAgentActivityBoard,
     loadSalesAgentActivitySummary,

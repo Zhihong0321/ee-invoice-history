@@ -5549,31 +5549,11 @@
     }
 
     /* ---------- WAREHOUSE › Stock Demand ----------
-       Traces one month of invoices that carry a payment into the hardware
-       they commit us to. Two groups the warehouse actually acts on:
+       Live: every invoice that carries a payment, traced to the hardware it
+       commits us to. Two groups the warehouse actually acts on:
          Group 1 — under 59% paid AND SEDA not approved  -> don't reserve
          Group 2 — 59%+ paid AND SEDA approved           -> reserve
        Everything else lands in "Unmatched" so no invoice silently vanishes. */
-
-    let warehouseMonth = null;
-
-    function warehouseMonthBarHtml(months, current) {
-      if (!months.length) return '';
-      const chips = months.slice(0, 12).map(m => `
-        <button class="filter-chip ${m.month === current ? 'active' : ''}"
-                data-warehouse-month="${escapeHtml(m.month)}">${escapeHtml(m.label)}</button>
-      `).join('');
-      return `<div class="filter-bar">${chips}</div>`;
-    }
-
-    function bindWarehouseMonths() {
-      document.querySelectorAll('[data-warehouse-month]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          warehouseMonth = btn.getAttribute('data-warehouse-month');
-          loadWarehouseStock();
-        });
-      });
-    }
 
     function warehouseTallyHtml(label, rows, unit) {
       const total = rows.reduce((s, r) => s + r.qty, 0);
@@ -5678,26 +5658,25 @@
     }
 
     async function loadWarehouseStock() {
+      clearFilters();
       const feed = setLoading('Loading warehouse stock demand...');
 
       try {
-        const qs = warehouseMonth ? `?month=${encodeURIComponent(warehouseMonth)}` : '';
-        const res = await fetch(`/api/warehouse${qs}`);
+        const res = await fetch('/api/warehouse');
         const payload = await res.json();
         if (!payload.ok) throw new Error(payload.error);
 
         const data = payload.data;
-        warehouseMonth = data.month;
 
-        document.getElementById('filters').innerHTML =
-          warehouseMonthBarHtml(data.months, data.month);
-        bindWarehouseMonths();
-
+        const asOf = new Date(data.generatedAt).toLocaleString('en-GB', {
+          day: '2-digit', month: 'short', year: 'numeric',
+          hour: '2-digit', minute: '2-digit'
+        });
         setHeader('Warehouse Stock Demand',
-          `${data.monthLabel || '—'} — invoices with a payment, traced to the panels and inverters their package commits`);
+          `Live — every invoice with a payment, traced to the panels and inverters their package commits · as of ${asOf}`);
 
-        if (!data.month || !data.totals || data.totals.invoices === 0) {
-          renderEmpty(feed, '📦', 'No invoices with payment', 'Nothing was paid against an invoice raised in this month.');
+        if (!data.totals || data.totals.invoices === 0) {
+          renderEmpty(feed, '📦', 'No invoices with payment', 'Nothing has been paid against an invoice yet.');
           return;
         }
 
@@ -5707,7 +5686,8 @@
             <div class="stat-tile">
               <div class="stat-label">Invoices with payment</div>
               <div class="stat-value">${data.totals.invoices}</div>
-              <div class="stat-sub">${money(data.totals.amount)} invoiced</div>
+              <div class="stat-sub">${money(data.totals.amount)} invoiced${data.coverage.firstInvoiceDate
+                ? ` · since ${new Date(data.coverage.firstInvoiceDate).toLocaleDateString()}` : ''}</div>
             </div>
             <div class="stat-tile">
               <div class="stat-label">Collected</div>

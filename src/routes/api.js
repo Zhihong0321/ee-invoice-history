@@ -639,15 +639,14 @@ router.get('/activity-log/finance/claim', async (req, res) => {
 
 /**
  * GET /api/warehouse
- * Stock demand for one month, traced from invoices that carry a payment.
- * Query params:
- *   month - 'YYYY-MM' (defaults to the newest month that has any payment)
+ * Live stock demand: every invoice that carries a payment, traced to the
+ * panels and inverters its package commits.
  *
- * Returns: 200 { ok: true, data: { month, monthLabel, months, totals, groups } }
+ * Returns: 200 { ok: true, data: { generatedAt, coverage, totals, groups } }
  */
 router.get('/warehouse', async (req, res) => {
     try {
-        const data = await loadWarehouse({ month: req.query.month });
+        const data = await loadWarehouse();
         res.json({ ok: true, data });
     } catch (err) {
         console.error('[api] /warehouse failed:', err.message);

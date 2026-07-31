@@ -3,10 +3,10 @@
 const { pool } = require('../db');
 
 /**
- * WAREHOUSE — stock demand traced from invoices, one month at a time.
+ * WAREHOUSE — live stock demand traced from every invoice that has a payment.
  *
  * The question this answers is "what hardware do I have to have on the shelf
- * for the invoices raised this month?", split by how safe the job is:
+ * right now?", split by how safe the job is:
  *
  *   Group 1 — paid < 59% AND SEDA not approved yet (null / Pending / Submitted)
  *             => soft demand, don't commit stock yet.
@@ -78,48 +78,8 @@ function cleanName(name) {
     return String(name || '').replace(/\s+/g, ' ').trim();
 }
 
-function monthRange(month) {
-    // month = 'YYYY-MM'
-    const m = /^(\d{4})-(\d{2})$/.exec(String(month || ''));
-    if (!m) return null;
-    const year = Number(m[1]);
-    const mon = Number(m[2]);
-    if (mon < 1 || mon > 12) return null;
-    const start = `${m[1]}-${m[2]}-01`;
-    const endYear = mon === 12 ? year + 1 : year;
-    const endMon = mon === 12 ? 1 : mon + 1;
-    const end = `${endYear}-${String(endMon).padStart(2, '0')}-01`;
-    return { start, end };
-}
-
-function monthLabel(month) {
-    const r = /^(\d{4})-(\d{2})$/.exec(String(month || ''));
-    if (!r) return month;
-    const names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    return `${names[Number(r[2]) - 1]} ${r[1]}`;
-}
-
-/** Months (newest first) that have at least one invoice carrying a payment. */
-async function loadMonths() {
-    const { rows } = await pool.query(`
-        SELECT to_char(date_trunc('month', i.invoice_date), 'YYYY-MM') AS month,
-               count(DISTINCT i.bubble_id) AS invoices
-          FROM invoice i
-          JOIN payment p ON p.linked_invoice = i.bubble_id
-         WHERE i.invoice_date IS NOT NULL
-         GROUP BY 1
-         ORDER BY 1 DESC
-         LIMIT 36
-    `);
-    return rows.map((r) => ({
-        month: r.month,
-        label: monthLabel(r.month),
-        invoices: Number(r.invoices) || 0,
-    }));
-}
-
-/** Invoices raised in [start, end) that have at least one verified payment. */
-async function loadInvoiceRows(start, end) {
+/** Every invoice that has at least one verified payment, newest first. */
+async function loadInvoiceRows() {
     const { rows } = await pool.query(`
         SELECT i.id,
                i.bubble_id,
@@ -146,9 +106,8 @@ async function loadInvoiceRows(start, end) {
                ) pay ON pay.linked_invoice = i.bubble_id
           LEFT JOIN customer c ON c.customer_id = i.linked_customer
           LEFT JOIN seda_registration sr ON sr.bubble_id = i.linked_seda_registration
-         WHERE i.invoice_date >= $1 AND i.invoice_date < $2
-         ORDER BY i.invoice_date DESC
-    `, [start, end]);
+         ORDER BY i.invoice_date DESC NULLS LAST
+    `);
     return rows;
 }
 
@@ -277,20 +236,9 @@ function buildGroup(key, title, description, invoices) {
     };
 }
 
-/**
- * @param {object} opts
- * @param {string} [opts.month] 'YYYY-MM'; defaults to the newest month that has payments.
- */
-async function loadWarehouse(opts = {}) {
-    const months = await loadMonths();
-    const month = monthRange(opts.month) ? opts.month : (months[0] ? months[0].month : null);
-    const range = month ? monthRange(month) : null;
-
-    if (!range) {
-        return { month: null, monthLabel: null, months, groups: [], unlinkedPackages: 0 };
-    }
-
-    const rows = await loadInvoiceRows(range.start, range.end);
+/** Live snapshot — every invoice with a payment, grouped and tallied. */
+async function loadWarehouse() {
+    const rows = await loadInvoiceRows();
     const packageIds = Array.from(new Set(rows.map((r) => trimOrNull(r.linked_package)).filter(Boolean)));
     const packages = await loadPackages(packageIds);
 
@@ -339,11 +287,15 @@ async function loadWarehouse(opts = {}) {
         else other.push(inv);
     }
 
+    const dates = invoices.map((i) => i.invoiceDate).filter(Boolean);
+
     return {
-        month,
-        monthLabel: monthLabel(month),
-        months,
+        generatedAt: new Date().toISOString(),
         unlinkedPackages,
+        coverage: {
+            firstInvoiceDate: dates.length ? dates[dates.length - 1] : null,
+            lastInvoiceDate: dates.length ? dates[0] : null,
+        },
         totals: {
             invoices: invoices.length,
             amount: invoices.reduce((s, i) => s + i.totalAmount, 0),

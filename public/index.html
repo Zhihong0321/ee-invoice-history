@@ -1312,6 +1312,223 @@
     .stat-tile.thin { border-color: #FDE68A; }
     .stat-tile.thin .stat-sub { color: #B45309; }
 
+    /* ---------- HOME › Overview ----------
+       One box per activity log. Built mobile-first: a single column on a
+       phone, filling out to a 3-4 up grid on desktop. Every box is a link
+       into that department's full feed. */
+    .ov-hero {
+      background: linear-gradient(160deg, #24344A 0%, #0F1B2A 100%);
+      border-radius: 20px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      color: #FFFFFF;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.14),
+        0 16px 34px -24px rgba(15,23,42,0.9);
+    }
+    .ov-hero-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      color: rgba(255,255,255,0.55);
+    }
+    .ov-hero-value {
+      font-size: 34px;
+      font-weight: 700;
+      line-height: 1.05;
+      margin-top: 8px;
+      letter-spacing: -0.03em;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .ov-hero-value small {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0;
+    }
+    .ov-hero-sub {
+      margin-top: 8px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .ov-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 560px) {
+      .ov-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+    }
+
+    .ov-card {
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(255,255,255,0.95);
+      border-radius: 18px;
+      padding: 15px 16px 13px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.95),
+        0 1px 2px rgba(15,23,42,0.05),
+        0 14px 30px -22px rgba(15,23,42,0.42);
+    }
+    .ov-card:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.95),
+        0 2px 4px rgba(15,23,42,0.07),
+        0 22px 40px -24px rgba(15,23,42,0.6);
+    }
+    .ov-card:active { transform: translateY(0); }
+    .ov-card.quiet { opacity: 0.62; }
+
+    .ov-card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .ov-icon {
+      width: 34px;
+      height: 34px;
+      flex-shrink: 0;
+      border-radius: 11px;
+      background: rgba(241,245,249,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .ov-card-title {
+      min-width: 0;
+      flex: 1;
+    }
+    .ov-dept {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #94A3B8;
+    }
+    .ov-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0B1524;
+      margin-top: 1px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .ov-figures {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+    }
+    .ov-today {
+      font-size: 26px;
+      font-weight: 700;
+      color: #0B1524;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .ov-unit {
+      font-size: 10px;
+      color: #94A3B8;
+      padding-bottom: 2px;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .ov-delta {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 999px;
+      flex-shrink: 0;
+      background: rgba(241,245,249,0.9);
+      color: #64748B;
+    }
+    .ov-delta.up { background: rgba(209,250,229,0.85); color: #047857; }
+    .ov-delta.down { background: rgba(254,226,226,0.85); color: #B91C1C; }
+
+    /* 7 day bars. Heights are set inline from the section's own max, so a
+       quiet log still shows shape instead of a flat line. */
+    .ov-spark {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 26px;
+    }
+    .ov-bar {
+      flex: 1;
+      min-height: 2px;
+      border-radius: 3px 3px 1px 1px;
+      background: rgba(203,213,225,0.85);
+    }
+    .ov-bar.today { background: linear-gradient(180deg, #3B82F6 0%, #1D4ED8 100%); }
+
+    .ov-foot {
+      border-top: 1px solid rgba(241,245,249,0.95);
+      padding-top: 9px;
+      font-size: 11px;
+      color: #94A3B8;
+      display: flex;
+      gap: 6px;
+      align-items: baseline;
+    }
+    .ov-last {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #64748B;
+    }
+    .ov-ago { flex-shrink: 0; font-variant-numeric: tabular-nums; }
+
+    .ov-other {
+      margin-top: 20px;
+    }
+    .ov-other-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #94A3B8;
+      margin-bottom: 9px;
+    }
+    .ov-other-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .ov-other-chip {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(226,232,240,0.9);
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748B;
+      cursor: pointer;
+    }
+    .ov-other-chip:hover { color: #0B1524; }
+    .ov-other-chip b {
+      color: #CBD5E1;
+      font-weight: 700;
+      margin-right: 5px;
+    }
+
     /* WAREHOUSE — one card per demand group, each holding two hardware
        tallies (panels, inverters) plus the invoices that produced them. */
     .wh-group {
@@ -2112,12 +2329,12 @@
 
     <!-- SALES Department -->
     <div class="dept-group">
-      <div class="dept-header active" data-dept="sales">
+      <div class="dept-header collapsed" data-dept="sales">
         <span class="dept-icon">▼</span>
         <span>SALES</span>
       </div>
-      <div class="submenu open" data-dept="sales">
-        <div class="submenu-item active" data-route="sales/calculator">Calculator</div>
+      <div class="submenu" data-dept="sales">
+        <div class="submenu-item" data-route="sales/calculator">Calculator</div>
         <div class="submenu-item" data-route="sales/proposal">Sales Agent Activity</div>
         <div class="submenu-item" data-route="sales/auto-proposal">Auto Proposal AI-Voiced</div>
         <div class="submenu-item" data-route="sales/referral">REFERRAL Activity</div>
@@ -2175,6 +2392,17 @@
       <div class="dept-header collapsed" data-dept="warehouse">
         <span class="dept-icon">▼</span>
         <span>WAREHOUSE</span>
+    <!-- HOME — landing page -->
+    <div class="dept-group">
+      <div class="dept-header active" data-dept="home">
+        <span class="dept-icon">▼</span>
+        <span>HOME</span>
+      </div>
+      <div class="submenu open" data-dept="home">
+        <div class="submenu-item active" data-route="home/overview">Overview</div>
+      </div>
+    </div>
+
       </div>
       <div class="submenu" data-dept="warehouse">
         <div class="submenu-item" data-route="warehouse/stock-demand">Stock Demand</div>
@@ -2266,9 +2494,9 @@
   <main class="main-content">
     <div class="top-bar">
       <div class="breadcrumb">
-        <span>SALES</span>
+        <span>HOME</span>
         <span>›</span>
-        <span class="current">Calculator</span>
+        <span class="current">Overview</span>
       </div>
       <div class="top-bar-actions">
         <button class="btn" onclick="reload()">Refresh</button>
@@ -2278,8 +2506,8 @@
     <div class="content-scroll">
       <div class="activity-header">
         <div class="activity-header-text">
-          <h2>Calculator Usage Activity</h2>
-          <div class="description">Residential & Commercial ROI calculation logs</div>
+          <h2>Company Activity Overview</h2>
+          <div class="description">Every log in one view</div>
         </div>
         <div class="activity-header-action"></div>
       </div>
@@ -2288,7 +2516,7 @@
 
       <div id="finance-stats"></div>
 
-      <div id="feed" class="loading-state">Loading calculator activity...</div>
+      <div id="feed" class="loading-state">Loading overview...</div>
     </div>
   </main>
 
@@ -2375,7 +2603,9 @@
       if (!LIVE_ROUTES.includes(route)) stopAutoRefresh();
 
       // Load content based on route
-      if (route === 'sales/calculator') {
+      if (route === 'home/overview') {
+        loadOverview();
+      } else if (route === 'sales/calculator') {
         setHeader('Calculator Usage Activity', 'Residential & Commercial ROI calculation logs');
         clearFilters();
         loadCalculatorActivity();
@@ -5748,8 +5978,125 @@
       }
     }
 
-    // Initial load
-    loadCalculatorActivity();
+    // Initial load — the landing page, matching the HOME item marked active
+    // in the sidebar markup.
+    loadOverview();
   </script>
 </body>
 </html>
+    /* ---------- HOME › Overview ----------
+       The landing page. One box per activity log, each showing today's
+       count, a 7-day shape and the last thing that happened, so the whole
+       company's activity reads in one screen on a phone. Tapping a box is
+       the same as picking that page from the sidebar. */
+
+    /* Drive the sidebar from a route string: open the department, mark the
+       item active, then run the existing click handler's work via loadRoute. */
+    function gotoRoute(route) {
+      const item = document.querySelector(`.submenu-item[data-route="${route}"]`);
+      if (!item) return;
+
+      const submenu = item.closest('.submenu');
+      if (submenu && !submenu.classList.contains('open')) {
+        const header = document.querySelector(`.dept-header[data-dept="${submenu.getAttribute('data-dept')}"]`);
+        if (header) header.classList.remove('collapsed');
+        submenu.classList.add('open');
+      }
+
+      document.querySelectorAll('.submenu-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      closeSidebar();
+      loadRoute(route);
+    }
+
+    function overviewSparkHtml(spark) {
+      const max = Math.max(...spark, 1);
+      return `<div class="ov-spark">${spark.map((n, i) => `
+        <div class="ov-bar${i === spark.length - 1 && n > 0 ? ' today' : ''}"
+             style="height: ${Math.max(2, Math.round(n / max * 26))}px"
+             title="${escapeHtml(String(n))}"></div>
+      `).join('')}</div>`;
+    }
+
+    function overviewCardHtml(s) {
+      const quiet = s.total === 0;
+      const last = s.offline
+        ? 'Router database unreachable'
+        : (s.lastLabel || (s.lastAt ? 'Last event' : 'No activity recorded'));
+
+      return `
+        <div class="ov-card${quiet ? ' quiet' : ''}" data-ov-route="${escapeHtml(s.route)}">
+          <div class="ov-card-head">
+            <div class="ov-icon">${s.icon}</div>
+            <div class="ov-card-title">
+              <div class="ov-dept">${escapeHtml(s.dept)}</div>
+              <div class="ov-name">${escapeHtml(s.title)}</div>
+            </div>
+          </div>
+          <div class="ov-figures">
+            <div class="ov-today">${s.today}</div>
+            <div class="ov-unit">${escapeHtml(s.unit)} today<br>${s.total} in 7d</div>
+            <div class="ov-delta ${s.delta.direction}">${escapeHtml(s.delta.label)}</div>
+          </div>
+          ${overviewSparkHtml(s.spark)}
+          <div class="ov-foot">
+            <div class="ov-last">${escapeHtml(last)}</div>
+            <div class="ov-ago">${s.lastAt ? escapeHtml(formatTime(s.lastAt)) : '—'}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadOverview() {
+      clearFilters();
+      const feed = setLoading('Loading overview...');
+
+      try {
+        const res = await fetch('/api/overview');
+        const payload = await res.json();
+        if (!payload.ok) throw new Error(payload.error);
+
+        const data = payload.data;
+        const busiest = data.sections
+          .filter(s => s.today > 0)
+          .sort((a, b) => b.today - a.today)[0];
+
+        setHeader('Company Activity Overview',
+          `Every log in one view — today vs yesterday, last ${data.windowDays} days`);
+
+        const hero = `
+          <div class="ov-hero">
+            <div class="ov-hero-label">Events logged today</div>
+            <div class="ov-hero-value">${data.totalToday} <small>/ ${data.totalWindow} in ${data.windowDays}d</small></div>
+            <div class="ov-hero-sub">${busiest
+              ? `Busiest right now: ${escapeHtml(busiest.title)} (${busiest.today})`
+              : 'Nothing logged yet today'} · across ${data.sections.length} logs</div>
+          </div>
+        `;
+
+        const grid = `<div class="ov-grid">${data.sections.map(overviewCardHtml).join('')}</div>`;
+
+        const other = data.otherPages.length ? `
+          <div class="ov-other">
+            <div class="ov-other-label">Other pages</div>
+            <div class="ov-other-list">
+              ${data.otherPages.map(p => `
+                <div class="ov-other-chip" data-ov-route="${escapeHtml(p.route)}">
+                  <b>${escapeHtml(p.dept)}</b>${escapeHtml(p.title)}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : '';
+
+        feed.className = '';
+        feed.innerHTML = hero + grid + other;
+
+        feed.querySelectorAll('[data-ov-route]').forEach(el => {
+          el.addEventListener('click', () => gotoRoute(el.getAttribute('data-ov-route')));
+        });
+      } catch (err) {
+        renderError(feed, err);
+      }
+    }
+

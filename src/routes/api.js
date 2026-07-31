@@ -34,6 +34,7 @@ const { loadProjectAttachments, loadProjectAttachmentSummary } = require('../rep
 const { loadAiActivity, loadAiActivitySummary, loadSolarPresentationActivity, loadReferralActivity } = require('../repo/aiActivity');
 const { loadAiRouterLogs, loadAiRouterSummary } = require('../repo/aiRouterLogs');
 const { loadWarehouse } = require('../repo/warehouse');
+const { loadOverview } = require('../repo/overview');
 
 const router = express.Router();
 
@@ -206,6 +207,38 @@ router.get('/live', async (req, res) => {
         res.status(500).json({ ok: false, error: err.message });
     } finally {
         if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/overview
+ * Landing page: one summary per activity log — today vs yesterday, a 7-day
+ * sparkline and the last event — so every department's box renders from a
+ * single request instead of thirteen feed loads.
+ *
+ * The AI Router box reads a second database; if that one is down the rest of
+ * the payload still returns and the box reports `offline: true`.
+ *
+ * Returns: 200 { ok: true, data: { generatedAt, days, sections, otherPages } }
+ */
+router.get('/overview', async (req, res) => {
+    let client = null;
+    let routerClient = null;
+    try {
+        client = await pool.connect();
+        try {
+            routerClient = await routerPool.connect();
+        } catch (err) {
+            console.warn('[api] /overview: router DB connect failed:', err.message);
+        }
+        const data = await loadOverview(client, routerClient);
+        res.json({ ok: true, data });
+    } catch (err) {
+        console.error('[api] /overview failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+        if (routerClient) routerClient.release();
     }
 });
 

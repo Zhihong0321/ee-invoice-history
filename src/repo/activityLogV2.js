@@ -882,6 +882,138 @@ async function loadSedaCycleTimes(client) {
     ];
 }
 
+/**
+ * SEDA activity map — one cell per calendar day, GitHub-contribution style.
+ *
+ * Same event universe and same filters as `loadSedaActivity` (kinds +
+ * backfill), so the map can never disagree with the feed sitting under it.
+ * Bucketing is UTC (`AT TIME ZONE 'UTC'`), matching how
+ * `loadPaymentVerificationStats` keys its daily buckets.
+ *
+ * The window is whole weeks: it starts on the Sunday on or before
+ * `weeks * 7 - 1` days ago and ends today, so the caller can lay the days
+ * out as a fixed 7-row grid without doing date maths of its own.
+ *
+ * Note the data itself is young — `seda_upload`/`seda_registration` rows
+ * only start 2026-05-08 — so the left of a 26-week map is legitimately
+ * empty rather than broken.
+ *
+ * @param {object} client - pg client
+ * @param {object} opts   - { weeks, kinds: string[], includeBackfill }
+ */
+async function loadSedaActivityMap(client, opts = {}) {
+    const weeks = Math.min(Math.max(Number(opts.weeks) || 26, 4), 53);
+    const kinds = Array.isArray(opts.kinds) && opts.kinds.length ? opts.kinds : null;
+    const includeBackfill = Boolean(opts.includeBackfill);
+
+    const KIND_BY_ENTITY = {
+        seda_registration: 'registration',
+        seda_upload: 'documents',
+        seda: 'status'
+    };
+    const entityTypes = Object.keys(KIND_BY_ENTITY)
+        .filter((et) => !kinds || kinds.includes(KIND_BY_ENTITY[et]));
+
+    const dayKey = (d) => d.toISOString().slice(0, 10);
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    // Back to the first day of the window, then back again to that week's
+    // Sunday so the grid's first column is a whole week.
+    const start = new Date(today);
+    start.setUTCDate(start.getUTCDate() - (weeks * 7 - 1));
+    start.setUTCDate(start.getUTCDate() - start.getUTCDay());
+
+    const empty = () => ({ count: 0, registration: 0, documents: 0, status: 0 });
+    const buckets = new Map();
+
+    if (entityTypes.length > 0) {
+        // Identical to loadSedaActivity's filter: the null -> X status writes
+        // are an April-2026 bulk backfill, not real transitions.
+        const backfillFilter = includeBackfill
+            ? ''
+            : `AND NOT (
+                   a.entity_type = 'seda'
+                   AND NOT EXISTS (
+                       SELECT 1 FROM jsonb_array_elements(a.changes) c
+                       WHERE c ? 'before' AND c->>'before' IS NOT NULL
+                   )
+               )`;
+
+        const result = await client.query(
+            `SELECT to_char(a.edited_at AT TIME ZONE 'UTC', 'YYYY-MM-DD') AS day,
+                    a.entity_type,
+                    count(*)::int AS n
+               FROM invoice_audit_log a
+              WHERE a.entity_type = ANY($1::text[])
+                AND jsonb_typeof(a.changes) = 'array'
+                AND a.edited_at >= $2::timestamptz
+                ${backfillFilter}
+              GROUP BY 1, 2`,
+            [entityTypes, `${dayKey(start)}T00:00:00Z`]
+        );
+
+        for (const row of result.rows) {
+            const bucket = buckets.get(row.day) || empty();
+            const kind = KIND_BY_ENTITY[row.entity_type];
+            bucket.count += row.n;
+            if (kind) bucket[kind] += row.n;
+            buckets.set(row.day, bucket);
+        }
+    }
+
+    // Every day in the window, gaps included — a heatmap that skipped quiet
+    // days would put the wrong date under every cell after the first gap.
+    const days = [];
+    for (let d = new Date(start); d <= today; d.setUTCDate(d.getUTCDate() + 1)) {
+        const key = dayKey(d);
+        const bucket = buckets.get(key) || empty();
+        days.push({ date: key, ...bucket });
+    }
+
+    const counts = days.map((d) => d.count);
+    const totalEvents = counts.reduce((sum, n) => sum + n, 0);
+    const activeDays = counts.filter((n) => n > 0).length;
+    const busiest = days.reduce(
+        (best, d) => (best === null || d.count > best.count ? d : best),
+        null
+    );
+
+    // Longest run of consecutive active days anywhere in the window, and the
+    // run still open at the end of it. A streak that ends yesterday still
+    // counts as current — today's work may simply not be logged yet.
+    let longestStreak = 0;
+    let run = 0;
+    for (const d of days) {
+        run = d.count > 0 ? run + 1 : 0;
+        if (run > longestStreak) longestStreak = run;
+    }
+    let currentStreak = 0;
+    for (let i = days.length - 1; i >= 0; i--) {
+        if (days[i].count > 0) currentStreak++;
+        else if (i === days.length - 1) continue; // today not logged yet
+        else break;
+    }
+
+    return {
+        weeks,
+        startDate: days.length ? days[0].date : null,
+        endDate: days.length ? days[days.length - 1].date : null,
+        totalEvents,
+        activeDays,
+        busiestDay: busiest && busiest.count > 0 ? busiest : null,
+        maxCount: counts.length ? Math.max(...counts) : 0,
+        avgPerActiveDay: activeDays > 0 ? Math.round((totalEvents / activeDays) * 10) / 10 : 0,
+        currentStreak,
+        longestStreak,
+        byKind: {
+            registration: days.reduce((sum, d) => sum + d.registration, 0),
+            documents: days.reduce((sum, d) => sum + d.documents, 0),
+            status: days.reduce((sum, d) => sum + d.status, 0)
+        },
+        days
+    };
+}
+
 /* ------------------------------------------------------------------ *
  * FINANCE department — payment lifecycle, split the same way as the
  * INVOICE tabs: who submitted a payment, who verified/corrected it, and
@@ -1387,6 +1519,124 @@ async function loadPaymentReceipt(client, opts = {}) {
         .slice(0, limit);
 }
 
+/**
+ * CLAIM SUBMISSION — staff expense claims (`claim_receipt`), same
+ * two-source shape as loadPaymentReceipt because logging started late:
+ *   - `activity_log` `entity_type='claim_receipt'` (written by app
+ *     `claim-system`, first row 2026-07-31) carries the actor, the action
+ *     and the request status.
+ *   - `claim_receipt` itself holds every claim ever submitted, including
+ *     the ones created before the logger existed — those are surfaced as
+ *     synthetic `source:'record'` rows stamped with `created_at`, so the
+ *     page is not a one-row feed.
+ *
+ * Amount/currency always come from `claim_receipt`, never from the log's
+ * `description` — that text hardcodes "RM" even for USD claims.
+ *
+ * @param {object} client - pg client
+ * @param {object} opts   - { limit }
+ */
+async function loadClaimSubmission(client, opts = {}) {
+    const limit = Math.min(Number(opts.limit) || 80, 200);
+
+    // entity_id is the claim_receipt id as text; guard the cast, other apps
+    // writing this table are free to use non-numeric ids.
+    const logSql = `
+        SELECT
+            l.id, l.app, l.app_env, l.source_url, l.action, l.entity_id,
+            l.entity_label, l.description, l.status, l.error_message,
+            l.actor_user_id, l.actor_name, l.actor_role, l.occurred_at,
+            r.id AS claim_id, r.vendor, r.item, r.description AS claim_description,
+            r.amount, r.currency, r.category, r.status AS claim_status,
+            r.submitted_by, r.submitted_by_email, r.approved_by, r.approved_at,
+            r.receipt_date, r.file_url
+        FROM activity_log l
+        LEFT JOIN claim_receipt r
+               ON l.entity_id ~ '^[0-9]+$' AND r.id = l.entity_id::int
+        WHERE l.entity_type = 'claim_receipt' OR l.app = 'claim-system'
+        ORDER BY l.occurred_at DESC
+        LIMIT $1
+    `;
+    const recordSql = `
+        SELECT
+            r.id AS claim_id, r.vendor, r.item, r.description AS claim_description,
+            r.amount, r.currency, r.category, r.status AS claim_status,
+            r.submitted_by, r.submitted_by_email, r.approved_by, r.approved_at,
+            r.receipt_date, r.file_url, r.created_at
+        FROM claim_receipt r
+        WHERE NOT EXISTS (
+            SELECT 1 FROM activity_log l
+            WHERE (l.entity_type = 'claim_receipt' OR l.app = 'claim-system')
+              AND l.entity_id ~ '^[0-9]+$'
+              AND l.entity_id::int = r.id
+        )
+        ORDER BY r.created_at DESC
+        LIMIT $1
+    `;
+
+    const [logRes, recordRes] = await Promise.all([
+        client.query(logSql, [limit]),
+        client.query(recordSql, [limit])
+    ]);
+
+    const claimFields = (row) => ({
+        claimId: row.claim_id,
+        vendor: row.vendor,
+        item: row.item,
+        claimDescription: row.claim_description,
+        amount: row.amount === null || row.amount === undefined ? null : Number(row.amount),
+        currency: row.currency || null,
+        category: row.category || null,
+        claimStatus: row.claim_status || null,
+        submittedBy: row.submitted_by || null,
+        submittedByEmail: row.submitted_by_email || null,
+        approvedBy: row.approved_by || null,
+        approvedAt: row.approved_at || null,
+        receiptDate: row.receipt_date || null,
+        fileUrl: row.file_url || null
+    });
+
+    const fromLog = logRes.rows.map((row) => ({
+        source: 'log',
+        id: `log:${row.id}`,
+        action: row.action || null,
+        logStatus: row.status || null,
+        errorMessage: row.error_message || null,
+        actorUserId: row.actor_user_id,
+        actorName: row.actor_name || row.submitted_by || null,
+        actorRole: row.actor_role || null,
+        app: row.app || null,
+        appEnv: row.app_env || null,
+        sourceUrl: row.source_url || null,
+        entityLabel: row.entity_label || null,
+        // The claim row can be gone (deleted) while its log line survives.
+        ...claimFields(row),
+        claimId: row.claim_id !== null ? row.claim_id : (row.entity_id || null),
+        occurredAt: row.occurred_at
+    }));
+
+    const fromRecord = recordRes.rows.map((row) => ({
+        source: 'record',
+        id: `record:${row.claim_id}`,
+        action: 'create',
+        logStatus: null,
+        errorMessage: null,
+        actorUserId: null,
+        actorName: row.submitted_by || null,
+        actorRole: null,
+        app: null,
+        appEnv: null,
+        sourceUrl: null,
+        entityLabel: row.vendor || null,
+        ...claimFields(row),
+        occurredAt: row.created_at
+    }));
+
+    return [...fromLog, ...fromRecord]
+        .sort((a, b) => new Date(b.occurredAt) - new Date(a.occurredAt))
+        .slice(0, limit);
+}
+
 module.exports = {
     loadCalculatorActivity,
     loadCalculatorUserSummaries,
@@ -1398,9 +1648,11 @@ module.exports = {
     loadInvoiceAll,
     loadSedaActivity,
     loadSedaCycleTimes,
+    loadSedaActivityMap,
     loadPaymentSubmission,
     loadPaymentVerification,
     loadPaymentActivity,
     loadPaymentVerificationStats,
-    loadPaymentReceipt
+    loadPaymentReceipt,
+    loadClaimSubmission
 };

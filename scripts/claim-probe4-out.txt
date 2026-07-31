@@ -1,0 +1,295 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+=============== F1 activity_log rows for claim-system ===============
+[
+ {
+  "app": "claim-system",
+  "app_env": "dev",
+  "action": "create",
+  "entity_type": "claim_receipt",
+  "n": "1",
+  "f": "2026-07-31T03:36:20.603Z",
+  "l": "2026-07-31T03:36:20.603Z"
+ }
+]
+
+=============== F2 claim_receipt status/currency mix ===============
+[
+ {
+  "status": "Pending",
+  "currency": "USD",
+  "n": "13",
+  "total": "509.67"
+ },
+ {
+  "status": "Pending",
+  "currency": "MYR",
+  "n": "3",
+  "total": "40.00"
+ },
+ {
+  "status": "Rejected",
+  "currency": "MYR",
+  "n": "1",
+  "total": "54.00"
+ }
+]
+
+=============== F3 claim_receipt category + submitters ===============
+[
+ {
+  "category": "Software & Subscriptions",
+  "submitted_by": "GAN ZHI HONG",
+  "n": "7"
+ },
+ {
+  "category": "Web Hosting & Domains",
+  "submitted_by": "GAN ZHI HONG",
+  "n": "4"
+ },
+ {
+  "category": null,
+  "submitted_by": "GAN ZHI HONG",
+  "n": "2"
+ },
+ {
+  "category": "Others",
+  "submitted_by": "GAN ZHI HONG",
+  "n": "2"
+ },
+ {
+  "category": "Tools & Hardware",
+  "submitted_by": "NURUL AQILAH BINTI SYARIFUL BHRIL @ SAIFUL BAHRIL",
+  "n": "1"
+ },
+ {
+  "category": "Meals & Refreshments",
+  "submitted_by": "NURUL AQILAH BINTI SYARIFUL BHRIL @ SAIFUL BAHRIL",
+  "n": "1"
+ }
+]
+
+=============== F4 claim_receipt all rows brief ===============
+[
+ {
+  "id": 24,
+  "vendor": "Bubble Group, Inc.",
+  "item": "Starter Web Plan",
+  "amount": "32.00",
+  "currency": "USD",
+  "category": "Others",
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "receipt_date": "2026-06-02T00:00:00.000Z",
+  "created_at": "2026-07-31T03:36:20.575Z",
+  "has_file": true
+ },
+ {
+  "id": 23,
+  "vendor": "Tong Wei Trading",
+  "item": "Hex shank socket, 2 units",
+  "amount": "40.00",
+  "currency": "MYR",
+  "category": "Tools & Hardware",
+  "status": "Pending",
+  "submitted_by": "NURUL AQILAH BINTI SYARIFUL BHRIL @ SAIFUL BAHRIL",
+  "receipt_date": null,
+  "created_at": "2026-07-28T00:39:18.898Z",
+  "has_file": true
+ },
+ {
+  "id": 22,
+  "vendor": "Restoran Afra Sdn Bhd",
+  "item": "Nasi goreng kambing, soup kosong, extra mango sauce",
+  "amount": "54.00",
+  "currency": "MYR",
+  "category": "Meals & Refreshments",
+  "status": "Rejected",
+  "submitted_by": "NURUL AQILAH BINTI SYARIFUL BHRIL @ SAIFUL BAHRIL",
+  "receipt_date": "2026-05-12T00:00:00.000Z",
+  "created_at": "2026-07-28T00:39:18.207Z",
+  "has_file": true
+ },
+ {
+  "id": 21,
+  "vendor": "Anthropic, PBC",
+  "item": "Anthropic Max plan subscription",
+  "amount": "96.21",
+  "currency": "USD",
+  "category": "Others",
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "receipt_date": "2026-07-16T00:00:00.000Z",
+  "created_at": "2026-07-27T14:28:52.685Z",
+  "has_file": true
+ },
+ {
+  "id": 19,
+  "vendor": null,
+  "item": null,
+  "amount": null,
+  "currency": "MYR",
+  "category": null,
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "receipt_date": null,
+  "created_at": "2026-07-27T13:54:38.464Z",
+  "has_file": true
+ },
+ {
+  "id": 18,
+  "vendor": null,
+  "item": null,
+  "amount": null,
+  "currency": "MYR",
+  "category": null,
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "receipt_date": null,
+  "created_at": "2026-07-27T13:54:27.756Z",
+  "has_file": true
+ },
+ {
+  "id": 14,
+  "vendor": "Namecheap",
+  "item": "Domain registration",
+  "amount": "18.68",
+  "currency": "USD",
+  "category": "Web Hosting & Domains",
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "receipt_date": "2026-07-19T00:00:00.000Z",
+  "created_at": "2026-07-21T08:18:02.165Z",
+  "has_file": false
+ },
+ {
+  "id": 13,
+  "vendor": "Anthropic",
+  "item": "Max plan - 5x",
+  "amount": "96.21",
+  "currency": "USD",
+  "category": "Software & Subscriptions",
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "receipt_date": "2026-07-16T00:00:00.000Z",
+  "created_at": "2026-07-21T08:18:02.022Z",
+  "has_file": false
+ },
+ {
+  "id": 12,
+  "vendor": "Bubble",
+  "item": "Starter Web Plan",
+  "amount": "32.00",
+  "currency": "USD",
+  "category": "Web Hosting & Domains",
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "receipt_date": "2026-07-14T00:00:00.000Z",
+  "created_at": "2026-07-21T08:18:01.885Z",
+  "has_file": false
+ },
+ {
+  "id": 11,
+  "vendor": "OpenAI",
+  "item": "ChatGPT Plus Subscription",
+  "amount": "21.60",
+  "currency": "USD",
+  "category": "Software & Subscriptions",
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "receipt_date": "2026-07-05T00:00:00.000Z",
+  "created_at": "2026-07-21T08:18:01.767Z",
+  "has_file": false
+ },
+ {
+  "id": 10,
+  "vendor": "MiniMax (Nanonoble Pte Ltd)",
+  "item": "Monthly Plus",
+  "amount": "20.00",
+  "currency": "USD",
+  "category": "Software & Subscriptions",
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "receipt_date": "2026-07-04T00:00:00.000Z",
+  "created_at": "2026-07-21T08:18:01.643Z",
+  "has_file": false
+ },
+ {
+  "id": 9,
+  "vendor": "Anthropic",
+  "item": "Claude Pro",
+  "amount": "20.00",
+  "currency": "USD",
+  "category": "Software & Subscriptions",
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "receipt_date": "2026-07-01T00:00:00.000Z",
+  "created_at": "2026-07-21T08:18:01.479Z",
+  "has_file": false
+ },
+ {
+  "id": 8,
+  "vendor": "Railway",
+  "item": "Hosting & Compute (Pro plan)",
+  "amount": "79.37",
+  "currency": "USD",
+  "category": "Web Hosting & Domains",
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "receipt_date": "2026-06-26T00:00:00.000Z",
+  "created_at": "2026-07-21T08:18:01.357Z",
+  "has_file": false
+ },
+ {
+  "id": 7,
+  "vendor": "Anthropic",
+  "item": "Claude Pro",
+  "amount": "20.00",
+  "currency": "USD",
+  "category": "Software & Subscriptions",
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "receipt_date": "2026-06-23T00:00:00.000Z",
+  "created_at": "2026-07-21T08:18:01.220Z",
+  "has_file": false
+ },
+ {
+  "id": 6,
+  "vendor": "MiniMax (Nanonoble Pte Ltd)",
+  "item": "Monthly Plus",
+  "amount": "20.00",
+  "currency": "USD",
+  "category": "Software & Subscriptions",
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "receipt_date": "2026-06-05T00:00:00.000Z",
+  "created_at": "2026-07-21T08:18:01.077Z",
+  "has_file": false
+ },
+ {
+  "id": 5,
+  "vendor": "Bubble",
+  "item": "Starter Web Plan",
+  "amount": "32.00",
+  "currency": "USD",
+  "category": "Web Hosting & Domains",
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "receipt_date": "2026-06-02T00:00:00.000Z",
+  "created_at": "2026-07-21T08:18:00.917Z",
+  "has_file": false
+ },
+ {
+  "id": 4,
+  "vendor": "OpenAI",
+  "item": "ChatGPT Plus Subscription",
+  "amount": "21.60",
+  "currency": "USD",
+  "category": "Software & Subscriptions",
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "receipt_date": "2026-06-05T00:00:00.000Z",
+  "created_at": "2026-07-21T08:16:51.927Z",
+  "has_file": false
+ }
+]

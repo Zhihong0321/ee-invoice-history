@@ -1,0 +1,266 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+=============== E1 activity_log columns ===============
+[
+ {
+  "column_name": "id",
+  "data_type": "bigint"
+ },
+ {
+  "column_name": "app",
+  "data_type": "text"
+ },
+ {
+  "column_name": "app_env",
+  "data_type": "text"
+ },
+ {
+  "column_name": "source_url",
+  "data_type": "text"
+ },
+ {
+  "column_name": "actor_kind",
+  "data_type": "text"
+ },
+ {
+  "column_name": "actor_user_id",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "actor_ref",
+  "data_type": "text"
+ },
+ {
+  "column_name": "actor_name",
+  "data_type": "text"
+ },
+ {
+  "column_name": "actor_role",
+  "data_type": "text"
+ },
+ {
+  "column_name": "action",
+  "data_type": "text"
+ },
+ {
+  "column_name": "entity_type",
+  "data_type": "text"
+ },
+ {
+  "column_name": "entity_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "entity_label",
+  "data_type": "text"
+ },
+ {
+  "column_name": "description",
+  "data_type": "text"
+ },
+ {
+  "column_name": "fields",
+  "data_type": "ARRAY"
+ },
+ {
+  "column_name": "status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "error_message",
+  "data_type": "text"
+ },
+ {
+  "column_name": "request_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "ip",
+  "data_type": "text"
+ },
+ {
+  "column_name": "user_agent",
+  "data_type": "text"
+ },
+ {
+  "column_name": "metadata",
+  "data_type": "jsonb"
+ },
+ {
+  "column_name": "occurred_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "retain_until",
+  "data_type": "timestamp with time zone"
+ }
+]
+
+=============== E2 activity_log total + claim rows ===============
+[
+ {
+  "total": "2010",
+  "claim_rows": "4"
+ }
+]
+
+=============== E3 claim rows in activity_log (latest 12) ===============
+[
+ {
+  "id": "1874",
+  "app": "claim-system",
+  "app_env": "dev",
+  "source_url": "/api/claim-receipts",
+  "actor_kind": "user",
+  "actor_user_id": 1,
+  "actor_ref": "1694840898359x952314974070402000",
+  "actor_name": "GAN ZHI HONG",
+  "actor_role": null,
+  "action": "create",
+  "entity_type": "claim_receipt",
+  "entity_id": "24",
+  "entity_label": "Bubble Group, Inc.",
+  "description": "GAN ZHI HONG submitted a claim receipt (RM32.00)",
+  "fields": null,
+  "status": "success",
+  "error_message": null,
+  "request_id": null,
+  "ip": null,
+  "user_agent": null,
+  "metadata": {},
+  "occurred_at": "2026-07-31T03:36:20.603Z",
+  "retain_until": null
+ },
+ {
+  "id": "1698",
+  "app": "main-site",
+  "app_env": "production",
+  "source_url": "https://eternalgy.me/malaysia-launches-landmark-reclaimed-water-supply-for-data-centres?format=raw",
+  "actor_kind": "bot",
+  "actor_user_id": null,
+  "actor_ref": null,
+  "actor_name": "Generic Bot/Scraper",
+  "actor_role": null,
+  "action": "visit",
+  "entity_type": "page",
+  "entity_id": "/malaysia-launches-landmark-reclaimed-water-supply-for-data-centres",
+  "entity_label": "/malaysia-launches-landmark-reclaimed-water-supply-for-data-centres",
+  "description": "Generic Bot/Scraper (other_bot) visited /malaysia-launches-landmark-reclaimed-water-supply-for-data-centres [200, desktop, 40ms]",
+  "fields": null,
+  "status": "success",
+  "error_message": null,
+  "request_id": null,
+  "ip": "216.244.66.250",
+  "user_agent": "Mozilla/5.0 (compatible; DotBot/1.2; +https://opensiteexplorer.org/dotbot; help@moz.com)",
+  "metadata": {
+   "method": "GET",
+   "referer": null,
+   "bot_name": "Generic Bot/Scraper",
+   "device_type": "desktop",
+   "status_code": 200,
+   "visitor_type": "other_bot",
+   "execution_time_ms": 40
+  },
+  "occurred_at": "2026-07-31T00:38:38.528Z",
+  "retain_until": null
+ },
+ {
+  "id": "1364",
+  "app": "main-site",
+  "app_env": "production",
+  "source_url": "https://eternalgy.me/malaysia-launches-landmark-reclaimed-water-supply-for-data-centres?format=raw",
+  "actor_kind": "bot",
+  "actor_user_id": null,
+  "actor_ref": null,
+  "actor_name": "Generic Bot/Scraper",
+  "actor_role": null,
+  "action": "visit",
+  "entity_type": "page",
+  "entity_id": "/malaysia-launches-landmark-reclaimed-water-supply-for-data-centres",
+  "entity_label": "/malaysia-launches-landmark-reclaimed-water-supply-for-data-centres",
+  "description": "Generic Bot/Scraper (other_bot) visited /malaysia-launches-landmark-reclaimed-water-supply-for-data-centres [200, mobile, 48ms]",
+  "fields": null,
+  "status": "success",
+  "error_message": null,
+  "request_id": null,
+  "ip": "114.119.132.242",
+  "user_agent": "Mozilla/5.0 (Linux; Android 7.0;) AppleWebKit/537.36 (HTML, like Gecko) Mobile Safari/537.36 (compatible; PetalBot;+https://webmaster.petalsearch.com/site/petalbot)",
+  "metadata": {
+   "method": "GET",
+   "referer": "https://eternalgy.me/malaysia-launches-landmark-reclaimed-water-supply-for-data-centres",
+   "bot_name": "Generic Bot/Scraper",
+   "device_type": "mobile",
+   "status_code": 200,
+   "visitor_type": "other_bot",
+   "execution_time_ms": 48
+  },
+  "occurred_at": "2026-07-30T13:47:46.476Z",
+  "retain_until": null
+ },
+ {
+  "id": "899",
+  "app": "ee-admin",
+  "app_env": "production",
+  "source_url": "https://admin.atap.solar/invoices",
+  "actor_kind": "user",
+  "actor_user_id": 3,
+  "actor_ref": "01168780422",
+  "actor_name": "ADMIN",
+  "actor_role": "user",
+  "action": "create",
+  "entity_type": "invoice_item",
+  "entity_id": "34318",
+  "entity_label": "FOC : 1x Mi Band 8 Pro (Claim On 21/06/2026)",
+  "description": "ADMIN created invoice_item FOC : 1x Mi Band 8 Pro (Claim On 21/06/2026)",
+  "fields": null,
+  "status": "success",
+  "error_message": null,
+  "request_id": null,
+  "ip": "118.100.130.171",
+  "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+  "metadata": {
+   "invoice_id": 165776,
+   "invoice_number": "INV-1010467"
+  },
+  "occurred_at": "2026-07-30T08:08:37.501Z",
+  "retain_until": null
+ }
+]
+
+=============== E4 claim_receipt now ===============
+[
+ {
+  "n": "17",
+  "max_id": 24
+ }
+]
+
+=============== E5 claim_receipt #24 ===============
+[
+ {
+  "id": 24,
+  "md5": "9ef79f98d33615d3920046572411af02",
+  "buyer": "Eternalgy Sdn Bhd",
+  "vendor": "Bubble Group, Inc.",
+  "item": "Starter Web Plan",
+  "description": "Subscription for web application hosting and platform services.",
+  "receipt_date": "2026-06-02T00:00:00.000Z",
+  "receipt_id": "2026-06-7076200",
+  "amount": "32.00",
+  "currency": "USD",
+  "category": "Others",
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "approved_by": null,
+  "approved_at": null,
+  "file_url": "https://pub-31ab1252a5544ca19749b476315d9b01.r2.dev/claim_receipt_uploads/1785468975087-ab72482f-a883-48b9-8a7a-9a0b52d30a49.pdf",
+  "file_mime": "application/pdf",
+  "created_at": "2026-07-31T03:36:20.575Z",
+  "updated_at": "2026-07-31T03:36:20.575Z",
+  "submitted_by_user_id": "1",
+  "submitted_by_email": "zhihong@eternalgy.com",
+  "approved_by_user_id": null,
+  "approved_by_email": null,
+  "remark": null
+ }
+]

@@ -19,11 +19,13 @@ const {
     loadInvoiceAll,
     loadSedaActivity,
     loadSedaCycleTimes,
+    loadSedaActivityMap,
     loadPaymentSubmission,
     loadPaymentVerification,
     loadPaymentActivity,
     loadPaymentVerificationStats,
-    loadPaymentReceipt
+    loadPaymentReceipt,
+    loadClaimSubmission
 } = require('../repo/activityLogV2');
 const { loadUserProfile, loadUserProfileByName, loadUserProfiles, loadAllUserProfiles } = require('../repo/userProfile');
 const { loadAdminActivity, loadAdminSummary } = require('../repo/adminActivity');
@@ -426,6 +428,40 @@ router.get('/activity-log/seda', async (req, res) => {
 });
 
 /**
+ * GET /api/activity-log/seda/activity-map
+ * Per-day SEDA event counts for the contribution-heatmap grid. Takes the
+ * same kinds/backfill filters as /activity-log/seda so the map and the feed
+ * below it always describe the same events.
+ * Query params:
+ *   weeks           - grid width in whole weeks, default 26, clamped 4..53
+ *   kinds           - comma list of 'registration','documents','status'
+ *   includeBackfill - '1' to include the null -> status initial writes
+ *
+ * Returns: 200 { ok: true, map: { days: DayCell[], ...summary } }
+ */
+router.get('/activity-log/seda/activity-map', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const kinds = String(req.query.kinds || '')
+            .split(',')
+            .map((k) => k.trim())
+            .filter(Boolean);
+        const map = await loadSedaActivityMap(client, {
+            weeks: req.query.weeks,
+            kinds,
+            includeBackfill: req.query.includeBackfill === '1'
+        });
+        res.json({ ok: true, map });
+    } catch (err) {
+        console.error('[api] /activity-log/seda/activity-map failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
  * GET /api/activity-log/seda/cycle-times
  * Median/avg days for the SEDA stages that are actually measurable.
  *
@@ -546,6 +582,28 @@ router.get('/activity-log/finance/receipt', async (req, res) => {
         res.json({ ok: true, rows });
     } catch (err) {
         console.error('[api] /activity-log/finance/receipt failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    } finally {
+        if (client) client.release();
+    }
+});
+
+/**
+ * GET /api/activity-log/finance/claim
+ * V2 endpoint: staff expense claim submissions, merged from activity_log
+ * (entity_type='claim_receipt', logging live since 2026-07-31) and the
+ * claim_receipt table itself (every claim, including pre-logging ones).
+ *
+ * Returns: 200 { ok: true, rows: ClaimRow[] }
+ */
+router.get('/activity-log/finance/claim', async (req, res) => {
+    let client = null;
+    try {
+        client = await pool.connect();
+        const rows = await loadClaimSubmission(client, { limit: req.query.limit });
+        res.json({ ok: true, rows });
+    } catch (err) {
+        console.error('[api] /activity-log/finance/claim failed:', err.message);
         res.status(500).json({ ok: false, error: err.message });
     } finally {
         if (client) client.release();

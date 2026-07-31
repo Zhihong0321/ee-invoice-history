@@ -464,6 +464,12 @@
       color: #64748B;
       margin-bottom: 8px;
     }
+    /* Secondary line under a description — e.g. a claim's own free text,
+       which must not compete with the event sentence above it. */
+    .activity-desc.muted {
+      color: #94A3B8;
+      margin-top: -4px;
+    }
     /* Per-row metadata chips. Keeps otherwise identical descriptions distinct. */
     .activity-detail {
       display: flex;
@@ -1231,40 +1237,279 @@
     .stat-tile.thin { border-color: #FDE68A; }
     .stat-tile.thin .stat-sub { color: #B45309; }
 
-    /* Payment Activity: daily verified-total chart */
-    .verify-chart {
+    /* SEDA: contribution-style activity map — one cell per day, 7 rows
+       (Sun..Sat) x one column per week. Answers "is this department busy
+       every day or in bursts?", which the chronological feed cannot show. */
+    .act-map {
       background: rgba(255,255,255,0.9);
       border: 1px solid rgba(255,255,255,0.95);
       border-radius: 18px;
-      padding: 16px 18px;
+      padding: 18px 20px;
       margin-bottom: 18px;
       box-shadow:
         inset 0 1px 0 rgba(255,255,255,0.95),
         0 1px 2px rgba(15,23,42,0.05),
         0 14px 30px -22px rgba(15,23,42,0.42);
     }
-    .verify-chart-title {
+    .act-map-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+    .act-map-title {
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 0.1em;
       color: #94A3B8;
       font-weight: 700;
-      margin-bottom: 14px;
     }
-    .verify-chart-bars {
+    .act-map-total {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 27px;
+      font-weight: 700;
+      color: #0B1524;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-top: 8px;
+    }
+    .act-map-total small {
+      font-size: 13px;
+      font-weight: 500;
+      color: #94A3B8;
+      letter-spacing: 0;
+    }
+    .act-map-range {
+      flex: 0 0 auto;
+      background: rgba(241,245,249,0.9);
+      border-radius: 999px;
+      color: #64748B;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 6px 11px;
+      white-space: nowrap;
+    }
+    /* Streak / busiest-day facts. Deliberately small: the grid is the
+       headline, these only explain it. */
+    .act-map-facts {
       display: flex;
-      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 6px 18px;
+      margin-bottom: 16px;
+    }
+    .act-map-fact {
+      font-size: 11px;
+      color: #94A3B8;
+    }
+    .act-map-fact b {
+      color: #0B1524;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      margin-right: 4px;
+    }
+    /* Horizontal scroll rather than shrinking cells: a 3px cell is unreadable
+       and unhoverable, a scrollbar is not. */
+    .act-map-scroll {
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .act-map-grid-wrap {
+      display: inline-block;
+      min-width: 100%;
+    }
+    .act-map-months {
+      display: grid;
       gap: 3px;
-      height: 90px;
+      margin-left: 28px;
+      margin-bottom: 5px;
     }
-    .verify-chart-bar {
-      flex: 1;
-      min-width: 2px;
-      background: #34D399;
-      border-radius: 3px 3px 1px 1px;
+    .act-map-month {
+      color: #94A3B8;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
     }
-    .verify-chart-bar.empty { background: rgba(226,232,240,0.95); }
-    .verify-chart-bar:hover { opacity: 0.7; }
+    .act-map-body {
+      display: flex;
+      gap: 5px;
+    }
+    .act-map-days {
+      display: grid;
+      grid-template-rows: repeat(7, 12px);
+      gap: 3px;
+      width: 23px;
+    }
+    .act-map-day {
+      color: #94A3B8;
+      font-size: 9px;
+      line-height: 12px;
+      text-align: right;
+    }
+    .act-map-grid {
+      display: grid;
+      grid-auto-flow: column;
+      grid-template-rows: repeat(7, 12px);
+      gap: 3px;
+    }
+    .act-map-cell {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      background: #F1F5F9;
+      box-shadow: inset 0 0 0 1px rgba(15,23,42,0.04);
+    }
+    /* Five steps, not a continuous scale: readable levels beat a smooth ramp
+       nobody can compare two cells on. */
+    .act-map-cell.l1 { background: #DBEAFE; box-shadow: none; }
+    .act-map-cell.l2 { background: #93C5FD; box-shadow: none; }
+    .act-map-cell.l3 { background: #3B82F6; box-shadow: none; }
+    .act-map-cell.l4 { background: #1D4ED8; box-shadow: none; }
+    /* Placeholder for the days after today in the final week column. */
+    .act-map-cell.future { background: transparent; box-shadow: none; }
+    .act-map-legend {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 12px;
+      color: #94A3B8;
+      font-size: 10px;
+    }
+    .act-map-legend .act-map-cell { width: 11px; height: 11px; }
+    .act-map-legend-label { margin: 0 3px; }
+    @media (max-width: 640px) {
+      .act-map { padding: 16px; }
+      .act-map-total { font-size: 23px; }
+    }
+
+    /* Payment Activity: verified-total trend chart */
+    .verify-chart {
+      position: relative;
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+    }
+    .verify-chart-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .verify-chart-title {
+      color: #0F172A;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .verify-chart-total {
+      color: #0F172A;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 27px;
+      font-weight: 700;
+      line-height: 1;
+      margin-top: 7px;
+    }
+    .verify-chart-subtitle {
+      color: #64748B;
+      font-size: 11px;
+      margin-top: 7px;
+    }
+    .verify-chart-range {
+      flex: 0 0 auto;
+      border: 1px solid #CBD5E1;
+      border-radius: 4px;
+      color: #475569;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 7px 10px;
+      white-space: nowrap;
+    }
+    .verify-chart-plot {
+      min-width: 0;
+      overflow: hidden;
+    }
+    .verify-chart-svg {
+      display: block;
+      height: 230px;
+      overflow: visible;
+      width: 100%;
+    }
+    .verify-chart-grid {
+      stroke: #E2E8F0;
+      stroke-dasharray: 2 4;
+      stroke-width: 1;
+    }
+    .verify-chart-axis-label,
+    .verify-chart-date-label {
+      fill: #64748B;
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+    }
+    .verify-chart-line {
+      fill: none;
+      stroke: #172033;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2.25;
+    }
+    .verify-chart-area {
+      fill: url(#verifyChartFade);
+    }
+    .verify-chart-hit {
+      cursor: crosshair;
+      fill: transparent;
+    }
+    .verify-chart-focus-line {
+      display: none;
+      pointer-events: none;
+      stroke: #94A3B8;
+      stroke-dasharray: 3 3;
+      stroke-width: 1;
+    }
+    .verify-chart-focus-dot {
+      display: none;
+      fill: #FFFFFF;
+      pointer-events: none;
+      stroke: #172033;
+      stroke-width: 2;
+    }
+    .verify-chart-tooltip {
+      display: none;
+      position: absolute;
+      z-index: 1;
+      min-width: 150px;
+      padding: 10px 12px;
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 8px 22px rgba(15,23,42,0.12);
+      color: #0F172A;
+      font-size: 11px;
+      line-height: 1.4;
+      pointer-events: none;
+    }
+    .verify-chart-tooltip-date {
+      color: #64748B;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .verify-chart-tooltip-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    @media (max-width: 640px) {
+      .verify-chart { padding: 16px; }
+      .verify-chart-header { gap: 10px; }
+      .verify-chart-total { font-size: 23px; }
+      .verify-chart-range { font-size: 10px; padding: 6px 8px; }
+      .verify-chart-svg { height: 205px; }
+    }
 
     /* Payment Submission card: 1st-payment → 60% → full-paid cycle, as two boxes */
     .cycle-box-row {
@@ -1606,6 +1851,7 @@
       <div class="submenu" data-dept="finance">
         <div class="submenu-item" data-route="finance/payment-activity">Payment Activity</div>
         <div class="submenu-item" data-route="finance/receipt">Official Receipt</div>
+        <div class="submenu-item" data-route="finance/claim">Claim Submission</div>
       </div>
     </div>
 
@@ -1786,7 +2032,7 @@
       // Only the live feeds poll; leaving them must stop the timer.
       const LIVE_ROUTES = [
         'invoice/activity', 'sales/calculator', 'sales/auto-proposal', 'sales/referral', 'seda/activity',
-        'finance/payment-activity', 'finance/receipt',
+        'finance/payment-activity', 'finance/receipt', 'finance/claim',
         'admin/console', 'ai-workflow/main', 'ai-router/logs'
       ];
       if (!LIVE_ROUTES.includes(route)) stopAutoRefresh();
@@ -1827,6 +2073,14 @@
       } else if (route === 'finance/receipt') {
         setHeader('Official Receipt', 'Receipts sent to customers — merged with WhatsApp delivery status');
         loadPaymentReceiptLog();
+      } else if (route === 'finance/claim') {
+        setHeader('Claim Submission', 'Staff expense claims — activity_log events merged with the claim_receipt record');
+        loadClaimSubmissionLog();
+      } else if (route === 'marketing/ads-research') {
+        setHeader('Market Ads Research Automation', 'Automated ads/market research runs — no activity logged yet',
+          '<a class="header-link-btn" href="https://ee-html.up.railway.app/app/malaysia-solar-pv-teardown/" target="_blank" rel="noopener noreferrer">VISIT MALAYSIA SOLAR PV TEARDOWN</a>');
+        clearFilters();
+        renderEmpty(document.getElementById('feed'), '📊', 'No activity yet', 'This log will fill in once ads research runs start reporting.');
       } else if (route === 'marketing/seo-geo-site') {
         setHeader('SEO+GEO Site Activity', 'Cross-app activity log filtered to app = main-site',
           '<a class="header-link-btn" href="https://eternalgy.me" target="_blank" rel="noopener noreferrer">VISIT Eternalgy.me</a>');
@@ -1964,7 +2218,7 @@
     const REFRESH_MS = 15000;
     const seenRowIds = {
       all: new Set(), prep: new Set(), edit: new Set(), view: new Set(), calculator: new Set(), seda: new Set(),
-      submission: new Set(), verification: new Set(), receipt: new Set(), financeAll: new Set(), admin: new Set(),
+      submission: new Set(), verification: new Set(), receipt: new Set(), claim: new Set(), financeAll: new Set(), admin: new Set(),
       aiWorkflow: new Set(), marketingSeoGeo: new Set(), autoProposal: new Set(), aiRouter: new Set(),
       referral: new Set()
     };
@@ -2813,6 +3067,116 @@
         </div>`;
     }
 
+    /* Contribution-style activity map: one cell per day, columns are weeks.
+       The feed answers "what happened"; this answers "when does this
+       department actually work" — burst vs steady, and where the dead weeks
+       are. Reads the SAME kinds/backfill filters as the feed below it. */
+    const ACT_MAP_DOW = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
+
+    function actMapLevel(count, max) {
+      if (count <= 0) return 0;
+      if (max <= 0) return 0;
+      const share = count / max;
+      if (share <= 0.15) return 1;
+      if (share <= 0.35) return 2;
+      if (share <= 0.6) return 3;
+      return 4;
+    }
+
+    function renderSedaActivityMap(map) {
+      const days = map.days || [];
+      if (days.length === 0) return '';
+
+      const cols = Math.ceil(days.length / 7);
+      const longDate = iso => {
+        const d = new Date(`${iso}T00:00:00Z`);
+        return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString(undefined, {
+          weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC'
+        });
+      };
+      const shortDate = iso => {
+        const d = new Date(`${iso}T00:00:00Z`);
+        return Number.isNaN(d.getTime()) ? iso : d.toLocaleDateString(undefined, {
+          month: 'short', day: 'numeric', timeZone: 'UTC'
+        });
+      };
+
+      const cells = days.map(d => {
+        const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+        const parts = [`${plural(d.count, 'event')} · ${longDate(d.date)}`];
+        if (d.registration) parts.push(plural(d.registration, 'registration'));
+        if (d.documents) parts.push(plural(d.documents, 'document'));
+        if (d.status) parts.push(plural(d.status, 'status change'));
+        return `<div class="act-map-cell l${actMapLevel(d.count, map.maxCount)}"
+                     title="${escapeHtml(parts.join(' · '))}"></div>`;
+      });
+      // Pad the final column so the grid keeps its 7-row shape past today.
+      const pad = (7 - (days.length % 7)) % 7;
+      for (let i = 0; i < pad; i++) cells.push('<div class="act-map-cell future"></div>');
+
+      // One label per month, anchored on the week column that month starts in.
+      // A month owning fewer than 3 columns gets no label: the window opens
+      // mid-month, so its first month is usually a stub whose label would sit
+      // on top of the next one. Same for a month starting in the last column.
+      const monthCols = new Map();
+      for (let c = 0; c < cols; c++) {
+        const first = days[c * 7];
+        if (!first) break;
+        const month = first.date.slice(0, 7);
+        const seen = monthCols.get(month);
+        if (seen) seen.span++;
+        else monthCols.set(month, { col: c, span: 1 });
+      }
+      const monthLabels = [...monthCols.entries()]
+        .filter(([, m]) => m.span >= 3 && m.col <= cols - 2)
+        .map(([month, m]) => ({ col: m.col, text: shortDate(`${month}-01`).split(' ')[0] }));
+
+      const busiest = map.busiestDay
+        ? `<span class="act-map-fact"><b>${map.busiestDay.count}</b>busiest day · ${escapeHtml(shortDate(map.busiestDay.date))}</span>`
+        : '';
+
+      return `
+        <div class="act-map">
+          <div class="act-map-header">
+            <div>
+              <div class="act-map-title">SEDA activity map</div>
+              <div class="act-map-total">${map.totalEvents.toLocaleString()} <small>events</small></div>
+            </div>
+            <div class="act-map-range">${map.weeks} weeks · ${escapeHtml(shortDate(map.startDate))} → ${escapeHtml(shortDate(map.endDate))}</div>
+          </div>
+          <div class="act-map-facts">
+            <span class="act-map-fact"><b>${map.activeDays}</b>active days</span>
+            <span class="act-map-fact"><b>${map.avgPerActiveDay}</b>avg per active day</span>
+            <span class="act-map-fact"><b>${map.currentStreak}d</b>current streak</span>
+            <span class="act-map-fact"><b>${map.longestStreak}d</b>longest streak</span>
+            ${busiest}
+          </div>
+          <div class="act-map-scroll">
+            <div class="act-map-grid-wrap">
+              <div class="act-map-months" style="grid-template-columns: repeat(${cols}, 12px);">
+                ${monthLabels.map(l => `<div class="act-map-month" style="grid-column: ${l.col + 1};">${escapeHtml(l.text)}</div>`).join('')}
+              </div>
+              <div class="act-map-body">
+                <div class="act-map-days">
+                  ${ACT_MAP_DOW.map(d => `<div class="act-map-day">${d}</div>`).join('')}
+                </div>
+                <div class="act-map-grid">${cells.join('')}</div>
+              </div>
+            </div>
+          </div>
+          <div class="act-map-legend">
+            <span class="act-map-legend-label">Less</span>
+            <div class="act-map-cell"></div>
+            <div class="act-map-cell l1"></div>
+            <div class="act-map-cell l2"></div>
+            <div class="act-map-cell l3"></div>
+            <div class="act-map-cell l4"></div>
+            <span class="act-map-legend-label">More</span>
+          </div>
+        </div>
+      `;
+    }
+
     function renderSedaCycleTimes(stats) {
       // n is tiny on the approval stage, so every tile carries its sample size.
       return `
@@ -2846,12 +3210,16 @@
         if (sedaKind) params.set('kinds', sedaKind);
         if (sedaShowBackfill) params.set('includeBackfill', '1');
 
-        const [feedRes, cycleRes] = await Promise.all([
+        // The map takes the same filters as the feed, so switching to
+        // "Documents" reshapes both instead of leaving them contradicting.
+        const [feedRes, cycleRes, mapRes] = await Promise.all([
           fetch('/api/activity-log/seda?' + params.toString()),
-          fetch('/api/activity-log/seda/cycle-times')
+          fetch('/api/activity-log/seda/cycle-times'),
+          fetch('/api/activity-log/seda/activity-map?' + params.toString())
         ]);
         const data = await feedRes.json();
         const cycle = await cycleRes.json();
+        const mapData = await mapRes.json();
         if (!data.ok) throw new Error(data.error);
 
         if (data.rows.length === 0) {
@@ -2936,9 +3304,10 @@
         }));
 
         const strip = cycle.ok ? renderSedaCycleTimes(cycle.stats) : '';
+        const activityMap = mapData.ok ? renderSedaActivityMap(mapData.map) : '';
         const isNew = markNewRows('seda', data.rows, r => r.id);
 
-        feed.innerHTML = strip + newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
+        feed.innerHTML = strip + activityMap + newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
           occurredAt: row.occurredAt,
           html: cards[i],
           isNew: isNew[i]
@@ -3713,9 +4082,9 @@
 
     function financeStatusPill(value) {
       const v = String(value || '').toLowerCase();
-      const cls = v === 'verified' || v === 'success' || v === 'sent' ? 'approved'
+      const cls = v === 'verified' || v === 'success' || v === 'sent' || v === 'approved' ? 'approved'
         : v === 'pending' ? 'pending'
-        : v === 'deleted' || v === 'failed' ? 'danger' : '';
+        : v === 'deleted' || v === 'failed' || v === 'rejected' ? 'danger' : '';
       return `<span class="status-pill ${cls}">${escapeHtml(value)}</span>`;
     }
 
@@ -3885,7 +4254,7 @@
 
     /**
      * Last-30-days summary bar shown above every Payment Activity mode: avg
-     * submit→verify turnaround, total RM verified, and a daily bar chart of
+     * submit→verify turnaround, total RM verified, and a daily trend chart of
      * verified totals. Fetched independently of the paginated feed below
      * (that one is limit-cut; this is a fixed date window) and rendered into
      * its own persistent container so it survives feed re-renders/silent
@@ -3893,12 +4262,58 @@
      */
     function financeStatsHtml(stats) {
       const avg = stats.avgResolutionMs !== null ? fmtElapsed(stats.avgResolutionMs) : '—';
-      const maxDaily = Math.max(1, ...stats.daily.map(d => d.total));
-      const bars = stats.daily.map(d => {
-        const pct = d.total > 0 ? Math.max((d.total / maxDaily) * 100, 3) : 1;
-        return `<div class="verify-chart-bar${d.total === 0 ? ' empty' : ''}" style="height:${pct}%"
-                     title="${d.date} · ${money(d.total)} · ${d.count} verified"></div>`;
+      const daily = (stats.daily || []).map(d => ({
+        date: d.date,
+        total: Number(d.total) || 0,
+        count: Number(d.count) || 0
+      }));
+      const maxDaily = Math.max(1, ...daily.map(d => d.total));
+      const rawStep = Math.pow(10, Math.floor(Math.log10(maxDaily / 4)));
+      const step = rawStep * (maxDaily / 4 / rawStep <= 2 ? 2 : maxDaily / 4 / rawStep <= 5 ? 5 : 10);
+      const maxScale = Math.max(step * 4, Math.ceil(maxDaily / step) * step);
+      const compact = window.innerWidth <= 640;
+      const chartWidth = compact ? 420 : 1000;
+      const plot = compact
+        ? { left: 54, right: 402, top: 16, bottom: 192 }
+        : { left: 54, right: 986, top: 16, bottom: 192 };
+      const xFor = index => daily.length <= 1
+        ? (plot.left + plot.right) / 2
+        : plot.left + (index / (daily.length - 1)) * (plot.right - plot.left);
+      const yFor = total => plot.bottom - (total / maxScale) * (plot.bottom - plot.top);
+      const compactAmount = value => {
+        if (compact) {
+          if (value >= 1000000) return `${(value / 1000000).toFixed(1)}m`;
+          if (value >= 1000) return `${Math.round(value / 1000)}k`;
+          return `${Math.round(value)}`;
+        }
+        if (value >= 1000000) return `RM ${(value / 1000000).toFixed(1)}m`;
+        if (value >= 1000) return `RM ${Math.round(value / 1000)}k`;
+        return `RM ${Math.round(value)}`;
+      };
+      const dateLabel = date => {
+        const parsed = new Date(`${date}T00:00:00`);
+        return Number.isNaN(parsed.getTime()) ? date : parsed.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+      };
+      const yTicks = Array.from({ length: 5 }, (_, index) => maxScale - step * index);
+      const grid = yTicks.map(value => {
+        const y = yFor(value);
+        return `<line class="verify-chart-grid" x1="${plot.left}" x2="${plot.right}" y1="${y}" y2="${y}" />
+                <text class="verify-chart-axis-label" text-anchor="end" x="${compact ? 48 : 44}" y="${y + 4}">${compactAmount(value)}</text>`;
       }).join('');
+      const points = daily.map((d, index) => `${xFor(index)},${yFor(d.total)}`).join(' ');
+      const areaPoints = daily.length
+        ? `${xFor(0)},${plot.bottom} ${points} ${xFor(daily.length - 1)},${plot.bottom}`
+        : '';
+      const labelEvery = Math.ceil(daily.length / (compact ? 3 : 6));
+      const labels = daily.filter((_, index) => daily.length < 8 || index % labelEvery === 0 || index === daily.length - 1)
+        .map(d => daily.indexOf(d))
+        .filter((index, position, all) => all.indexOf(index) === position)
+        .map(index => `<text class="verify-chart-date-label" text-anchor="${index === 0 ? 'start' : index === daily.length - 1 ? 'end' : 'middle'}" x="${xFor(index)}" y="218">${dateLabel(daily[index].date)}</text>`)
+        .join('');
+      const hits = daily.map((d, index) => `<rect class="verify-chart-hit" data-index="${index}" x="${Math.max(plot.left, xFor(index) - 16)}" y="${plot.top}" width="32" height="${plot.bottom - plot.top}" aria-label="${dateLabel(d.date)}: ${money(d.total)}" />`).join('');
+      const initialIndex = daily.length ? daily.reduce((best, d, index, all) => d.total > all[best].total ? index : best, 0) : 0;
+      const initialX = daily.length ? xFor(initialIndex) : plot.left;
+      const initialY = daily.length ? yFor(daily[initialIndex].total) : plot.bottom;
 
       return `
         <div class="stat-strip">
@@ -3913,11 +4328,94 @@
             <div class="stat-sub">${stats.verifiedCount} payment${stats.verifiedCount === 1 ? '' : 's'} verified</div>
           </div>
         </div>
-        <div class="verify-chart">
-          <div class="verify-chart-title">Verified total per day <span class="stat-derived">last ${stats.windowDays}d</span></div>
-          <div class="verify-chart-bars">${bars}</div>
+        <div class="verify-chart" data-chart="finance" data-chart-points="${encodeURIComponent(JSON.stringify(daily))}" data-chart-max="${maxScale}" data-chart-width="${chartWidth}">
+          <div class="verify-chart-header">
+            <div>
+              <div class="verify-chart-title">Verified payments</div>
+              <div class="verify-chart-total">${money(stats.verifiedTotal)}</div>
+              <div class="verify-chart-subtitle">Total verified · last ${stats.windowDays} days</div>
+            </div>
+            <div class="verify-chart-range">Last ${stats.windowDays} days</div>
+          </div>
+          <div class="verify-chart-plot">
+            <svg class="verify-chart-svg" viewBox="0 0 ${chartWidth} 236" role="img" aria-label="Verified payment totals over the last ${stats.windowDays} days">
+              <defs>
+                <linearGradient id="verifyChartFade" gradientUnits="userSpaceOnUse" x1="0" y1="${plot.top}" x2="0" y2="${plot.bottom}">
+                  <stop offset="0" stop-color="#1E293B" stop-opacity="0.22" />
+                  <stop offset="0.45" stop-color="#334155" stop-opacity="0.09" />
+                  <stop offset="1" stop-color="#475569" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              ${grid}
+              <polygon class="verify-chart-area" points="${areaPoints}" />
+              <polyline class="verify-chart-line" points="${points}" />
+              <line class="verify-chart-focus-line" x1="${initialX}" x2="${initialX}" y1="${plot.top}" y2="${plot.bottom}" />
+              <circle class="verify-chart-focus-dot" cx="${initialX}" cy="${initialY}" r="4" />
+              ${labels}
+              ${hits}
+            </svg>
+          </div>
+          <div class="verify-chart-tooltip">
+            <div class="verify-chart-tooltip-date"></div>
+            <div class="verify-chart-tooltip-value"></div>
+          </div>
         </div>
       `;
+    }
+
+    function bindFinanceChart() {
+      const chart = document.querySelector('[data-chart="finance"]');
+      if (!chart) return;
+      const svg = chart.querySelector('.verify-chart-svg');
+      const focusLine = chart.querySelector('.verify-chart-focus-line');
+      const focusDot = chart.querySelector('.verify-chart-focus-dot');
+      const tooltip = chart.querySelector('.verify-chart-tooltip');
+      const hits = [...chart.querySelectorAll('.verify-chart-hit')];
+      const points = JSON.parse(decodeURIComponent(chart.dataset.chartPoints || '[]'));
+      const maxScale = Number(chart.dataset.chartMax) || 1;
+      const chartWidth = Number(chart.dataset.chartWidth) || 1000;
+      const plot = chartWidth <= 420
+        ? { left: 54, right: 402, top: 16, bottom: 192 }
+        : { left: 54, right: 986, top: 16, bottom: 192 };
+      const dateLabel = date => {
+        const parsed = new Date(`${date}T00:00:00`);
+        return Number.isNaN(parsed.getTime())
+          ? date
+          : parsed.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+      };
+
+      const showPoint = index => {
+        const point = points[index];
+        const hit = hits[index];
+        if (!point || !hit) return;
+        const x = Number(hit.getAttribute('x')) + Number(hit.getAttribute('width')) / 2;
+        const y = plot.bottom - (point.total / maxScale) * (plot.bottom - plot.top);
+        const svgRect = svg.getBoundingClientRect();
+        const scaleX = svgRect.width / chartWidth;
+        const scaleY = svgRect.height / 236;
+        const chartRect = chart.getBoundingClientRect();
+
+        focusLine.style.display = 'block';
+        focusDot.style.display = 'block';
+        focusLine.setAttribute('x1', x);
+        focusLine.setAttribute('x2', x);
+        focusDot.setAttribute('cx', x);
+        focusDot.setAttribute('cy', y);
+        tooltip.style.display = 'block';
+        tooltip.querySelector('.verify-chart-tooltip-date').textContent = dateLabel(point.date);
+        tooltip.querySelector('.verify-chart-tooltip-value').textContent = `${money(point.total)} · ${point.count} verified`;
+
+        const left = x * scaleX + svgRect.left - chartRect.left;
+        tooltip.style.left = `${Math.min(Math.max(left - 75, 12), chartRect.width - 168)}px`;
+        tooltip.style.top = `${Math.max(y * scaleY - 76, 62)}px`;
+      };
+
+      hits.forEach((hit, index) => hit.addEventListener('pointerenter', () => showPoint(index)));
+      svg.addEventListener('pointerleave', () => {
+        focusLine.style.display = 'none';
+        focusDot.style.display = 'none';
+        tooltip.style.display = 'none';
+      });
     }
 
     async function loadFinanceStats() {
@@ -3928,6 +4426,7 @@
         const data = await res.json();
         if (!data.ok) throw new Error(data.error);
         el.innerHTML = financeStatsHtml(data.stats);
+        bindFinanceChart();
       } catch (err) {
         // Non-critical panel — leave whatever was there (or empty) rather
         // than disrupting the main feed over a stats-only failure.
@@ -4120,6 +4619,130 @@
 
         const isNew = markNewRows('receipt', data.rows, r => r.id);
         feed.innerHTML = strip + newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
+          occurredAt: row.occurredAt,
+          html: cards[i],
+          isNew: isNew[i]
+        })));
+      } catch (err) {
+        if (!opts.silent) renderError(feed, err);
+      }
+    }
+
+    /* ---------- FINANCE › Claim Submission ---------- */
+
+    // MYR is written as RM everywhere else in this app; every other currency
+    // keeps its ISO code because these claims are genuinely multi-currency.
+    function claimAmountText(row) {
+      if (row.amount === null) return 'No amount';
+      const n = Number(row.amount).toFixed(2);
+      return row.currency === 'MYR' ? `RM ${n}` : `${row.currency || ''} ${n}`.trim();
+    }
+
+    function claimStatsHtml(rows) {
+      const totals = new Map();
+      let pending = 0;
+      let logged = 0;
+      rows.forEach(r => {
+        if (String(r.claimStatus || '').toLowerCase() === 'pending') pending++;
+        if (r.source === 'log') logged++;
+        if (r.amount === null) return;
+        const cur = r.currency || '—';
+        totals.set(cur, (totals.get(cur) || 0) + Number(r.amount));
+      });
+      const totalText = [...totals.entries()]
+        .map(([cur, sum]) => cur === 'MYR' ? `RM ${sum.toFixed(2)}` : `${cur} ${sum.toFixed(2)}`)
+        .join(' · ') || '—';
+
+      return `
+        <div class="stat-strip">
+          <div class="stat-tile">
+            <div class="stat-label">Claims submitted</div>
+            <div class="stat-value">${rows.length}</div>
+            <div class="stat-sub">${pending} still pending approval</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-label">Claimed value <span class="stat-derived">not converted</span></div>
+            <div class="stat-value">${totalText}</div>
+            <div class="stat-sub">summed per currency, no FX applied</div>
+          </div>
+          <div class="stat-tile ${logged === rows.length ? '' : 'thin'}"
+               title="claim-system only started writing activity_log on 2026-07-31">
+            <div class="stat-label">In activity log</div>
+            <div class="stat-value">${logged} <small>/ ${rows.length}</small></div>
+            <div class="stat-sub">${rows.length - logged} pre-date the logger, read from claim_receipt</div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadClaimSubmissionLog(opts = {}) {
+      startAutoRefresh(() => loadClaimSubmissionLog({ silent: true }));
+      clearFilters();
+      const feed = opts.silent
+        ? document.getElementById('feed')
+        : setLoading('Loading claim submissions...');
+
+      try {
+        if (!window.userProfileCache.initialized) await window.userProfileCache.init();
+
+        const res = await fetch(`/api/activity-log/finance/claim?limit=80`);
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error);
+
+        if (data.rows.length === 0) {
+          renderEmpty(feed, '🧾', 'No claim submissions found', 'Nothing has been claimed yet');
+          return;
+        }
+
+        feed.className = 'timeline';
+        const cards = await Promise.all(data.rows.map(async row => {
+          const icon = await renderActorIcon(row.actorUserId, row.actorName, '🧾');
+          const title = [row.vendor, row.item].filter(Boolean).join(' · ')
+            || row.entityLabel
+            || `Claim #${row.claimId}`;
+
+          return `
+            <div class="activity-item">
+              <div class="activity-row">
+                ${icon}
+                <div class="activity-body">
+                  <div class="activity-title">
+                    ${escapeHtml(title)}
+                    ${row.claimStatus ? financeStatusPill(row.claimStatus) : ''}
+                    ${row.source === 'log'
+                      ? '<span class="tag">activity log</span>'
+                      : '<span class="tag">claim record</span>'}
+                    ${row.appEnv && row.appEnv !== 'production'
+                      ? `<span class="tag danger">${escapeHtml(row.appEnv)}</span>`
+                      : ''}
+                  </div>
+                  <div class="activity-desc">
+                    ${escapeHtml(row.actorName || 'Someone')} submitted a claim receipt
+                    (${escapeHtml(claimAmountText(row))})
+                  </div>
+                  ${row.claimDescription ? `
+                    <div class="activity-desc muted">${escapeHtml(row.claimDescription)}</div>
+                  ` : ''}
+                  ${row.errorMessage ? `
+                    <div class="tag-row"><span class="tag danger">${escapeHtml(row.errorMessage)}</span></div>
+                  ` : ''}
+                  <div class="activity-meta">
+                    <span>⏱ ${formatTime(row.occurredAt)}</span>
+                    ${row.category ? `<span>🏷 ${escapeHtml(row.category)}</span>` : ''}
+                    ${row.receiptDate ? `<span>📅 receipt ${new Date(row.receiptDate).toLocaleDateString()}</span>` : ''}
+                    ${row.claimId ? `<span>#${escapeHtml(String(row.claimId))}</span>` : ''}
+                    ${row.fileUrl
+                      ? `<a href="${escapeHtml(row.fileUrl)}" target="_blank" rel="noopener noreferrer">📎 receipt file</a>`
+                      : ''}
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }));
+
+        const isNew = markNewRows('claim', data.rows, r => r.id);
+        feed.innerHTML = claimStatsHtml(data.rows) + newPulseHtml() + renderTimeline(data.rows.map((row, i) => ({
           occurredAt: row.occurredAt,
           html: cards[i],
           isNew: isNew[i]

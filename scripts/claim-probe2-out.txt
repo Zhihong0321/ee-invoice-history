@@ -1,0 +1,190 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+=============== D1 claim_receipt columns ===============
+[
+ {
+  "column_name": "id",
+  "data_type": "integer"
+ },
+ {
+  "column_name": "md5",
+  "data_type": "text"
+ },
+ {
+  "column_name": "buyer",
+  "data_type": "text"
+ },
+ {
+  "column_name": "vendor",
+  "data_type": "text"
+ },
+ {
+  "column_name": "item",
+  "data_type": "text"
+ },
+ {
+  "column_name": "description",
+  "data_type": "text"
+ },
+ {
+  "column_name": "receipt_date",
+  "data_type": "date"
+ },
+ {
+  "column_name": "receipt_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "amount",
+  "data_type": "numeric"
+ },
+ {
+  "column_name": "currency",
+  "data_type": "text"
+ },
+ {
+  "column_name": "category",
+  "data_type": "text"
+ },
+ {
+  "column_name": "status",
+  "data_type": "text"
+ },
+ {
+  "column_name": "submitted_by",
+  "data_type": "text"
+ },
+ {
+  "column_name": "approved_by",
+  "data_type": "text"
+ },
+ {
+  "column_name": "approved_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "file_url",
+  "data_type": "text"
+ },
+ {
+  "column_name": "file_mime",
+  "data_type": "text"
+ },
+ {
+  "column_name": "created_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "updated_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "column_name": "submitted_by_user_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "submitted_by_email",
+  "data_type": "text"
+ },
+ {
+  "column_name": "approved_by_user_id",
+  "data_type": "text"
+ },
+ {
+  "column_name": "approved_by_email",
+  "data_type": "text"
+ },
+ {
+  "column_name": "remark",
+  "data_type": "text"
+ }
+]
+
+=============== D2 claim_receipt volume ===============
+[
+ {
+  "n": "17"
+ }
+]
+
+=============== D3 claim_receipt sample ===============
+[
+ {
+  "id": 4,
+  "md5": "ecaf065786e6fae5b0dbb48c2c6f5086",
+  "buyer": "Eternalgy Sdn Bhd",
+  "vendor": "OpenAI",
+  "item": "ChatGPT Plus Subscription",
+  "description": "ChatGPT Plus monthly (Jun 5 - Jul 5, 2026), incl. 8% SST. Invoice VXIVLC9J-0001. Approx RM87.07.",
+  "receipt_date": "2026-06-05T00:00:00.000Z",
+  "receipt_id": "2503-7755-5922",
+  "amount": "21.60",
+  "currency": "USD",
+  "category": "Software & Subscriptions",
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "approved_by": null,
+  "approved_at": null,
+  "file_url": null,
+  "file_mime": null,
+  "created_at": "2026-07-21T08:16:51.927Z",
+  "updated_at": "2026-07-21T08:16:51.927Z",
+  "submitted_by_user_id": "1",
+  "submitted_by_email": "zhihong@eternalgy.com",
+  "approved_by_user_id": null,
+  "approved_by_email": null,
+  "remark": null
+ },
+ {
+  "id": 5,
+  "md5": "9ef79f98d33615d3920046572411af02",
+  "buyer": "Eternalgy Sdn Bhd",
+  "vendor": "Bubble",
+  "item": "Starter Web Plan",
+  "description": "Web app hosting for HiOrder.app (May 31 - Jun 30, 2026). Invoice 2026-06-7076200. Approx RM127.84.",
+  "receipt_date": "2026-06-02T00:00:00.000Z",
+  "receipt_id": "2026-06-7076200",
+  "amount": "32.00",
+  "currency": "USD",
+  "category": "Web Hosting & Domains",
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "approved_by": null,
+  "approved_at": null,
+  "file_url": null,
+  "file_mime": null,
+  "created_at": "2026-07-21T08:18:00.917Z",
+  "updated_at": "2026-07-21T08:18:00.917Z",
+  "submitted_by_user_id": "1",
+  "submitted_by_email": "zhihong@eternalgy.com",
+  "approved_by_user_id": null,
+  "approved_by_email": null,
+  "remark": null
+ },
+ {
+  "id": 6,
+  "md5": "e87ea8c14c1a232eed2a2c2e23fc4098",
+  "buyer": "Eternalgy Sdn Bhd",
+  "vendor": "MiniMax (Nanonoble Pte Ltd)",
+  "item": "Monthly Plus",
+  "description": "MiniMax AI Monthly Plus subscription. Invoice LDBAX0VD-0001, receipt 2586-8693. Approx RM80.62.",
+  "receipt_date": "2026-06-05T00:00:00.000Z",
+  "receipt_id": "2586-8693",
+  "amount": "20.00",
+  "currency": "USD",
+  "category": "Software & Subscriptions",
+  "status": "Pending",
+  "submitted_by": "GAN ZHI HONG",
+  "approved_by": null,
+  "approved_at": null,
+  "file_url": null,
+  "file_mime": null,
+  "created_at": "2026-07-21T08:18:01.077Z",
+  "updated_at": "2026-07-21T08:18:01.077Z",
+  "submitted_by_user_id": "1",
+  "submitted_by_email": "zhihong@eternalgy.com",
+  "approved_by_user_id": null,
+  "approved_by_email": null,
+  "remark": null
+ }
+]

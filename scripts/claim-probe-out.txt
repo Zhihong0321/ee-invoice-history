@@ -1,0 +1,593 @@
+[db] running in proxy mode → https://pg-proxy-production.up.railway.app/ (db: prod_main)
+
+
+=============== C1 audit: entity/action matrix matching "claim" ===============
+[]
+
+
+=============== C2 audit: "claim" anywhere in changes jsonb ===============
+[
+ {
+  "entity_type": "invoice_item",
+  "action_type": "insert",
+  "n": "10",
+  "first_seen": "2026-05-08T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action_type": "update",
+  "n": "10",
+  "first_seen": "2026-05-19T00:00:00.000Z",
+  "last_seen": "2026-06-25T00:00:00.000Z"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action_type": "create",
+  "n": "5",
+  "first_seen": "2026-06-16T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "entity_type": "invoice",
+  "action_type": "update",
+  "n": "2",
+  "first_seen": "2026-06-13T00:00:00.000Z",
+  "last_seen": "2026-06-24T00:00:00.000Z"
+ }
+]
+
+
+=============== C3 full entity/action inventory (for eyeballing) ===============
+[
+ {
+  "entity_type": "drawing",
+  "action_type": "upload",
+  "n": "323",
+  "first_seen": "2026-06-11T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "entity_type": "invoice",
+  "action_type": "update",
+  "n": "13624",
+  "first_seen": "2026-03-26T00:00:00.000Z",
+  "last_seen": "2026-07-31T00:00:00.000Z"
+ },
+ {
+  "entity_type": "invoice",
+  "action_type": "insert",
+  "n": "8191",
+  "first_seen": "2024-02-19T00:00:00.000Z",
+  "last_seen": "2026-07-31T00:00:00.000Z"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action_type": "insert",
+  "n": "10775",
+  "first_seen": "2026-04-08T00:00:00.000Z",
+  "last_seen": "2026-07-31T00:00:00.000Z"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action_type": "delete",
+  "n": "1820",
+  "first_seen": "2026-02-10T00:00:00.000Z",
+  "last_seen": "2026-07-31T00:00:00.000Z"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action_type": "update",
+  "n": "1680",
+  "first_seen": "2026-02-10T00:00:00.000Z",
+  "last_seen": "2026-07-31T00:00:00.000Z"
+ },
+ {
+  "entity_type": "invoice_item",
+  "action_type": "create",
+  "n": "863",
+  "first_seen": "2026-02-10T00:00:00.000Z",
+  "last_seen": "2026-07-31T00:00:00.000Z"
+ },
+ {
+  "entity_type": "invoice_upload",
+  "action_type": "added",
+  "n": "2940",
+  "first_seen": "2026-05-10T00:00:00.000Z",
+  "last_seen": "2026-07-31T00:00:00.000Z"
+ },
+ {
+  "entity_type": "invoice_upload",
+  "action_type": "deleted",
+  "n": "145",
+  "first_seen": "2026-05-12T00:00:00.000Z",
+  "last_seen": "2026-07-31T00:00:00.000Z"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "verify",
+  "n": "423",
+  "first_seen": "2026-06-11T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "update",
+  "n": "325",
+  "first_seen": "2026-06-11T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "delete",
+  "n": "12",
+  "first_seen": "2026-06-18T00:00:00.000Z",
+  "last_seen": "2026-07-03T00:00:00.000Z"
+ },
+ {
+  "entity_type": "payment",
+  "action_type": "receipt_sent_manual",
+  "n": "2",
+  "first_seen": "2026-06-30T00:00:00.000Z",
+  "last_seen": "2026-07-17T00:00:00.000Z"
+ },
+ {
+  "entity_type": "seda",
+  "action_type": "update",
+  "n": "1616",
+  "first_seen": "2025-07-01T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "updated",
+  "n": "940",
+  "first_seen": "2026-05-08T00:00:00.000Z",
+  "last_seen": "2026-07-31T00:00:00.000Z"
+ },
+ {
+  "entity_type": "seda_registration",
+  "action_type": "insert",
+  "n": "117",
+  "first_seen": "2026-07-21T00:00:00.000Z",
+  "last_seen": "2026-07-31T00:00:00.000Z"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "added",
+  "n": "2088",
+  "first_seen": "2026-05-08T00:00:00.000Z",
+  "last_seen": "2026-07-31T00:00:00.000Z"
+ },
+ {
+  "entity_type": "seda_upload",
+  "action_type": "deleted",
+  "n": "238",
+  "first_seen": "2026-05-10T00:00:00.000Z",
+  "last_seen": "2026-07-30T00:00:00.000Z"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "insert",
+  "n": "1135",
+  "first_seen": "2026-03-09T00:00:00.000Z",
+  "last_seen": "2026-07-31T00:00:00.000Z"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "delete",
+  "n": "38",
+  "first_seen": "2026-05-12T00:00:00.000Z",
+  "last_seen": "2026-07-29T00:00:00.000Z"
+ },
+ {
+  "entity_type": "submitted_payment",
+  "action_type": "update",
+  "n": "11",
+  "first_seen": "2026-05-12T00:00:00.000Z",
+  "last_seen": "2026-07-10T00:00:00.000Z"
+ },
+ {
+  "entity_type": "verified_payment",
+  "action_type": "insert",
+  "n": "2987",
+  "first_seen": "2024-04-29T00:00:00.000Z",
+  "last_seen": "2026-05-05T00:00:00.000Z"
+ },
+ {
+  "entity_type": "viewer_activity",
+  "action_type": "invoice_viewed",
+  "n": "13335",
+  "first_seen": "2026-05-07T00:00:00.000Z",
+  "last_seen": "2026-07-31T00:00:00.000Z"
+ },
+ {
+  "entity_type": "viewer_activity",
+  "action_type": "invoice_session_ended",
+  "n": "12616",
+  "first_seen": "2026-05-07T00:00:00.000Z",
+  "last_seen": "2026-07-31T00:00:00.000Z"
+ },
+ {
+  "entity_type": "viewer_activity",
+  "action_type": "invoice_button_clicked",
+  "n": "8942",
+  "first_seen": "2026-05-07T00:00:00.000Z",
+  "last_seen": "2026-07-31T00:00:00.000Z"
+ },
+ {
+  "entity_type": "viewer_activity",
+  "action_type": "proposal_viewed",
+  "n": "655",
+  "first_seen": "2026-05-08T00:00:00.000Z",
+  "last_seen": "2026-07-31T00:00:00.000Z"
+ },
+ {
+  "entity_type": "viewer_activity",
+  "action_type": "proposal_session_ended",
+  "n": "62",
+  "first_seen": "2026-05-08T00:00:00.000Z",
+  "last_seen": "2026-07-29T00:00:00.000Z"
+ },
+ {
+  "entity_type": "viewer_activity",
+  "action_type": "proposal_button_clicked",
+  "n": "5",
+  "first_seen": "2026-05-10T00:00:00.000Z",
+  "last_seen": "2026-07-21T00:00:00.000Z"
+ }
+]
+
+
+=============== C4 tables in DB whose name mentions claim ===============
+[
+ {
+  "table_schema": "public",
+  "table_name": "claim_receipt"
+ }
+]
+
+
+=============== C5 columns anywhere named like claim ===============
+[
+ {
+  "table_name": "eternalgy_agreement",
+  "column_name": "disclaimer",
+  "data_type": "text"
+ },
+ {
+  "table_name": "invoice_template",
+  "column_name": "disclaimer",
+  "data_type": "text"
+ },
+ {
+  "table_name": "saj_backfill_device",
+  "column_name": "claimed_at",
+  "data_type": "timestamp with time zone"
+ },
+ {
+  "table_name": "saj_backfill_device",
+  "column_name": "claimed_by",
+  "data_type": "text"
+ },
+ {
+  "table_name": "seda_tasks",
+  "column_name": "claimed_at",
+  "data_type": "timestamp without time zone"
+ }
+]
+
+
+=============== C6 sample rows if any claim entity exists ===============
+[
+ {
+  "id": 85414,
+  "entity_type": "invoice_item",
+  "action_type": "create",
+  "invoice_id": 165776,
+  "entity_id": "1785398917425x5325087450222186",
+  "actor_name": "ADMIN",
+  "edited_at": "2026-07-30T08:08:37.493Z",
+  "changes": [
+   {
+    "after": "FOC : 1x Mi Band 8 Pro (Claim On 21/06/2026)",
+    "field": "item",
+    "before": null
+   },
+   {
+    "after": "0",
+    "field": "amount",
+    "before": null
+   }
+  ]
+ },
+ {
+  "id": 85413,
+  "entity_type": "invoice_item",
+  "action_type": "insert",
+  "invoice_id": 165776,
+  "entity_id": "1785398917425x5325087450222186",
+  "actor_name": null,
+  "edited_at": "2026-07-30T08:08:37.431Z",
+  "changes": [
+   {
+    "after": "FOC : 1x Mi Band 8 Pro (Claim On 21/06/2026)",
+    "field": "description",
+    "before": null
+   },
+   {
+    "after": "1",
+    "field": "qty",
+    "before": null
+   },
+   {
+    "after": "0",
+    "field": "amount",
+    "before": null
+   },
+   {
+    "after": "0",
+    "field": "unit_price",
+    "before": null
+   }
+  ]
+ },
+ {
+  "id": 58995,
+  "entity_type": "invoice_item",
+  "action_type": "create",
+  "invoice_id": 165854,
+  "entity_id": "1782875002440x15104070824092797",
+  "actor_name": "ADMIN",
+  "edited_at": "2026-07-01T03:03:22.555Z",
+  "changes": [
+   {
+    "after": "FOC : 1X Mi Band 8 Pro (Claim on 21/06/2026)",
+    "field": "item",
+    "before": null
+   },
+   {
+    "after": "0",
+    "field": "amount",
+    "before": null
+   }
+  ]
+ },
+ {
+  "id": 58994,
+  "entity_type": "invoice_item",
+  "action_type": "insert",
+  "invoice_id": 165854,
+  "entity_id": "1782875002440x15104070824092797",
+  "actor_name": null,
+  "edited_at": "2026-07-01T03:03:22.445Z",
+  "changes": [
+   {
+    "after": "FOC : 1X Mi Band 8 Pro (Claim on 21/06/2026)",
+    "field": "description",
+    "before": null
+   },
+   {
+    "after": "1",
+    "field": "qty",
+    "before": null
+   },
+   {
+    "after": "0",
+    "field": "amount",
+    "before": null
+   },
+   {
+    "after": "0",
+    "field": "unit_price",
+    "before": null
+   }
+  ]
+ },
+ {
+  "id": 55284,
+  "entity_type": "invoice_item",
+  "action_type": "update",
+  "invoice_id": 8124,
+  "entity_id": "1781593136017x6535747935952365",
+  "actor_name": "ADMIN",
+  "edited_at": "2026-06-25T08:14:29.134Z",
+  "changes": [
+   {
+    "after": "Solaris Protect RM3000 (Claim on 17/06/2026)",
+    "field": "description",
+    "before": "Solaris Protect RM3000 (Claim on 16/06/2026)"
+   }
+  ]
+ },
+ {
+  "id": 55283,
+  "entity_type": "invoice_item",
+  "action_type": "update",
+  "invoice_id": 8124,
+  "entity_id": "1781593136017x6535747935952365",
+  "actor_name": null,
+  "edited_at": "2026-06-25T08:14:29.075Z",
+  "changes": [
+   {
+    "after": "Solaris Protect RM3000 (Claim on 17/06/2026)",
+    "field": "description",
+    "before": "Solaris Protect RM3000 (Claim on 16/06/2026)"
+   }
+  ]
+ },
+ {
+  "id": 53754,
+  "entity_type": "invoice",
+  "action_type": "update",
+  "invoice_id": 2406,
+  "entity_id": "1747976646661x350612150085484540",
+  "actor_name": null,
+  "edited_at": "2026-06-24T00:02:14.989Z",
+  "changes": [
+   {
+    "after": "1747976646661x689121042147835900",
+    "field": "linked_seda_registration",
+    "before": "—"
+   },
+   {
+    "after": "22138",
+    "field": "amount_eligible_for_comm",
+    "before": "31339.00"
+   },
+   {
+    "after": "Stamped Package Cash Price : RM25532\\nMarkup : \\nDiscount/Adjustment : \\nNo Xiaomi Robot swap discount, (RM-600)\\nSwap TnG 200 to rebate, (RM-200)\\nDiscount, (RM-594)\\nVoucher Deductible :\\n\\nAdmin Adjustment :\\nRM2000 REBATE  voucher for solar package (12-18 panels). Term & condition apply. (Claim on 15/07/2025), RM-2000-----------------------\\nFinal Eligible Amount : RM22138.00\\nlast Update : Aug 11, 2025 4:54 am",
+    "field": "eligible_amount_description",
+    "before": "List Of Payment\\n1. RM 1210.00 | 2025-05-23 | CASH BANK IN |  | RM 0.00\\n2. RM 18876.00 | 2025-06-11 | CREDIT CARD LOCAL | Pbb | RM 0.00\\n3. RM 11253.00 | 2025-07-06 | CREDIT CARD LOCAL | Pbb | RM 0.00\\n\\nList Of Voucher in this Invoice :\\n1. No IMILAB V1 Robot Swap discount 600 (Comm. Deduct: RM 0)\\n2. NO TnG200 swap rebate (Comm. Deduct: RM 0)\\n\\nInvoice Final Amount : RM 31339.00\\nTotal Received : RM 31339.00\\nPercent of Total Payment : 100.00%\\n\\nEPP INTEREST TOTAL : RM 0.00\\nVOUCHER COST TOTAL : RM 0.00\\n\\nInvoice.amount_eligible_for_comm = RM 31339.00"
+   }
+  ]
+ },
+ {
+  "id": 50678,
+  "entity_type": "invoice_item",
+  "action_type": "update",
+  "invoice_id": 155244,
+  "entity_id": "1774487945229x35490737634915503",
+  "actor_name": "ADMIN",
+  "edited_at": "2026-06-19T09:28:33.811Z",
+  "changes": [
+   {
+    "after": "Free Imilab V1 Vacuum Robot. Term & condition apply.\nClaim on 16/06/2026",
+    "field": "description",
+    "before": "Free Imilab V1 Vacuum Robot. Term & condition apply.\nClaim on 16/05/2025"
+   }
+  ]
+ },
+ {
+  "id": 50677,
+  "entity_type": "invoice_item",
+  "action_type": "update",
+  "invoice_id": 155244,
+  "entity_id": "1774487945229x35490737634915503",
+  "actor_name": null,
+  "edited_at": "2026-06-19T09:28:33.752Z",
+  "changes": [
+   {
+    "after": "Free Imilab V1 Vacuum Robot. Term & condition apply.\\nClaim on 16/06/2026",
+    "field": "description",
+    "before": "Free Imilab V1 Vacuum Robot. Term & condition apply.\\nClaim on 16/05/2025"
+   }
+  ]
+ },
+ {
+  "id": 48607,
+  "entity_type": "invoice_item",
+  "action_type": "update",
+  "invoice_id": 155244,
+  "entity_id": "1774487945229x35490737634915503",
+  "actor_name": "ADMIN",
+  "edited_at": "2026-06-16T07:18:58.396Z",
+  "changes": [
+   {
+    "after": "Free Imilab V1 Vacuum Robot. Term & condition apply.\nClaim on 16/05/2025",
+    "field": "description",
+    "before": "Free Imilab V1 Vacuum Robot. Term & condition apply.\nClaim on 169/05/2025"
+   }
+  ]
+ },
+ {
+  "id": 48606,
+  "entity_type": "invoice_item",
+  "action_type": "update",
+  "invoice_id": 155244,
+  "entity_id": "1774487945229x35490737634915503",
+  "actor_name": null,
+  "edited_at": "2026-06-16T07:18:58.357Z",
+  "changes": [
+   {
+    "after": "Free Imilab V1 Vacuum Robot. Term & condition apply.\\nClaim on 16/05/2025",
+    "field": "description",
+    "before": "Free Imilab V1 Vacuum Robot. Term & condition apply.\\nClaim on 169/05/2025"
+   }
+  ]
+ },
+ {
+  "id": 48605,
+  "entity_type": "invoice_item",
+  "action_type": "update",
+  "invoice_id": 155244,
+  "entity_id": "1774487945229x35490737634915503",
+  "actor_name": "ADMIN",
+  "edited_at": "2026-06-16T07:18:50.233Z",
+  "changes": [
+   {
+    "after": "Free Imilab V1 Vacuum Robot. Term & condition apply.\nClaim on 169/05/2025",
+    "field": "description",
+    "before": "Free Imilab V1 Vacuum Robot. Term & condition apply."
+   }
+  ]
+ },
+ {
+  "id": 48604,
+  "entity_type": "invoice_item",
+  "action_type": "update",
+  "invoice_id": 155244,
+  "entity_id": "1774487945229x35490737634915503",
+  "actor_name": null,
+  "edited_at": "2026-06-16T07:18:50.169Z",
+  "changes": [
+   {
+    "after": "Free Imilab V1 Vacuum Robot. Term & condition apply.\\nClaim on 169/05/2025",
+    "field": "description",
+    "before": "Free Imilab V1 Vacuum Robot. Term & condition apply."
+   }
+  ]
+ },
+ {
+  "id": 48561,
+  "entity_type": "invoice_item",
+  "action_type": "create",
+  "invoice_id": 8264,
+  "entity_id": "1781593334067x6890460802454623",
+  "actor_name": "ADMIN",
+  "edited_at": "2026-06-16T07:02:14.137Z",
+  "changes": [
+   {
+    "after": "Solaris Protect RM3,000 (Claim On 16/06/2026)",
+    "field": "item",
+    "before": null
+   },
+   {
+    "after": "0",
+    "field": "amount",
+    "before": null
+   }
+  ]
+ },
+ {
+  "id": 48560,
+  "entity_type": "invoice_item",
+  "action_type": "insert",
+  "invoice_id": 8264,
+  "entity_id": "1781593334067x6890460802454623",
+  "actor_name": null,
+  "edited_at": "2026-06-16T07:02:14.074Z",
+  "changes": [
+   {
+    "after": "Solaris Protect RM3,000 (Claim On 16/06/2026)",
+    "field": "description",
+    "before": null
+   },
+   {
+    "after": "1",
+    "field": "qty",
+    "before": null
+   },
+   {
+    "after": "0",
+    "field": "amount",
+    "before": null
+   },
+   {
+    "after": "0",
+    "field": "unit_price",
+    "before": null
+   }
+  ]
+ }
+]

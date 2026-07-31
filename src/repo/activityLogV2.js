@@ -723,8 +723,10 @@ async function loadSedaActivity(client, opts = {}) {
             i.total_amount,
             i."1st_payment_date" AS t_first_payment,
             paid.paid_amount,
+            pays.payments,
             ms.t_submitted,
             ms.t_approved,
+            ms.n_status_events,
             p59.t_pay_cross
         FROM invoice_audit_log a
         LEFT JOIN invoice i ON i.id = a.invoice_id
@@ -739,10 +741,27 @@ async function loadSedaActivity(client, opts = {}) {
             WHERE p.linked_invoice = i.bubble_id
               AND p.amount IS NOT NULL
         ) paid ON TRUE
+        -- The individual instalments behind paid_amount. The stage cells go
+        -- blank whenever a SEDA milestone was never logged, and then the only
+        -- honest thing left to show is the money itself: when it came in and
+        -- how much.
+        LEFT JOIN LATERAL (
+            SELECT json_agg(
+                       json_build_object('date', p.payment_date, 'amount', p.amount)
+                       ORDER BY p.payment_date NULLS LAST, p.id
+                   ) AS payments
+            FROM payment p
+            WHERE p.linked_invoice = i.bubble_id
+              AND p.amount IS NOT NULL
+        ) pays ON TRUE
         -- This invoice's own SEDA milestones, so every card can carry its
         -- stage lengths instead of only the dataset-wide averages.
+        -- n_status_events separates "not there yet" from "never logged": the
+        -- log only started in 2026, so older applications have zero status rows
+        -- and their stage lengths are unknowable, not pending.
         LEFT JOIN LATERAL (
             SELECT
+                count(*) AS n_status_events,
                 min(a2.edited_at) FILTER (WHERE c2->>'after' = 'Submitted') AS t_submitted,
                 min(a2.edited_at) FILTER (WHERE c2->>'after' ILIKE 'approved%') AS t_approved
             FROM invoice_audit_log a2, LATERAL jsonb_array_elements(a2.changes) c2
@@ -791,6 +810,20 @@ async function loadSedaActivity(client, opts = {}) {
             ? null : Number(row.total_amount);
         const paidAmount = row.paid_amount === null || row.paid_amount === undefined
             ? 0 : Number(row.paid_amount);
+
+        let running = 0;
+        const payments = (Array.isArray(row.payments) ? row.payments : []).map((p) => {
+            const amount = p.amount === null || p.amount === undefined ? 0 : Number(p.amount);
+            running += amount;
+            return {
+                date: p.date || null,
+                amount: amount,
+                cumulative: Math.round(running * 100) / 100,
+                cumulativePercent: totalAmount > 0
+                    ? Math.round((running / totalAmount) * 100)
+                    : null
+            };
+        });
 
         if (row.entity_type === 'seda_registration' && row.action_type === 'insert') {
             kind = 'registration';
@@ -864,6 +897,14 @@ async function loadSedaActivity(client, opts = {}) {
             paidAmount: paidAmount,
             paidPercent: totalAmount > 0 ? Math.round((paidAmount / totalAmount) * 100) : null,
             hasPayment: paidAmount > 0,
+            // Every instalment, oldest first, with the running share of the
+            // invoice total it reached — the evidence behind `paidPercent`.
+            payments: payments,
+            // 0 = this invoice has no SEDA status history at all. The audit log
+            // only covers what has happened since it was switched on, so the
+            // stages below read "—" for reasons that have nothing to do with
+            // the application itself.
+            statusLogCount: Number(row.n_status_events || 0),
             // This invoice's own stage lengths in days. null = the pair of
             // milestones this stage needs has not both happened yet.
             stages: {

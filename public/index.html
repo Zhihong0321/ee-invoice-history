@@ -2174,6 +2174,71 @@
     }
     .stage-cell.alert .stage-value { color: #BE123C; }
 
+    /* When the stage cells are all "—" the card would otherwise say nothing at
+       all about an invoice that plainly has money in it. This states WHY the
+       stages are empty — the log started after this application did — so the
+       gap reads as a known blind spot instead of a stalled application. */
+    .log-gap {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-top: 8px;
+      padding: 7px 10px;
+      border-radius: 10px;
+      background: rgba(241,245,249,0.9);
+      border-left: 3px solid #CBD5E1;
+      font-size: 11px;
+      line-height: 1.45;
+      color: #64748B;
+    }
+    .log-gap strong { color: #475569; font-weight: 700; }
+
+    /* The payment ledger: the one thing about this invoice that IS fully
+       recorded. Dates and amounts are monospaced so the column of numbers can
+       be read down, and the running share is what the missing "approve → 59%
+       paid" stage would have keyed off. */
+    .pay-log { margin-top: 10px; }
+    .pay-log-head {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #94A3B8;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .pay-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 10px;
+      border-radius: 9px;
+      background: rgba(238,242,247,0.7);
+      margin-bottom: 3px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+    }
+    .pay-line:last-child { margin-bottom: 0; }
+    .pay-seq {
+      color: #94A3B8;
+      font-size: 10px;
+      min-width: 18px;
+    }
+    .pay-date { color: #475569; min-width: 92px; }
+    .pay-date.missing { color: #B45309; }
+    .pay-amt {
+      color: #0B1524;
+      font-weight: 700;
+      margin-left: auto;
+    }
+    .pay-cum {
+      color: #94A3B8;
+      min-width: 68px;
+      text-align: right;
+    }
+    /* The instalment that took cumulative collection past 59%. */
+    .pay-line.cross { background: rgba(209,250,229,0.65); }
+    .pay-line.cross .pay-cum { color: #047857; font-weight: 700; }
+
     /* SEDA header: customer · kWp · city. The event name and invoice number
        drop to a second line — who and where is what the eye scans for. */
     .activity-sub {
@@ -3743,6 +3808,74 @@
         </div>`;
     }
 
+    /* A blank stage cell has two very different causes and the card must not
+       let them look alike: the milestone has not happened yet, or it happened
+       before the log existed and was never written down. */
+    function renderSedaLogGap(row) {
+      const ms = row.milestones || {};
+      const missing = [];
+      if (!ms.submittedAt) missing.push('submitted');
+      if (!ms.approvedAt) missing.push('approved');
+      if (missing.length === 0) return '';
+
+      const n = row.statusLogCount || 0;
+      const gap = missing.join(' / ');
+      const detail = n === 0
+        ? 'Zero status changes are recorded against this invoice — the application '
+          + 'predates the log.'
+        : `${n} status change${n === 1 ? '' : 's'} recorded, but no → ${gap} `
+          + 'transition among them.';
+
+      return `
+        <div class="log-gap">
+          <span>⚠</span>
+          <div><strong>No SEDA status log found for ${escapeHtml(gap)}.</strong>
+          ${escapeHtml(detail)} The blank stages above mean "never logged", not
+          "never happened" — the payments below are the firm dates.</div>
+        </div>`;
+    }
+
+    /* The payment ledger — shown on every SEDA card with money in it. Where the
+       status log is silent this is the whole story of the invoice. */
+    function renderSedaPayments(row) {
+      const list = row.payments || [];
+      if (!list.length) return '';
+
+      const payDate = iso => {
+        if (!iso) return null;
+        const d = new Date(iso);
+        return Number.isNaN(d.getTime()) ? String(iso) : d.toLocaleDateString(undefined, {
+          day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC'
+        });
+      };
+
+      // Mark the instalment that carried collection past 59% — the milestone
+      // the missing stage cell is measured from.
+      let crossed = false;
+      const lines = list.map((p, i) => {
+        const isCross = !crossed && p.cumulativePercent !== null && p.cumulativePercent >= 59;
+        if (isCross) crossed = true;
+        const when = payDate(p.date);
+        return `
+          <div class="pay-line ${isCross ? 'cross' : ''}">
+            <span class="pay-seq">#${i + 1}</span>
+            <span class="pay-date ${when ? '' : 'missing'}">${when || 'no date'}</span>
+            <span class="pay-amt">${money(p.amount)}</span>
+            <span class="pay-cum">${p.cumulativePercent === null ? '—' : p.cumulativePercent + '%'}</span>
+          </div>`;
+      }).join('');
+
+      const head = `${list.length} payment${list.length === 1 ? '' : 's'}`
+        + ` · ${money(row.paidAmount)}${row.totalAmount ? ' of ' + money(row.totalAmount) : ''}`
+        + `${row.paidPercent === null ? '' : ' · ' + row.paidPercent + '% collected'}`;
+
+      return `
+        <div class="pay-log">
+          <div class="pay-log-head">${escapeHtml(head)}</div>
+          ${lines}
+        </div>`;
+    }
+
     /* Contribution-style activity map: one cell per day, columns are weeks.
        The feed answers "what happened"; this answers "when does this
        department actually work" — burst vs steady, and where the dead weeks
@@ -3968,6 +4101,8 @@
                   ${docs}
                   ${diff}
                   ${renderSedaStages(row.stages)}
+                  ${renderSedaLogGap(row)}
+                  ${renderSedaPayments(row)}
                   <div class="activity-meta">
                     <span>⏱ ${formatTime(row.occurredAt)}</span>
                     ${row.actorName ? `<span>👤 ${escapeHtml(row.actorName)}</span>` : ''}

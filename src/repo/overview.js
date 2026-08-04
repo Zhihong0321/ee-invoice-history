@@ -46,6 +46,7 @@ const SECTIONS = [
 /** Pages that exist in the nav but are not activity feeds — listed, not boxed. */
 const OTHER_PAGES = [
     { route: 'sales/proposal', dept: 'SALES', title: 'Sales Agent Activity' },
+    { route: 'sales/payment-cycle', dept: 'SALES', title: 'Payment Cycle' },
     { route: 'warehouse/stock-demand', dept: 'WAREHOUSE', title: 'Stock Demand' },
     { route: 'marketing/ads-research', dept: 'MARKETING', title: 'Ads Research' },
     { route: 'pr/company-info', dept: 'PR', title: 'Company Info' },

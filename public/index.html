@@ -757,6 +757,39 @@
     .agent-chart-row.mid .agent-chart-bar { background: #A78BFA; }
     .agent-chart-row.high .agent-chart-bar { background: #34D399; }
 
+    /* SALES › Payment Cycle — two KPI rows per agent card. */
+    .pc-metric-row {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 8px 0;
+    }
+    .pc-metric-row + .pc-metric-row {
+      border-top: 1px solid rgba(226,232,240,0.9);
+    }
+    .pc-metric-label {
+      color: #475569;
+      font-size: 11px;
+      font-weight: 650;
+    }
+    .pc-metric-value {
+      color: #0B1524;
+      font-size: 16px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .pc-metric-value small {
+      color: #94A3B8;
+      font-size: 10px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+    }
+    .pc-metric-note {
+      color: #94A3B8;
+      font-size: 10px;
+    }
+
     @media (max-width: 768px) {
       .agent-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .agent-overview-stat:first-child { grid-column: 1 / -1; }
@@ -2418,6 +2451,7 @@
       <div class="submenu" data-dept="sales">
         <div class="submenu-item" data-route="sales/calculator">Calculator</div>
         <div class="submenu-item" data-route="sales/proposal">Sales Agent Activity</div>
+        <div class="submenu-item" data-route="sales/payment-cycle">Payment Cycle</div>
         <div class="submenu-item" data-route="sales/auto-proposal">Auto Proposal AI-Voiced</div>
         <div class="submenu-item" data-route="sales/referral">REFERRAL Activity</div>
       </div>
@@ -2684,6 +2718,10 @@
         setHeader('Sales Agent Activity', 'Top 15 calculator users — last 30 days');
         clearFilters();
         loadSalesAgentActivityBoard();
+      } else if (route === 'sales/payment-cycle') {
+        setHeader('Sales Payment Cycle', 'Loading...');
+        clearFilters();
+        loadSalesAgentPaymentCycle();
       } else if (route === 'sales/auto-proposal') {
         setHeader('Auto Proposal AI-Voiced Activity', 'AI workflow and app activity from solar-presentation',
           '<a class="header-link-btn" href="https://e.atap.solar/p/c4e472781c45887eeb25fd270ca3c40553e050ed45095817cc10f30de5fef21c" target="_blank" rel="noopener noreferrer">VISIT DEMO AUTO-PRESENTATION</a>');
@@ -2722,7 +2760,7 @@
         loadWarehouseStock();
       } else if (route === 'marketing/ads-research') {
         setHeader('Market Ads Research Automation', 'Automated ads/market research runs — no activity logged yet',
-          '<a class="header-link-btn" href="https://ee-html.up.railway.app/app/malaysia-solar-pv-teardown/" target="_blank" rel="noopener noreferrer">VISIT MALAYSIA SOLAR PV TEARDOWN</a>');
+          '<a class="header-link-btn" href="https://ads-engine.up.railway.app/" target="_blank" rel="noopener noreferrer">VISIT MALAYSIA SOLAR PV TEARDOWN</a>');
         clearFilters();
         renderEmpty(document.getElementById('feed'), '📊', 'No activity yet', 'This log will fill in once ads research runs start reporting.');
       } else if (route === 'marketing/seo-geo-site') {
@@ -3745,6 +3783,100 @@
 
         feed.className = 'agent-board';
         feed.innerHTML = salesAgentBoardHtml(agents, data.summary);
+      } catch (err) {
+        renderError(feed, err);
+      }
+    }
+
+    /* ---------- SALES › Payment Cycle ----------
+       Per sales agent: how long a case takes to move money, in two stages —
+       deposit (1st payment) to crossing 59% of the invoice total, and 59% to
+       full payment. Same 59% milestone the Warehouse and SEDA pages use. */
+
+    function pcDays(value) {
+      return value === null || value === undefined ? '—' : `${value}`;
+    }
+
+    function pcMetricRowHtml(label, avgDays, medianDays, reached, caseCount) {
+      return `
+        <div class="pc-metric-row">
+          <span class="pc-metric-label">${escapeHtml(label)}</span>
+          <span class="pc-metric-value">${pcDays(avgDays)} <small>avg</small> · ${pcDays(medianDays)} <small>median</small></span>
+          <span class="pc-metric-note">${reached} of ${caseCount} case${caseCount === 1 ? '' : 's'} reached this milestone</span>
+        </div>
+      `;
+    }
+
+    function pcRateRowHtml(agent) {
+      const note = agent.depositsWithDate && agent.firstDepositAt && agent.lastDepositAt
+        ? `${agent.depositsWithDate} deposit${agent.depositsWithDate === 1 ? '' : 's'} · ${new Date(agent.firstDepositAt).toLocaleDateString()} – ${new Date(agent.lastDepositAt).toLocaleDateString()}`
+        : 'no deposit-date data';
+      return `
+        <div class="pc-metric-row">
+          <span class="pc-metric-label">New cases / week (avg)</span>
+          <span class="pc-metric-value">${pcDays(agent.avgNewCasesPerWeek)}</span>
+          <span class="pc-metric-note">${escapeHtml(note)}</span>
+        </div>
+      `;
+    }
+
+    function salesAgentPaymentCycleCardHtml(agent, index) {
+      return `
+        <section class="agent-card" aria-label="#${index + 1} ${escapeHtml(agent.agentName)}">
+          <div class="agent-card-head">
+            <span class="agent-rank">#${index + 1}</span>
+            <span class="agent-name">${escapeHtml(agent.agentName)}</span>
+            <span class="agent-usage"><b>${agent.caseCount}</b> case${agent.caseCount === 1 ? '' : 's'}</span>
+          </div>
+          <div class="agent-average">
+            <span class="agent-average-label">Total invoice amount</span>
+            <span class="agent-average-value">${money(agent.totalAmount)}</span>
+          </div>
+          <div class="agent-chart-title">Payment cycle — days</div>
+          ${pcMetricRowHtml('Deposit → 59%', agent.avgDaysDepositTo59, agent.medianDaysDepositTo59, agent.casesReached59, agent.caseCount)}
+          ${pcMetricRowHtml('59% → Full', agent.avgDays59ToFull, agent.medianDays59ToFull, agent.casesReachedFull, agent.caseCount)}
+          <div class="agent-chart-title">New case rate</div>
+          ${pcRateRowHtml(agent)}
+        </section>
+      `;
+    }
+
+    async function loadSalesAgentPaymentCycle() {
+      const feed = setLoading('Loading Sales Payment Cycle...');
+
+      try {
+        const res = await fetch('/api/sales/agent-payment-cycle');
+        const payload = await res.json();
+        if (!payload.ok) throw new Error(payload.error);
+
+        const data = payload.data;
+        setHeader('Sales Payment Cycle',
+          `Per agent — days from deposit to ${Math.round(data.crossRatio * 100)}% paid, and from there to full payment`);
+
+        if (!data.agents || !data.agents.length) {
+          renderEmpty(feed, '⏱️', 'No payment cycle data', 'No invoice has a linked sales agent with a recorded payment yet.');
+          return;
+        }
+
+        const stats = `
+          <div class="stat-strip">
+            <div class="stat-tile">
+              <div class="stat-label">Sales agents</div>
+              <div class="stat-value">${data.totals.agents}</div>
+            </div>
+            <div class="stat-tile">
+              <div class="stat-label">Cases</div>
+              <div class="stat-value">${data.totals.cases}</div>
+            </div>
+            <div class="stat-tile">
+              <div class="stat-label">Total amount</div>
+              <div class="stat-value">${money(data.totals.amount)}</div>
+            </div>
+          </div>
+        `;
+
+        feed.className = 'agent-board';
+        feed.innerHTML = stats + `<div class="agent-board-grid">${data.agents.map(salesAgentPaymentCycleCardHtml).join('')}</div>`;
       } catch (err) {
         renderError(feed, err);
       }

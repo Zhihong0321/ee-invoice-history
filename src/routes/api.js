@@ -34,6 +34,7 @@ const { loadProjectAttachments, loadProjectAttachmentSummary } = require('../rep
 const { loadAiActivity, loadAiActivitySummary, loadSolarPresentationActivity, loadReferralActivity } = require('../repo/aiActivity');
 const { loadAiRouterLogs, loadAiRouterSummary } = require('../repo/aiRouterLogs');
 const { loadWarehouse } = require('../repo/warehouse');
+const { loadSalesAgentPaymentCycle } = require('../repo/salesAgentPaymentCycle');
 const { loadOverview } = require('../repo/overview');
 
 const router = express.Router();
@@ -683,6 +684,21 @@ router.get('/warehouse', async (req, res) => {
         res.json({ ok: true, data });
     } catch (err) {
         console.error('[api] /warehouse failed:', err.message);
+        res.status(500).json({ ok: false, error: err.message });
+    }
+});
+
+/**
+ * GET /api/sales/agent-payment-cycle
+ * Per sales agent: avg/median days deposit -> 59% paid, and 59% -> full
+ * payment, plus case count and total invoice amount.
+ */
+router.get('/sales/agent-payment-cycle', async (req, res) => {
+    try {
+        const data = await loadSalesAgentPaymentCycle();
+        res.json({ ok: true, data });
+    } catch (err) {
+        console.error('[api] /sales/agent-payment-cycle failed:', err.message);
         res.status(500).json({ ok: false, error: err.message });
     }
 });
